@@ -11,7 +11,7 @@ The goal of this project is to create a website and an app to facilitate the pet
 | Name  | Role | Major | Year |
 | ----- | ----- | ----- | :--: |
 | Alexander Legouverneur  | TBA | Computer Engineering | U2 |
-| Kaustauv Das Sharma | TBA | Comptuer Engineering | U2 |
+| Kaustav Das Sharma | TBA | Computer Engineering | U2 |
 | Mohamed Bouaouina | TBA | Electrical Engineering | U2 |
 | Nicolas Buisson | TBA | Computer Engineering | U2 |
-| Rahul Behal | TBA | Software Engineering | U2 |
+| Rahul Behal | TBA | Chemical Engineering | U2 |
