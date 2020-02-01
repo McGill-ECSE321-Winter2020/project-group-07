@@ -8,13 +8,13 @@ The goal of this project is to create a website and an app to facilitate the pet
 
 ## Team Members
 
-Below can be found the time spent by each team member on each sprint. Please refer to the specific sprint for details on the work done. 
+Below can be found the time spent in hours by each team member on each sprint. Please refer to the specific sprint for details on the work done. 
 
 | Name  | Role | Major | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
 | Alexander Legouverneur  | TBA | Computer Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
 | Kaustav Das Sharma | TBA | Computer Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
-| Mohamed Bouaouina | TBA | Electrical Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
+| Mohamed Bouaouina | TBA | Electrical Engineering | 3 | &mdash; | &mdash; | &mdash; |
 | Nicolas Buisson | TBA | Computer Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
 | Rahul Behal | TBA | Chemical Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
 
