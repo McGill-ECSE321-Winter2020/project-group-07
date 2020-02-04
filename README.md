@@ -13,7 +13,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Name  | Role | Major | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
 | Alexander Legouverneur  | TBA | Computer Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
-| Kaustav Das Sharma | TBA | Computer Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
+| Kaustav Das Sharma | TBA | Computer Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
 | Mohamed Bouaouina | TBA | Electrical Engineering | 6 | &mdash; | &mdash; | &mdash; |
 | Nicolas Buisson | TBA | Computer Engineering | &mdash; | &mdash; | &mdash; | &mdash; |
 | Rahul Behal | TBA | Chemical Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
