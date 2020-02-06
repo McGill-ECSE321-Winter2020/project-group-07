@@ -6,6 +6,8 @@ Welcome to the Group 07 Pet Shelter Project Repository!
 
 The goal of this project is to create a website and an app to facilitate the pet adoption process for our local pet shelter. People can sign up and log in to post or look at pet postings. The option of applying to adopt a pet from a posting is also provided. The pet shelter can also post about the pets available on their premises as well as receive donations from the system's users.
 
+Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2020/project-group-07/wiki) for more info!
+
 ## Team Members
 
 Below can be found the time spent in hours by each team member on each sprint. Please refer to the specific sprint for details on the work done. 
