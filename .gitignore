@@ -46,3 +46,6 @@ PetShelter-Backend/src/main/.DS_Store
 PetShelter-Backend/src/main/java/.DS_Store
 PetShelter-Backend/src/main/java/com/.DS_Store
 PetShelter-Backend/src/main/java/com/example/.DS_Store
+.gradle/6.1.1/fileContent/fileContent.lock
+.gradle/checksums/md5-checksums.bin
+.gradle/checksums/sha1-checksums.bin
