@@ -6,3 +6,10 @@ build/
 
 # Ignore Gradle build output directory
 build
+project-group-07.iml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/encodings.xml
+.DS_Store
