@@ -17,3 +17,16 @@ project-group-07.iml
 .gradle/buildOutputCleanup/outputFiles.bin
 .gradle/checksums/checksums.lock
 .gradle/vcs-1/gc.properties
+generated/.gradle/6.1.1/executionHistory/executionHistory.bin
+generated/.gradle/6.1.1/executionHistory/executionHistory.lock
+generated/.gradle/6.1.1/fileChanges/last-build.bin
+generated/.gradle/6.1.1/fileHashes/fileHashes.bin
+generated/.gradle/6.1.1/fileHashes/fileHashes.lock
+generated/.gradle/6.1.1/gc.properties
+generated/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+generated/.gradle/buildOutputCleanup/cache.properties
+generated/.gradle/buildOutputCleanup/outputFiles.bin
+generated/.gradle/checksums/checksums.lock
+generated/.gradle/checksums/md5-checksums.bin
+generated/.gradle/checksums/sha1-checksums.bin
+generated/.gradle/vcs-1/gc.properties
