@@ -1,0 +1,1 @@
+web: java -jar generated/build/libs/generated-Backend-0.0.1-SNAPSHOT.jar
