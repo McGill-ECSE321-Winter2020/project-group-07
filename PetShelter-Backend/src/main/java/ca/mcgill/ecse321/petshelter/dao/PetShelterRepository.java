@@ -27,7 +27,7 @@ public class PetShelterRepository {
 		Admin p = new Admin();
 		p.setAddress(address);
 		p.setComments(comments);
-		p.setDate(birthdate);
+		p.setDateOfBirth(birthdate);
 		p.setMessages(messages);
 		p.setPassword(password);
 		p.setPhoneNumber(phoneNumber);
@@ -43,12 +43,12 @@ public class PetShelterRepository {
 		return p;
 	}
 	@Transactional
-	public Client createClient(String email, String address, ArrayList<Application> applications, Set<Comment> comments, Date birthdate, ArrayList<Donation> donations, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
+	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
 		Client p = new Client();
 		p.setAddress(address);
 		p.setApplications(applications);
 		p.setComments(comments);
-		p.setDate(birthdate);
+		p.setDateOfBirth(birthdate);
 		p.setDonations(donations);
 		p.setMessages(messages);
 		p.setPassword(password);

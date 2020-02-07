@@ -6,53 +6,53 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Client extends Profile{
-   private String firstName;
+	private String firstName;
 
-private void setFirstName(String value) {
-    this.firstName = value;
-}
-private String getFirstName() {
-    return this.firstName;
-}
-private String lastName;
+	public void setFirstName(String value) {
+		this.firstName = value;
+	}
+	public String getFirstName() {
+		return this.firstName;
+	}
+	private String lastName;
 
-private void setLastName(String value) {
-    this.lastName = value;
+	public void setLastName(String value) {
+		this.lastName = value;
+	}
+	public String getLastName() {
+		return this.lastName;
+	}
+	private Set<Donation> donations;
+
+	@OneToMany(mappedBy="client" )
+	public Set<Donation> getDonations() {
+		return this.donations;
+	}
+
+	public void setDonations(Set<Donation> donations) {
+		this.donations = donations;
+	}
+
+	private Set<Message> messages;
+
+	@OneToMany(mappedBy="client" )
+	public Set<Message> getMessages() {
+		return this.messages;
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
+	}
+
+	private Set<Application> applications;
+
+	@OneToMany(mappedBy="client" )
+	public Set<Application> getApplications() {
+		return this.applications;
+	}
+
+	public void setApplications(Set<Application> applications) {
+		this.applications = applications;
+	}
+
 }
-private String getLastName() {
-    return this.lastName;
-}
-   private Set<Donation> donation;
-   
-   @OneToMany(mappedBy="client" )
-   public Set<Donation> getDonation() {
-      return this.donation;
-   }
-   
-   public void setDonation(Set<Donation> donationss) {
-      this.donation = donationss;
-   }
-   
-   private Set<Message> message;
-   
-   @OneToMany(mappedBy="client" )
-   public Set<Message> getMessage() {
-      return this.message;
-   }
-   
-   public void setMessage(Set<Message> messagess) {
-      this.message = messagess;
-   }
-   
-   private Set<Application> application;
-   
-   @OneToMany(mappedBy="client" )
-   public Set<Application> getApplication() {
-      return this.application;
-   }
-   
-   public void setApplication(Set<Application> applicationss) {
-      this.application = applicationss;
-   }
-   
-   }
