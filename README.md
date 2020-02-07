@@ -16,7 +16,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | ----- | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
 | Alexander Legouverneur  | TBA | Computer Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
 | Kaustav Das Sharma | TBA | Computer Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
-| Mohamed Bouaouina | TBA | Electrical Engineering | 7.50 | &mdash; | &mdash; | &mdash; |
+| Mohamed Bouaouina | TBA | Electrical Engineering | 11 | &mdash; | &mdash; | &mdash; |
 | Nicolas Buisson | TBA | Computer Engineering | 5.5 | &mdash; | &mdash; | &mdash; |
 | Rahul Behal | TBA | Chemical Engineering | 10 | &mdash; | &mdash; | &mdash; |
 
@@ -24,16 +24,26 @@ Below can be found the time spent in hours by each team member on each sprint. P
 ## Sprint 1 
 
 Started Jan 27, 2020
-
+* Requirements, Actors, and Use Cases
+* Domain Model
+* Database design
+* Test cases for persistence layer
 
 ## Sprint 2
 
 Starts Feb 10, 2020
+* Backend implementation as RESTful services
+* Documentation of RESTful services
+* Suite of unit tests for backend
 
 ## Sprint 3
 
 Starts Mar 2, 2020
+* Architecture model
+* Implementation of Web frontend
 
 ## Sprint 4
 
 Starts Mar 23, 2020
+* Implementation of mobile frontend
+* Preparation for group presentation 
