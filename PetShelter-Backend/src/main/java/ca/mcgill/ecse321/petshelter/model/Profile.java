@@ -1,4 +1,5 @@
 package ca.mcgill.ecse321.petshelter.model;
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import java.util.Set;
