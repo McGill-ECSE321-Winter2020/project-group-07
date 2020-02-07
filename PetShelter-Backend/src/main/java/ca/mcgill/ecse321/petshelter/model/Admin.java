@@ -6,15 +6,15 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Admin extends Profile{
-	private Set<Message> messages;
-
-	@OneToMany(mappedBy="admin" )
-	public Set<Message> getMessages() {
-		return this.messages;
-	}
-
-	public void setMessages(Set<Message> messagess) {
-		this.messages = messagess;
-	}
-
-}
+   private Set<Message> message;
+   
+   @OneToMany(mappedBy="admin" )
+   public Set<Message> getMessage() {
+      return this.message;
+   }
+   
+   public void setMessage(Set<Message> messages) {
+      this.message = messages;
+   }
+   
+   }
