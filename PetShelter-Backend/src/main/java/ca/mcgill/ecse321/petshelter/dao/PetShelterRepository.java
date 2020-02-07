@@ -2,7 +2,9 @@ package ca.mcgill.ecse321.petshelter.dao;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -21,16 +23,45 @@ public class PetShelterRepository {
 	EntityManager entityManager;
 
 	@Transactional
-	public Admin createPerson(String email) {
+	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
 		Admin p = new Admin();
+		p.setAddress(address);
+		p.setComments(comments);
+		p.setDate(birthdate);
+		p.setMessages(messages);
+		p.setPassword(password);
+		p.setPhoneNumber(phoneNumber);
+		p.setPostings(postings);
 		p.setEmail(email);
 		entityManager.persist(p);
 		return p;
 	}
 
 	@Transactional
-	public Person getPerson(String name) {
-		Person p = entityManager.find(Person.class, name);
+	public Admin getAdmin(String email) {
+		Admin p = entityManager.find(Admin.class, email);
+		return p;
+	}
+	@Transactional
+	public Client createClient(String email, String address, ArrayList<Application> applications, Set<Comment> comments, Date birthdate, ArrayList<Donation> donations, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
+		Client p = new Client();
+		p.setAddress(address);
+		p.setApplications(applications);
+		p.setComments(comments);
+		p.setDate(birthdate);
+		p.setDonations(donations);
+		p.setMessages(messages);
+		p.setPassword(password);
+		p.setPhoneNumber(phoneNumber);
+		p.setPostings(postings);
+		p.setEmail(email);
+		entityManager.persist(p);
+		return p;
+	}
+
+	@Transactional
+	public Client getClient(String email) {
+		Client p = entityManager.find(Client.class, email);
 		return p;
 	}
 

@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
+
+import java.util.ArrayList;
 import java.util.Set;
 import javax.persistence.OneToMany;
 
@@ -22,14 +24,14 @@ public class Client extends Profile{
 	private String getLastName() {
 		return this.lastName;
 	}
-	private Set<Donation> donations;
+	private ArrayList<Donation> donations;
 
 	@OneToMany(mappedBy="client" )
-	public Set<Donation> getDonations() {
+	public ArrayList<Donation> getDonations() {
 		return this.donations;
 	}
 
-	public void setDonations(Set<Donation> donationss) {
+	public void setDonations(ArrayList<Donation> donationss) {
 		this.donations = donationss;
 	}
 
@@ -44,14 +46,14 @@ public class Client extends Profile{
 		this.messages = messagess;
 	}
 
-	private Set<Application> applications;
+	private ArrayList<Application> applications;
 
 	@OneToMany(mappedBy="client" )
-	public Set<Application> getApplications() {
+	public ArrayList<Application> getApplications() {
 		return this.applications;
 	}
 
-	public void setApplications(Set<Application> applicationss) {
+	public void setApplications(ArrayList<Application> applicationss) {
 		this.applications = applicationss;
 	}
 

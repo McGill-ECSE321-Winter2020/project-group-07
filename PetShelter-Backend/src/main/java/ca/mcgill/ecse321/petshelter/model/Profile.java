@@ -10,43 +10,43 @@ import javax.persistence.OneToMany;
 public abstract class Profile{
 	private Date date;
 
-	private void setDate(Date value) {
+	public void setDate(Date value) {
 		this.date = value;
 	}
-	private Date getDate() {
+	public Date getDate() {
 		return this.date;
 	}
 	private String email;
 
-	private void setEmail(String value) {
+	public void setEmail(String value) {
 		this.email = value;
 	}
 	@Id
-	private String getEmail() {
+	public String getEmail() {
 		return this.email;
 	}
 	private String password;
 
-	private void setPassword(String value) {
+	public void setPassword(String value) {
 		this.password = value;
 	}
-	private String getPassword() {
+	public String getPassword() {
 		return this.password;
 	}
 	private Integer phoneNumber;
 
-	private void setPhoneNumber(Integer value) {
+	public void setPhoneNumber(Integer value) {
 		this.phoneNumber = value;
 	}
-	private Integer getPhoneNumber() {
+	public Integer getPhoneNumber() {
 		return this.phoneNumber;
 	}
 	private String address;
 
-	private void setAddress(String value) {
+	public void setAddress(String value) {
 		this.address = value;
 	}
-	private String getAddress() {
+	public String getAddress() {
 		return this.address;
 	}
 	private Set<Posting> postings;
