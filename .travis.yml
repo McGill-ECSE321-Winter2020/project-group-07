@@ -1,3 +1,9 @@
 language: java
 script:
 - gradle build
+
+deploy:
+      provider: heroku
+      api_key:
+        secure: d2ddf131-38f6-44dd-8d86-b7cd51668a63
+      app: petshelter-backend-g7
