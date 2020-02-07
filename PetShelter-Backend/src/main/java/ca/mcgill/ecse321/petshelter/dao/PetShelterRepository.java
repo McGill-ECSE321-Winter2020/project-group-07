@@ -1,10 +1,8 @@
 package ca.mcgill.ecse321.petshelter.dao;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

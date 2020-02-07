@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.model;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.OneToMany;
@@ -22,6 +23,8 @@ public class Client extends Profile{
 	public String getLastName() {
 		return this.lastName;
 	}
+	
+	@ElementCollection(targetClass=Donation.class)
 	private Set<Donation> donations;
 
 	@OneToMany(mappedBy="client" )
@@ -33,6 +36,7 @@ public class Client extends Profile{
 		this.donations = donations;
 	}
 
+	@ElementCollection(targetClass=Message.class)
 	private Set<Message> messages;
 
 	@OneToMany(mappedBy="client" )
@@ -44,6 +48,7 @@ public class Client extends Profile{
 		this.messages = messages;
 	}
 
+	@ElementCollection(targetClass=Application.class)
 	private Set<Application> applications;
 
 	@OneToMany(mappedBy="client" )

@@ -1,8 +1,11 @@
 package ca.mcgill.ecse321.petshelter.model;
 import java.sql.Date;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import java.util.Set;
+import javax.persistence.Id;
+
+import java.util.*;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -15,6 +18,8 @@ public abstract class Profile{
 	public Date getDateOfBirth() {
 		return this.dateOfBirth;
 	}
+	
+	@Id
 	private String email;
 
 	public void setEmail(String value) {
@@ -47,6 +52,8 @@ public abstract class Profile{
 	public String getAddress() {
 		return this.address;
 	}
+	
+	@ElementCollection(targetClass=Posting.class)
 	private Set<Posting> postings;
 
 	@OneToMany(mappedBy="profile" )
@@ -57,7 +64,8 @@ public abstract class Profile{
 	public void setPostings(Set<Posting> postings) {
 		this.postings = postings;
 	}
-
+	
+	@ElementCollection(targetClass=Comment.class)
 	private Set<Comment> comments;
 
 	@OneToMany(mappedBy="profile" )
