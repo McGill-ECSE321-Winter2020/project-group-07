@@ -58,28 +58,109 @@ public class PetShelterRepository {
 		entityManager.persist(p);
 		return p;
 	}
+	
 
 	@Transactional
 	public Client getClient(String email) {
 		Client p = entityManager.find(Client.class, email);
 		return p;
 	}
-
+	
 	@Transactional
-	public Event createEvent(String name, Date date, Time startTime, Time endTime) {
-		Event e = new Event();
-		e.setName(name);
-		e.setDate(date);
-		e.setStartTime(startTime);
-		e.setEndTime(endTime);
-		entityManager.persist(e);
-		return e;
+	public Application createApplication(Client client, HomeType homeType, int id,IncomeRange incomeRange,int numberOfResidents,Posting posting,ApplicationStatus status) {
+		Application a = new Application();
+		a.setClient(client);
+		a.setHomeType(homeType);
+		a.setId(id);
+		a.setIncomeRange(incomeRange);
+		a.setNumberOfResidents(numberOfResidents);
+		a.setPosting(posting);
+		a.setStatus(status);
+		entityManager.persist(a);
+		return a;
+	}
+	
+	@Transactional
+	public Application getApplication(int id) {
+		Application a = entityManager.find(Application.class, id);
+		return a;
+	}
+	
+	@Transactional
+	public Comment createComment(String content,Date date, int id,Posting posting,Profile profile) {
+		Comment c = new Comment();
+		c.setContent(content);
+		c.setDate(date);
+		c.setId(id);
+		c.setPosting(posting);
+		c.setProfile(profile);
+		entityManager.persist(c);
+		return c;
+	}
+	
+	@Transactional
+	public Comment getComment(int id) {
+		Comment c = entityManager.find(Comment.class, id);
+		return c;
+	}
+	
+	@Transactional
+	public Donation createDonation(int amount, Client client,Date date,int id) {
+		Donation d = new Donation();
+		d.setAmount(amount);
+		d.setClient(client);
+		d.setDate(date);
+		d.setId(id);
+		entityManager.persist(d);
+		return d;
+		
+	}
+	
+	@Transactional
+	public Donation getDonation(int id) {
+		Donation d = entityManager.find(Donation.class, id);
+		return d;
+	}
+	
+	@Transactional
+	public Message createMessage(Admin admin,Client client,String content,Date date, int id) {
+		Message m = new Message();
+		m.setAdmin(admin);
+		m.setClient(client);
+		m.setContent(content);
+		m.setDate(date);
+		m.setId(id);
+		entityManager.persist(m);
+		return m;
+	}
+	
+	@Transactional
+	public Message getMessage(int id) {
+		Message m = entityManager.find(Message.class, id);
+		return m;
 	}
 
+	
 	@Transactional
-	public Event getEvent(String name) {
-		Event e = entityManager.find(Event.class, name);
-		return e;
+	public Posting createPosting(Set<Application> applications,Set<Comment> comments,Date date,String description, int id,String breed,Date petDateBirth,String petName,String picture,Profile profile) {
+		Posting p = new Posting();
+		p.setApplication(applications);
+		p.setComment(comments);
+		p.setDate(date);
+		p.setDescription(description);
+		p.setId(id);
+		p.setPetBreed(breed);
+		p.setPetDateOfBirth(petDateBirth);
+		p.setPetName(petName);
+		p.setPicture(picture);
+		p.setProfile(profile);
+		entityManager.persist(p);
+		return p;
 	}
-
+	
+	@Transactional
+	public Posting getPosting(int id) {
+		Posting p = entityManager.find(Posting.class, id);
+		return p;
+	}
 }
