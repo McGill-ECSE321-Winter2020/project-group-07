@@ -4,8 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.petshelter.model.Posting;
 
-public interface PostingRepository extends CrudRepository<Posting, String>{
+public interface PostingRepository extends CrudRepository<Posting, Integer>{
 
-	Posting findPostingByName(String name);
+	Posting findPostingById(Integer id);
 
 }

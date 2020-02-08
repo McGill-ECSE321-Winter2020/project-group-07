@@ -4,8 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.petshelter.model.Message;
 
-public interface MessageRepository extends CrudRepository<Message, String>{
+public interface MessageRepository extends CrudRepository<Message, Integer>{
 
-	Message findMessageByName(String name);
+	Message findMessageById(Integer id);
 
 }
