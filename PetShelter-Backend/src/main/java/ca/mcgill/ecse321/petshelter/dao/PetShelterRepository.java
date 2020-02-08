@@ -21,7 +21,7 @@ public class PetShelterRepository {
 	EntityManager entityManager;
 
 	@Transactional
-	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
+	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password,Integer phoneNumber, Set<Posting> postings) {
 		Admin p = new Admin();
 		p.setAddress(address);
 		p.setComments(comments);
@@ -41,7 +41,7 @@ public class PetShelterRepository {
 		return p;
 	}
 	@Transactional
-	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,int phoneNumber, Set<Posting> postings) {
+	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,Integer phoneNumber, Set<Posting> postings) {
 		Client p = new Client();
 		p.setAddress(address);
 		p.setApplications(applications);
@@ -65,7 +65,7 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Application createApplication(Client client, HomeType homeType, int id,IncomeRange incomeRange,int numberOfResidents,Posting posting,ApplicationStatus status) {
+	public Application createApplication(Client client, HomeType homeType, Integer id,IncomeRange incomeRange,Integer numberOfResidents,Posting posting,ApplicationStatus status) {
 		Application a = new Application();
 		a.setClient(client);
 		a.setHomeType(homeType);
@@ -79,13 +79,13 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Application getApplication(int id) {
+	public Application getApplication(Integer id) {
 		Application a = entityManager.find(Application.class, id);
 		return a;
 	}
 	
 	@Transactional
-	public Comment createComment(String content,Date date, int id,Posting posting,Profile profile) {
+	public Comment createComment(String content,Date date, Integer id,Posting posting,Profile profile) {
 		Comment c = new Comment();
 		c.setContent(content);
 		c.setDate(date);
@@ -97,13 +97,13 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Comment getComment(int id) {
+	public Comment getComment(Integer id) {
 		Comment c = entityManager.find(Comment.class, id);
 		return c;
 	}
 	
 	@Transactional
-	public Donation createDonation(int amount, Client client,Date date,int id) {
+	public Donation createDonation(Integer amount, Client client,Date date,Integer id) {
 		Donation d = new Donation();
 		d.setAmount(amount);
 		d.setClient(client);
@@ -115,13 +115,13 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Donation getDonation(int id) {
+	public Donation getDonation(Integer id) {
 		Donation d = entityManager.find(Donation.class, id);
 		return d;
 	}
 	
 	@Transactional
-	public Message createMessage(Admin admin,Client client,String content,Date date, int id) {
+	public Message createMessage(Admin admin,Client client,String content,Date date, Integer id) {
 		Message m = new Message();
 		m.setAdmin(admin);
 		m.setClient(client);
@@ -133,14 +133,14 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Message getMessage(int id) {
+	public Message getMessage(Integer id) {
 		Message m = entityManager.find(Message.class, id);
 		return m;
 	}
 
 	
 	@Transactional
-	public Posting createPosting(Set<Application> applications,Set<Comment> comments,Date date,String description, int id,String breed,Date petDateBirth,String petName,String picture,Profile profile) {
+	public Posting createPosting(Set<Application> applications,Set<Comment> comments,Date date,String description, Integer id,String breed,Date petDateBirth,String petName,String picture,Profile profile) {
 		Posting p = new Posting();
 		p.setApplication(applications);
 		p.setComment(comments);
@@ -157,7 +157,7 @@ public class PetShelterRepository {
 	}
 	
 	@Transactional
-	public Posting getPosting(int id) {
+	public Posting getPosting(Integer id) {
 		Posting p = entityManager.find(Posting.class, id);
 		return p;
 	}
