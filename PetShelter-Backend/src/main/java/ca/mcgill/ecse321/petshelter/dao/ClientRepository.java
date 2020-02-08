@@ -6,6 +6,6 @@ import ca.mcgill.ecse321.petshelter.model.Client;
 
 public interface ClientRepository extends CrudRepository<Client, String>{
 
-	Client findClientByName(String name);
+	Client findClientByEmail(String email);
 
 }
