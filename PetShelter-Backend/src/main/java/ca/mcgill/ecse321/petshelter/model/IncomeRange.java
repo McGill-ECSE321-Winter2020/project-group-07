@@ -4,4 +4,5 @@ import javax.persistence.Entity;
 
 
 public enum IncomeRange{
+	low, medium, high
 }

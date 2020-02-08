@@ -15,13 +15,13 @@ public class Comment{
 	public Date getDate() {
 		return this.date;
 	}
-	private int id;
+	private Integer id;
 
-	public void setId(int value) {
+	public void setId(Integer value) {
 		this.id = value;
 	}
 	@Id
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 	private String content;

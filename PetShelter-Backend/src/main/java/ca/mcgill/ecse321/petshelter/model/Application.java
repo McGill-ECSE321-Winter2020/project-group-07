@@ -30,13 +30,13 @@ public class Application{
 	public ApplicationStatus getStatus() {
 		return this.status;
 	}
-	private int id;
+	private Integer id;
 
-	public void setId(int value) {
+	public void setId(Integer value) {
 		this.id = value;
 	}
 	@Id
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 	private Integer numberOfResidents;

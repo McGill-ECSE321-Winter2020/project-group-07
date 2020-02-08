@@ -4,4 +4,5 @@ import javax.persistence.Entity;
 
 
 public enum ApplicationStatus{
+	pending, accepted, rejected
 }

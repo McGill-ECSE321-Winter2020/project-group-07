@@ -26,13 +26,13 @@ public class Posting{
 	public Date getPetDateOfBirth() {
 		return this.petDateOfBirth;
 	}
-	private int id;
+	private Integer id;
 
-	public void setId(int value) {
+	public void setId(Integer value) {
 		this.id = value;
 	}
 	@Id
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 	private String description;
