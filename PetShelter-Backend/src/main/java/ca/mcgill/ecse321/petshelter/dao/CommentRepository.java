@@ -4,8 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.petshelter.model.Comment;
 
-public interface CommentRepository extends CrudRepository<Comment, String>{
+public interface CommentRepository extends CrudRepository<Comment, Integer>{
 
-	Comment findCommentByName(String name);
+	Comment findCommentById(Integer id);
 
 }

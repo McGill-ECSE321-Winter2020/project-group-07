@@ -4,8 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.petshelter.model.Application;
 
-public interface ApplicationRepository extends CrudRepository<Application, String>{
+public interface ApplicationRepository extends CrudRepository<Application, Integer>{
 
-	Application findApplicationByName(String name);
+	Application findApplicationById(Integer Id);
 
 }
