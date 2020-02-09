@@ -31,7 +31,7 @@ Started Jan 27, 2020
 
 ### Tasks completed by each member:
 * Alex: Worked on setting up the spring backend app along with the petshelterRepository class, designed the use case diagrams, and participated in the conception and refinement of the requirements. Worked on the testing of the persistence layer with JUnit testing.
-* Kaustav:
+* Kaustav: Worked on project management tasks (adding wiki documentation, project backlog, Kanban board organisation, issue tracking), setting up Spring boot backend app with Gradle, Travis CI integration, deploying Heroku instance with database and UML domain modelling.
 * Mohamed: Worked on creating requirements, use cases, use case diagrams, setting up a Spring backend app with a Gradle build system, creating the CRUD repos, unit testing the persitence layer with JUnit, and documenting the project.
 * Nicolas: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
 * Rahul: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
