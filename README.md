@@ -31,9 +31,9 @@ Started Jan 27, 2020
 
 ### Tasks completed by each member:
 * Alex:
-* Kaustav: Worked on project management tasks (adding wiki documentation, project backlog, Kanban board organisation, issue tracking), setting up Spring boot backend app with Gradle, Travis CI integration, deploying Heroku instance with database and UML domain modelling.
+* Kaustav:
 * Mohamed:
-* Nicolas:
+* Nicolas: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
 * Rahul: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
 
 ## Sprint 2
