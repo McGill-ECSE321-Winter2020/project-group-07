@@ -36,12 +36,12 @@ public abstract class Profile{
 	public String getPassword() {
 		return this.password;
 	}
-	private String phoneNumber;
+	private Integer phoneNumber;
 
-	public void setPhoneNumber(String value) {
+	public void setPhoneNumber(Integer value) {
 		this.phoneNumber = value;
 	}
-	public String getPhoneNumber() {
+	public Integer getPhoneNumber() {
 		return this.phoneNumber;
 	}
 	private String address;

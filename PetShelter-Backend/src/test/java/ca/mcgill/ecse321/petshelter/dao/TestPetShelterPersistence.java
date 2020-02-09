@@ -42,13 +42,13 @@ public class TestPetShelterPersistence {
 
 	@AfterEach
 	public void clearDatabase() {
-		adminRepository.deleteAll();
-		applicationRepository.deleteAll();
-		clientRepository.deleteAll();
 		commentRepository.deleteAll();
-		donationRepository.deleteAll();
-		messageRepository.deleteAll();
+		applicationRepository.deleteAll();
 		postingRepository.deleteAll();
+		messageRepository.deleteAll();
+		adminRepository.deleteAll();
+		donationRepository.deleteAll();
+		clientRepository.deleteAll();
 		profileRepository.deleteAll();
 	}
 
@@ -74,8 +74,17 @@ public class TestPetShelterPersistence {
 		Integer id = 123456;
 		// First example for object save/load
 		Application application = new Application();
+		Client client = new Client();
+		client.setEmail("rahul.doe@mail.com");
+		clientRepository.save(client);
+		Posting posting = new Posting();
+		posting.setId(67891);
+		posting.setProfile(client);
 		// First example for attribute save/load
 		application.setId(id);
+		application.setClient(client);
+		clientRepository.save(client);
+		postingRepository.save(posting);
 		applicationRepository.save(application);
 
 		application = null;
@@ -87,7 +96,7 @@ public class TestPetShelterPersistence {
 
 	@Test
 	public void testPersistAndLoadClient() {
-		String email = "john.doe@mail.com";
+		String email = "jane.doe@mail.com";
 		// First example for object save/load
 		Client client = new Client();
 		// First example for attribute save/load
@@ -106,8 +115,18 @@ public class TestPetShelterPersistence {
 		Integer id = 123456;
 		// First example for object save/load
 		Comment comment = new Comment();
+		Client client = new Client();
+		client.setEmail("nicolas.doe@mail.com");
+		clientRepository.save(client);
+		Posting posting = new Posting();
+		posting.setId(34567);
+		posting.setProfile(client);
 		// First example for attribute save/load
 		comment.setId(id);
+		comment.setProfile(client);
+		comment.setPosting(posting);
+		
+		postingRepository.save(posting);
 		commentRepository.save(comment);
 
 		comment = null;
@@ -122,8 +141,12 @@ public class TestPetShelterPersistence {
 		Integer id = 123456;
 		// First example for object save/load
 		Donation donation = new Donation();
+		Client client = new Client();
+		client.setEmail("nicolas.doe@mail.com");
+		clientRepository.save(client);
 		// First example for attribute save/load
 		donation.setId(id);
+		donation.setClient(client);
 		donationRepository.save(donation);
 
 		donation = null;
@@ -138,8 +161,16 @@ public class TestPetShelterPersistence {
 		Integer id = 123456;
 		// First example for object save/load
 		Message message = new Message();
+		Admin admin = new Admin();
+		admin.setEmail("admin.doe@mail.com");
+		Client client = new Client();
+		client.setEmail("alexander.doe@mail.com");
 		// First example for attribute save/load
 		message.setId(id);
+		message.setAdmin(admin);
+		message.setClient(client);
+		clientRepository.save(client);
+		adminRepository.save(admin);
 		messageRepository.save(message);
 
 		message = null;
@@ -152,10 +183,14 @@ public class TestPetShelterPersistence {
 	@Test
 	public void testPersistAndLoadPosting() {
 		Integer id = 123456;
+		Client client = new Client();
+		client.setEmail("youssef.doe@mail.com");
+		clientRepository.save(client);
 		// First example for object save/load
 		Posting posting = new Posting();
 		// First example for attribute save/load
 		posting.setId(id);
+		posting.setProfile(client);
 		postingRepository.save(posting);
 
 		posting = null;
