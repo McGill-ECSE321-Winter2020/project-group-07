@@ -3,12 +3,6 @@ package ca.mcgill.ecse321.petshelter.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +36,8 @@ public class TestPetShelterPersistence {
 
 	@AfterEach
 	public void clearDatabase() {
+		//delete the entities that depend on other entities (e.g. comment, donation, application, etc.)
+		//before deleting the entities they depend on (e.g posting, client, admin, etc.)
 		commentRepository.deleteAll();
 		applicationRepository.deleteAll();
 		postingRepository.deleteAll();
@@ -71,27 +67,38 @@ public class TestPetShelterPersistence {
 
 	@Test
 	public void testPersistAndLoadApplication() {
-		Integer id = 123456;
-		// First example for object save/load
-		Application application = new Application();
-		Client client = new Client();
-		client.setEmail("rahul.doe@mail.com");
-		clientRepository.save(client);
+		// create the owner that owns the pet posting
+		Client petOwner = new Client();
+		String ownerEmail = "owner.doe@mail.com";
+		petOwner.setEmail(ownerEmail);
+		clientRepository.save(petOwner);
+		
+		//create the posting
 		Posting posting = new Posting();
-		posting.setId(67891);
-		posting.setProfile(client);
-		// First example for attribute save/load
-		application.setId(id);
-		application.setClient(client);
-		clientRepository.save(client);
+		Integer postingId = 666; 
+		posting.setProfile(petOwner);
+		posting.setId(postingId);
 		postingRepository.save(posting);
+		
+		//create the applicant client 
+		Client applicant = new Client();
+		String applicantEmail = "applicant.doe@mail.com";
+		applicant.setEmail(applicantEmail);
+		clientRepository.save(applicant);
+		
+		//create the application 
+		Application application = new Application();
+		Integer applicationId = 999;
+		application.setId(applicationId);
+		application.setClient(applicant);
+		application.setPosting(posting);
 		applicationRepository.save(application);
-
+		
 		application = null;
 
-		application = applicationRepository.findApplicationById(id);
+		application = applicationRepository.findApplicationById(applicationId);
 		assertNotNull(application);
-		assertEquals(id, application.getId());
+		assertEquals(applicationId, application.getId());
 	}
 
 	@Test
