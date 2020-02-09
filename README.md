@@ -30,7 +30,7 @@ Started Jan 27, 2020
 * Test cases for persistence layer
 
 ### Tasks completed by each member:
-* Alex:
+* Alex: Worked on setting up the spring backend app along with the petshelterRepository class, designed the use case diagrams, and participated in the conception and refinement of the requirements. Worked on the testing of the persistence layer with JUnit testing.
 * Kaustav:
 * Mohamed: Worked on creating requirements, use cases, use case diagrams, setting up a Spring backend app with a Gradle build system, creating the CRUD repos, unit testing the persitence layer with JUnit, and documenting the project.
 * Nicolas: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
