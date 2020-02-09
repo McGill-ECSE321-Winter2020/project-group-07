@@ -12,14 +12,13 @@ Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2020/project-g
 
 Below can be found the time spent in hours by each team member on each sprint. Please refer to the specific sprint for details on the work done. 
 
-| Name  | Role | Major | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
-| ----- | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Alexander Legouverneur  | TBA | Computer Engineering | 17.5 | &mdash; | &mdash; | &mdash; |
-| Kaustav Das Sharma | TBA | Computer Engineering | 19 | &mdash; | &mdash; | &mdash; |
-| Mohamed Bouaouina | TBA | Electrical Engineering | 18.5 | &mdash; | &mdash; | &mdash; |
-| Nicolas Buisson | TBA | Computer Engineering | 20 | &mdash; | &mdash; | &mdash; |
-| Rahul Behal | TBA | Chemical Engineering | 15 | &mdash; | &mdash; | &mdash; |
-
+| Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
+| ----- | ----- | ----- | :-----: | :-----: | :-----: |
+| Alexander Legouverneur  | Software Developer | 17.5 | &mdash; | &mdash; | &mdash; |
+| Kaustav Das Sharma | Software Architecure Engineer | 19 | &mdash; | &mdash; | &mdash; |
+| Mohamed Bouaouina | Project Manager | 18.5 | &mdash; | &mdash; | &mdash; |
+| Nicolas Buisson | Product Manager | 20 | &mdash; | &mdash; | &mdash; |
+| Rahul Behal | Software Consultant | 15 | &mdash; | &mdash; | &mdash; |
 
 ## Sprint 1 
 
