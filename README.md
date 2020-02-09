@@ -14,11 +14,11 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | ----- | :-----: | :-----: | :-----: |
-| Alexander Legouverneur  | TBA | Software Developer | 17.5 | &mdash; | &mdash; | &mdash; |
-| Kaustav Das Sharma | TBA | Software Architecure Engineer | 19 | &mdash; | &mdash; | &mdash; |
-| Mohamed Bouaouina | TBA | Project Manager | 18.5 | &mdash; | &mdash; | &mdash; |
-| Nicolas Buisson | TBA | Product Manager | 20 | &mdash; | &mdash; | &mdash; |
-| Rahul Behal | TBA | Software Consultant | 15 | &mdash; | &mdash; | &mdash; |
+| Alexander Legouverneur  | Software Developer | 17.5 | &mdash; | &mdash; | &mdash; |
+| Kaustav Das Sharma | Software Architecure Engineer | 19 | &mdash; | &mdash; | &mdash; |
+| Mohamed Bouaouina | Project Manager | 18.5 | &mdash; | &mdash; | &mdash; |
+| Nicolas Buisson | Product Manager | 20 | &mdash; | &mdash; | &mdash; |
+| Rahul Behal | Software Consultant | 15 | &mdash; | &mdash; | &mdash; |
 
 ## Sprint 1 
 
