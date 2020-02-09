@@ -32,7 +32,7 @@ Started Jan 27, 2020
 ### Tasks completed by each member:
 * Alex:
 * Kaustav:
-* Mohamed:
+* Mohamed: Worked on creating requirements, use cases, use case diagrams, setting up a Spring backend app with a Gradle build system, creating the CRUD repos, unit testing the persitence layer with JUnit, and documenting the project.
 * Nicolas: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
 * Rahul: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
 
