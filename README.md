@@ -22,27 +22,59 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 ## Sprint 1 
 
+### Objectives to complete:
 Started Jan 27, 2020
 * Requirements, Actors, and Use Cases
 * Domain Model
 * Database design
 * Test cases for persistence layer
 
+### Tasks completed by each member:
+* Alex:
+* Kaustav:
+* Mohamed:
+* Nicolas:
+* Rahul: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
+
 ## Sprint 2
 
+### Objectives to complete:
 Starts Feb 10, 2020
 * Backend implementation as RESTful services
 * Documentation of RESTful services
 * Suite of unit tests for backend
 
+### Tasks completed by each member:
+* Alex:
+* Kaustav:
+* Mohamed:
+* Nicolas:
+* Rahul:
+
 ## Sprint 3
 
+### Objectives to complete:
 Starts Mar 2, 2020
 * Architecture model
 * Implementation of Web frontend
 
+### Tasks completed by each member:
+* Alex:
+* Kaustav:
+* Mohamed:
+* Nicolas:
+* Rahul:
+
 ## Sprint 4
 
+### Objectives to complete:
 Starts Mar 23, 2020
 * Implementation of mobile frontend
 * Preparation for group presentation 
+
+### Tasks completed by each member:
+* Alex:
+* Kaustav:
+* Mohamed:
+* Nicolas:
+* Rahul:
