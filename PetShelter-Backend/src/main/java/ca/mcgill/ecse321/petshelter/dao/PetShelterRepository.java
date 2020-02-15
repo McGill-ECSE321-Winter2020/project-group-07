@@ -21,7 +21,7 @@ public class PetShelterRepository {
 	EntityManager entityManager;
 
 	@Transactional
-	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password,Integer phoneNumber, Set<Posting> postings) {
+	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password, String phoneNumber, Set<Posting> postings) {
 		Admin p = new Admin();
 		p.setAddress(address);
 		p.setComments(comments);
@@ -41,7 +41,7 @@ public class PetShelterRepository {
 		return p;
 	}
 	@Transactional
-	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,Integer phoneNumber, Set<Posting> postings) {
+	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,String phoneNumber, Set<Posting> postings) {
 		Client p = new Client();
 		p.setAddress(address);
 		p.setApplications(applications);
