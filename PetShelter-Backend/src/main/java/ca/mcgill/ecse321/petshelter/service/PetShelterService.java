@@ -41,7 +41,6 @@ public class PetShelterService {
 	public Client createClient(Date dob, String email, String password, String phoneNumber, String address, 
 							   Set<Posting> postings, Set<Comment> comments, String firstName, String lastName, 
 							   Set<Donation> donations, Set<Message> messages, Set<Application> applications) {
-		
 		// Checking if DOB is appropriate
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
@@ -91,6 +90,7 @@ public class PetShelterService {
 		client.setDateOfBirth(dob);
 		client.setEmail(email);
 		client.setPassword(password); // Just stored as string for now, can change later
+		client.setPhoneNumber(phoneNumber);
 		client.setAddress(address);
 		client.setPostings(postings);
 		client.setComments(comments);
@@ -106,14 +106,38 @@ public class PetShelterService {
 		
 		return client;
 	}
-	
+
 	@Transactional
-	public Client deleteClient() {
-		return null;
+	public Client getClient(String email) {
+		if (email != null) {
+			Client client = clientRepository.findClientByEmail(email);
+			return client;
+		}
+		return null; 
 	}
 	
 	@Transactional
-	public boolean clientLogin() {
+	public Client deleteClient(String email) {
+		if (email != null) {
+			Client client = clientRepository.findClientByEmail(email);
+			clientRepository.delete(client); 
+			return client;
+		}
+		return null; 
+	}
+	
+	@Transactional
+	public boolean clientLogin(String email, String password) {
+		if (email != null) {
+			try {
+				Client client = clientRepository.findClientByEmail(email);
+				if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
+					return true;
+				}	
+			} catch (Exception e) {
+				return false; 
+			}	
+		}
 		return false;
 	}
 	
