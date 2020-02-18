@@ -230,8 +230,27 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Application createApplication(){
-		return null;
+	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
+		Application application = new Application();
+		application.setId(client.getEmail().hashCode() * posting.getId());
+		application.setClient(client);
+		application.setPosting(posting);
+		application.setHomeType(homeType);
+		application.setIncomeRange(incomeRange);
+		application.setNumberOfResidents(numberOfResidents);
+		application.setStatus(ApplicationStatus.pending);
+		
+		applicationRepository.save(application);
+		
+		return application;
+	}
+	
+	private <T> List<T> toList(Iterable<T> iterable){
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
 	}
 
 	private <T> List<T> toList(Iterable<T> iterable){
