@@ -41,6 +41,12 @@ public class PetShelterService {
 	public Client createClient(Date dob, String email, String password, String phoneNumber, String address, 
 							   Set<Posting> postings, Set<Comment> comments, String firstName, String lastName, 
 							   Set<Donation> donations, Set<Message> messages, Set<Application> applications) {
+
+		// Checking if client exists already
+		if (getClient(email) != null) {
+			throw new IllegalArgumentException(ErrorMessages.accountExists);
+		}
+
 		// Checking if DOB is appropriate
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
