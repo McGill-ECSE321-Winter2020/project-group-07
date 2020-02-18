@@ -87,17 +87,34 @@ public class PetShelterService {
 	}
 	
 	@Transactional
-	public List<Application> getApplications(){
+	public List<Application> getPostingApplications(Posting posting){
 		return null;
 	}
 	
 	@Transactional
-	public Application selectFinalApplication(){
-		return null;
+	public boolean approveApplication(Application application){
+		/**
+		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
+		 * Status of this application is changed to approved
+		 * Change the status of other applications on the same posting to rejected 
+		 */
+		//TODO: add checks and warnings, check if posting has another application that was approved
+		application.setStatus(ApplicationStatus.accepted);
+		applicationRepository.save(application);
+		
+		for(Application a : getPostingApplications(application.getPosting())) {
+			if(a != application) {
+				a.setStatus(ApplicationStatus.rejected);
+				applicationRepository.save(a);
+			}
+		}
+			
+		return true;
 	}
 	
 	@Transactional
 	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
+		//TODO: add checks and warnings
 		Application application = new Application();
 		application.setId(client.getEmail().hashCode() * posting.getId());
 		application.setClient(client);
