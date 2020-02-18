@@ -88,7 +88,8 @@ public class PetShelterService {
 	
 	@Transactional
 	public List<Application> getPostingApplications(Posting posting){
-		return null;
+		//TODO: add checks and warnings, check if posting has another application that was approved
+		return toList(posting.getApplication()); //returns ArrayList of applications associated with the posting 
 	}
 	
 	@Transactional
