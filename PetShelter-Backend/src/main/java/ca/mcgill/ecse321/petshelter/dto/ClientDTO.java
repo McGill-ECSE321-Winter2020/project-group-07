@@ -27,10 +27,26 @@ public class ClientDTO {
     public ClientDTO() {
     }
 
+    // Viewing your own profile
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
+                     Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
+                     Set<Message> messages, Set<Application> applications) {
+        this.dateOfBirth = dob;
+        this.email = email; // Might get complicated changing the primary key in DB
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.postings = postings;
+        this.comments = comments; 
+        this.firstName = firstName;
+        this.lastName = lastName; 
+        this.donations = donations;
+        this.messages = messages;
+        this.applications = applications; 
+    }
+
     // Updating information
     public ClientDTO(Date dob, String email, String password, String phoneNumber, // May have to remove email
                      String address, String firstName, String lastName) {
-
         this.dateOfBirth = dob;
         this.email = email; // Might get complicated changing the primary key in DB
         this.password = password;
@@ -40,9 +56,21 @@ public class ClientDTO {
         this.lastName = lastName; 
     }
 
-    // Viewing profile
-    public ClientDTO(String email, String firstName, String lastName) {
+    // Viewing others profile
+    public ClientDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
+        this.dateOfBirth = dob; 
         this.email = email;
+        this.firstName = firstName; 
+        this.lastName = lastName; 
+        this.postings = postings;
+    }
+
+    // The person who posted your accepted application
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, String firstName, String lastName) {
+        this.dateOfBirth = dob; 
+        this.email = email;
+        this.phoneNumber= phoneNumber;
+        this.address = address; 
         this.firstName = firstName; 
         this.lastName = lastName; 
     }

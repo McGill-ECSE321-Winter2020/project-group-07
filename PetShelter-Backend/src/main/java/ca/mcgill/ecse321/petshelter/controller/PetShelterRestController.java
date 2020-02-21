@@ -1,9 +1,11 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
 import java.sql.Date;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,29 +32,78 @@ public class PetShelterRestController {
 	@Autowired
 	private PetShelterService service;
 
+
+	
 	// GET Mappings // 
 
-	// Get client -- For profile page
-	@GetMapping(value = { "/profile/{email}", "/profile/{email}/" }) // This is a problem because @ can't be there
-																	 // Easy fix suggestion -- We set a username attribute
-	public ClientDTO getClientByEmail(@PathVariable("email") String email) throws IllegalArgumentException {
-
+	// Get client -- For someone viewing a profile page
+	@GetMapping(value = { "/profile", "/profile/" }) 
+	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException {
 		Client client = service.getClient(email);
-
 		if (client == null) {
 			throw new IllegalArgumentException("Profile does not exist."); 
 		}
-		ClientDTO cDTO = convertToDTO(client.getEmail(), client.getFirstName(), client.getLastName());
-
+		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
+		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
+									  client.getLastName(), client.getPostings());
 		return cDTO;
 	}
 
+
+
+	// POST Mappings // 
+
+	// Creating an account 
+	@PostMapping(value = { "/createaccount", "/createaccount/" })
+	public ClientDTO registerClient(@RequestParam("email") String email, 
+			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, 
+			@RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+			@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+		
+		// Changing date to SQL object
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		java.util.Date dob_util = sdf.parse(dob);
+		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
+		Client client = service.createClient(dob_sql, email, password, phoneNumber, address,
+											 null, null, firstName, lastName, null, null, null);
+
+		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), 
+							client.getAddress(), client.getPostings(), client.getComments(), 
+							client.getFirstName(), client.getLastName(), client.getDonations(), 
+							client.getMessages(), client.getApplications());
+	}
+
+
+
 	// Convert to DTO functions // 
 
-	// For profile page
-	private ClientDTO convertToDTO(String email, String firstName, String lastName) {
-		ClientDTO clientDTO = new ClientDTO(email, firstName, lastName); 
+	// For viewing your own profile page -- Happens when you create an account/login/go to your page
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
+								   Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
+								   Set<Message> messages, Set<Application> applications) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
+											donations, messages, applications);
+		return clientDTO;
+	}
+
+	// For viewing people's profile pages
+	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
 		return clientDTO; 
+	}
+
+	// For the person who posted your accepted application
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, firstName, lastName); 
+		return clientDTO; 
+	}
+
+	// For updating profile information
+	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, // May have to remove email
+		String address, String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, password,phoneNumber, address, firstName, lastName);
+		return clientDTO;
 	}
 
 }
