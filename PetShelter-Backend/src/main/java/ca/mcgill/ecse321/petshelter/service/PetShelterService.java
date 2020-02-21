@@ -57,8 +57,8 @@ public class PetShelterService {
 		"[a-zA-Z0-9_+&*-]+)*@" + 
 		"(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
 		"A-Z]{2,7}$"; 
-		Pattern pat = Pattern.compile(emailRegex); 
-		if (email == null || !(pat.matcher(email).matches())) {
+		Pattern patEmail = Pattern.compile(emailRegex); 
+		if (email == null || !(patEmail.matcher(email).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
 		}
 
@@ -68,12 +68,9 @@ public class PetShelterService {
 		}
 
 		// Checking if phone number is appropriate
-		try {
-			if (phoneNumber == null || !(phoneNumber.length() == 10)) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
-			}
-			double d = Double.parseDouble(phoneNumber);
-		} catch (NumberFormatException nfe) {
+		String phoneNumberRegex = "^\\d{10}$";
+		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
+		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
 		}
 
@@ -125,7 +122,7 @@ public class PetShelterService {
 	@Transactional
 	public Client deleteClient(String email) {
 		if (email != null) {
-			Client client = clientRepository.findClientByEmail(email);
+			Client client = getClient(email);
 			clientRepository.delete(client); 
 			return client;
 		}
@@ -136,7 +133,7 @@ public class PetShelterService {
 	public boolean clientLogin(String email, String password) {
 		if (email != null) {
 			try {
-				Client client = clientRepository.findClientByEmail(email);
+				Client client = getClient(email);
 				if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
 					return true;
 				}	
