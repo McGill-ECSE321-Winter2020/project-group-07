@@ -40,6 +40,13 @@ public class ClientDTO {
         this.lastName = lastName; 
     }
 
+    // Viewing profile
+    public ClientDTO(String email, String firstName, String lastName) {
+        this.email = email;
+        this.firstName = firstName; 
+        this.lastName = lastName; 
+    }
+
     // Setters and Getters
     public void setDateOfBirth(Date dob) {
         this.dateOfBirth = dob;
