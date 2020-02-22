@@ -2,13 +2,18 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+
 import java.util.Collection;
+
+import java.util.Iterator;
+
 import java.util.List;
 import java.util.Set;
 
 // Used for checking for valid email
 import java.util.regex.Matcher; 
 import java.util.regex.Pattern; 
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +42,7 @@ public class PetShelterService {
 	private PostingRepository postingRepository;
 	@Autowired
 	private ProfileRepository profileRepository;
+
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
@@ -122,6 +128,7 @@ public class PetShelterService {
 		return null; 
 	}
 
+
 	@Transactional
 	public Client deleteClient(String email) {
 		if (email != null) {
@@ -131,6 +138,7 @@ public class PetShelterService {
 		}
 		return null; 
 	}
+
 
 	@Transactional
 	public boolean clientLogin(String email, String password) {
@@ -144,19 +152,77 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Profile updateProfile() {
-		return null;
+	public Client updateProfile(Client client, String email, String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
+		
+		if(!clientRepository.findById(email).equals(client)) {
+			throw new IllegalArgumentException("Profile with this email already exists.");
+		}
+		client.setAddress(address);
+		client.setDateOfBirth(dob);
+		client.setEmail(email);
+		client.setPassword(password);
+		client.setPhoneNumber(phoneNumber);
+		return client;
 	}
 
 	@Transactional
-	public Donation sendDonation() {
-		return null;
+	public Donation sendDonation(Integer amount, Client client, Date date) {
+
+		try {
+			if(amount<=0) {
+				throw new IllegalArgumentException("Amount needs to be whole and positive number!");
+			}
+		}
+		catch(IllegalArgumentException e) {
+			System.out.println("Amount cannot be a letter or a special character!");
+		}
+
+		if(date == null) {
+			throw new IllegalArgumentException("No date for donation.");
+		}
+
+		Donation donation = new Donation();
+		donation.setAmount(amount);
+		donation.setClient(client);
+		donation.setId(client.getEmail().hashCode()*date.hashCode());
+		donationRepository.save(donation);
+		return donation;
 	}
 
 	@Transactional
-	public Message sendMessage() {
-		return null;
+	public Message sendMessage(Admin admin,Client client,String content,Date date) {
+		
+		if(content.length() == 0 ) {
+			throw new IllegalArgumentException("You need to write a message before sending it.");
+		}
+		if(content.length() >1000) {
+			throw new IllegalArgumentException("Your message is too long.");
+		}
+		if(date == null) {
+			throw new IllegalArgumentException("No date for message.");
+		}
+		
+		//To avoid spam on admin account, checking if content has already been sent as a message.
+		java.util.Set<Message> allMess;
+		allMess = client.getMessages();
+		Iterator<Message> itr = allMess.iterator();
+		
+		while(itr.hasNext()) {
+			if(itr.next().getContent().equalsIgnoreCase(content)) {
+				throw new IllegalArgumentException("The message you are trying to send is identical to a previous message already sent.");
+			}
+		}
+		Message message = new Message();
+		message.setAdmin(admin);
+		message.setClient(client);
+		message.setContent(content);
+		message.setDate(date);
+		message.setId(client.getEmail().hashCode()*date.hashCode());
+		messageRepository.save(message);
+		return message;
+
 	}
+
 
 	/**
 	 * 
@@ -166,6 +232,8 @@ public class PetShelterService {
 	 * @param date
 	 * @return comment
 	 */
+
+
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
 
@@ -245,7 +313,7 @@ public class PetShelterService {
 		applicationRepository.save(application);
 		return true;
 	}
-	
+
 	@Transactional
 	public boolean approveApplication(Application application){
 		/**
