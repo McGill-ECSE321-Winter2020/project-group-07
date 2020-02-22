@@ -51,14 +51,10 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Profile updateProfile(Profile profile, String email, String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
+	public Profile updateProfile(Profile profile, String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
 		
-		if(!profileRepository.findById(email).equals(profile)) {
-			throw new IllegalArgumentException("Profile with this email already exists.");
-		}
 		profile.setAddress(address);
 		profile.setDateOfBirth(dob);
-		profile.setEmail(email);
 		profile.setPassword(password);
 		profile.setPhoneNumber(phoneNumber);
 		return profile;
