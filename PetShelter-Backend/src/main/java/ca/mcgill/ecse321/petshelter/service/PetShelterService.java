@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.dao.*;
+import ca.mcgill.ecse321.petshelter.ErrorMessages;;
 
 @Service
 public class PetShelterService {
@@ -30,6 +32,8 @@ public class PetShelterService {
 	private PostingRepository postingRepository;
 	@Autowired
 	private ProfileRepository profileRepository;
+	
+	private Integer commentID = 0;
 	
 	@Transactional
 	public Client createClient() {
@@ -61,14 +65,62 @@ public class PetShelterService {
 		return null;
 	}
 	
+	//MINE
+	/**
+	 * 
+	 * @param profile
+	 * @param posting
+	 * @param content
+	 * @param date
+	 * @return comment
+	 */
 	@Transactional
-	public Comment commentOnPosting() {
-		return null;
+	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
+		
+		//check inputs are valid
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPostingComment);
+		}
+		if(profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfileComment);
+		}
+		//check if the content is not just white spaces
+		String contentWhiteSpaceCheck = content.trim();
+		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+		}
+		
+		
+		//create comment object and set all its attributes
+		Comment comment = new Comment();
+		comment.setId(commentID);
+		comment.setPosting(posting);
+		comment.setProfile(profile);
+		comment.setContent(content);
+		comment.setDate(date);
+		
+		commentRepository.save(comment);
+		commentID++;
+		return comment;
 	}
 	
+	//MINE
 	@Transactional
 	public List<Posting> getPostings(){
-		return null;
+		
+		ArrayList <Posting> Postings = new ArrayList();
+		
+		//LIST OR ARRAYLIST?!?!?
+		
+		//how do I iterate through all the IDs?
+		Postings.add((Posting) postingRepository.findAll());
+		
+		Postings.addAll((Collection) postingRepository.findAll());
+		//return toList(PostingRepository.findAll());
+		return Postings;
 	}
 	
 	@Transactional
@@ -99,5 +151,13 @@ public class PetShelterService {
 	@Transactional
 	public Application createApplication(){
 		return null;
+	}
+	
+	private <T> List<T> toList(Iterable<T> iterable){
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
 	}
 }
