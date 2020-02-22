@@ -21,4 +21,15 @@ public class ErrorMessages {
     
     //Application 
     public static String selfApplication = "Cannot apply to your own posting.";
+    
+    //Donations
+    public static String negAmount = "Amount needs to be whole and positive number!";
+    public static String incorrectCharacter = "Amount cannot be a letter or a special character!";
+    public static String DateDonation = "No date for donation.";
+    
+    //Messages
+    public static String NoContent = "You need to write a message before sending it.";
+    public static String tooLong = "Your message is too long.";
+    public static String dateMessage = "No date for message.";
+    public static String MessAlreadyExists = "The message you are trying to send is identical to a previous message already sent.";
 }

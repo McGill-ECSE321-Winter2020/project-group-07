@@ -177,16 +177,16 @@ public class PetShelterService {
 
 		try {
 			if(amount<=0) {
-				throw new IllegalArgumentException("Amount needs to be whole and positive number!");
+				throw new IllegalArgumentException(ErrorMessages.negAmount);
 			}
 		}
 		catch(IllegalArgumentException e) {
-			System.out.println("Amount cannot be a letter or a special character!");
+			System.out.println(ErrorMessages.incorrectCharacter);
 		}
 
 
 		if(date == null) {
-			throw new IllegalArgumentException("No date for donation.");
+			throw new IllegalArgumentException(ErrorMessages.DateDonation);
 		}
 
 		Donation donation = new Donation();
@@ -202,13 +202,13 @@ public class PetShelterService {
 		
 
 	if(content.length() == 0 ) {
-		throw new IllegalArgumentException("You need to write a message before sending it.");
+		throw new IllegalArgumentException(ErrorMessages.NoContent);
 	}
 	if(content.length() >1000) {
-		throw new IllegalArgumentException("Your message is too long.");
+		throw new IllegalArgumentException(ErrorMessages.tooLong);
 	}
 	if(date == null) {
-		throw new IllegalArgumentException("No date for message.");
+		throw new IllegalArgumentException(ErrorMessages.dateMessage);
 	}
 
 	//To avoid spam on admin account, checking if content has already been sent as a message.
@@ -217,8 +217,16 @@ public class PetShelterService {
 	Iterator<Message> itr = allMess.iterator();
 
 	while(itr.hasNext()) {
-		if(itr.next().getContent().equalsIgnoreCase(content)) {
-			throw new IllegalArgumentException("The message you are trying to send is identical to a previous message already sent.");
+		Message curr = itr.next();
+		String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
+		String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
+		String month = new String(new char[] {date.toString().charAt(6),date.toString().charAt(7)});
+		String monthcurr = new String(new char[] {curr.getDate().toString().charAt(6),curr.getDate().toString().charAt(7)});
+		if(curr.getContent().equalsIgnoreCase(content)) {
+			if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
+				throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
+			}
+			
 		}
 	}
 	Message message = new Message();
