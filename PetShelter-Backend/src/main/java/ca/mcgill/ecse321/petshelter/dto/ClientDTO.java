@@ -45,10 +45,9 @@ public class ClientDTO {
     }
 
     // Updating information
-    public ClientDTO(Date dob, String email, String password, String phoneNumber, // May have to remove email
+    public ClientDTO(Date dob, String password, String phoneNumber, 
                      String address, String firstName, String lastName) {
         this.dateOfBirth = dob;
-        this.email = email; // Might get complicated changing the primary key in DB
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -66,12 +65,11 @@ public class ClientDTO {
     }
 
     // The person who posted your accepted application
-    public ClientDTO(Date dob, String email, String phoneNumber, String address, String firstName, String lastName) {
-        this.dateOfBirth = dob; 
-        this.email = email;
-        this.phoneNumber= phoneNumber;
-        this.address = address; 
-        this.firstName = firstName; 
+    public ClientDTO(Date dob, String phoneNumber, String address, String firstName, String lastName) {
+        this.dateOfBirth = dob;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.firstName = firstName;
         this.lastName = lastName; 
     }
 

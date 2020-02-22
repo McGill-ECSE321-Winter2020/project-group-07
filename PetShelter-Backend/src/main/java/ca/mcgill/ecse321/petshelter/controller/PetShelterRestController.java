@@ -3,27 +3,19 @@ package ca.mcgill.ecse321.petshelter.controller;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
 import ca.mcgill.ecse321.petshelter.dto.*;
 import ca.mcgill.ecse321.petshelter.model.*;
-import ca.mcgill.ecse321.petshelter.service.*;
+import ca.mcgill.ecse321.petshelter.service.PetShelterService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -38,10 +30,10 @@ public class PetShelterRestController {
 
 	// Get client -- For someone viewing a profile page
 	@GetMapping(value = { "/profile", "/profile/" }) 
-	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException {
+	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException { // Is it okay to have @?
 		Client client = service.getClient(email);
 		if (client == null) {
-			throw new IllegalArgumentException("Profile does not exist."); 
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
 		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
@@ -54,7 +46,7 @@ public class PetShelterRestController {
 	// POST Mappings // 
 
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" })
+	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
@@ -64,8 +56,9 @@ public class PetShelterRestController {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		java.util.Date dob_util = sdf.parse(dob);
 		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
-		Client client = service.createClient(dob_sql, email, password, phoneNumber, address, null, 
-											 null, firstName, lastName, null, null, null);
+		
+		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
+											 address, firstName, lastName);
 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
 							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
@@ -76,7 +69,7 @@ public class PetShelterRestController {
 
 	// Convert to DTO functions // 
 
-	// For viewing your own profile page -- Happens when you create an account/login/go to your page
+	// For viewing your own profile page -- Happens when you go to your page
 	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
 								   Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
 								   Set<Message> messages, Set<Application> applications) {
@@ -100,7 +93,7 @@ public class PetShelterRestController {
 	// For updating profile information
 	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, String firstName, // May have to remove email
 								   String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, password,phoneNumber, address, firstName, lastName);
+		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, firstName, lastName);
 		return clientDTO;
 	}
 

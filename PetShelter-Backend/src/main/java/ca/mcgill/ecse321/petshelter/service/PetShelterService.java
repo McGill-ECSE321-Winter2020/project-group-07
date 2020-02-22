@@ -38,16 +38,15 @@ public class PetShelterService {
 	private ProfileRepository profileRepository;
 	
 	@Transactional
-	public Client createClient(Date dob, String email, String password, String phoneNumber, String address, 
-							   Set<Posting> postings, Set<Comment> comments, String firstName, String lastName, 
-							   Set<Donation> donations, Set<Message> messages, Set<Application> applications) {
+	public Client createClient(Date dob, String email, String password, String phoneNumber, 
+							   String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		if (getClient(email) != null) {
 			throw new IllegalArgumentException(ErrorMessages.accountExists);
 		}
 
-		// Checking if DOB is appropriate
+		// Checking if DOB is appropriate -- Need to add check for 18 years of age
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
 		}
@@ -68,7 +67,7 @@ public class PetShelterService {
 		}
 
 		// Checking if phone number is appropriate
-		String phoneNumberRegex = "^\\d{10}$";
+		String phoneNumberRegex = "^\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d$";
 		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
 		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
@@ -95,15 +94,15 @@ public class PetShelterService {
 		client.setPassword(password); // Just stored as string for now, can change later
 		client.setPhoneNumber(phoneNumber);
 		client.setAddress(address);
-		client.setPostings(postings);
-		client.setComments(comments);
+		client.setPostings(null);
+		client.setComments(null);
 
 		// Client attributes
 		client.setFirstName(firstName);
 		client.setLastName(lastName);
-		client.setDonations(donations);
-		client.setMessages(messages);
-		client.setApplications(applications);
+		client.setDonations(null);
+		client.setMessages(null);
+		client.setApplications(null);
 
 		clientRepository.save(client);
 		
@@ -114,6 +113,9 @@ public class PetShelterService {
 	public Client getClient(String email) {
 		if (email != null) {
 			Client client = clientRepository.findClientByEmail(email);
+			if (client == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+			}
 			return client;
 		}
 		return null; 
@@ -132,14 +134,9 @@ public class PetShelterService {
 	@Transactional
 	public boolean clientLogin(String email, String password) {
 		if (email != null) {
-			try {
-				Client client = getClient(email);
-				if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
-					return true;
-				}	
-			} catch (Exception e) {
-				return false; 
-			}	
+			Client client = getClient(email);
+			if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
+				return true;
 		}
 		return false;
 	}
