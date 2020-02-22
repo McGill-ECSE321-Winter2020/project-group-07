@@ -14,8 +14,8 @@ public class ErrorMessages {
 
     
     // Comment
-    public static String invalidPostingComment = "Invalid Posting.";
-    public static String invalidProfileComment = "Invalid Profile.";
+    public static String invalidPostingComment = "Invalid posting.";
+    public static String invalidProfileComment = "Invalid profile.";
     public static String invalidContentComment = "Cannot post an empty comment.";
     public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
 }
