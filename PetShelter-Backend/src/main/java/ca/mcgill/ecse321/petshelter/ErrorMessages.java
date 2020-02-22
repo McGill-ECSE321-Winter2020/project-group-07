@@ -18,4 +18,7 @@ public class ErrorMessages {
     public static String invalidProfileComment = "Invalid profile.";
     public static String invalidContentComment = "Cannot post an empty comment.";
     public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
+    
+    //Application 
+    public static String selfApplication = "Cannot apply to your own posting.";
 }

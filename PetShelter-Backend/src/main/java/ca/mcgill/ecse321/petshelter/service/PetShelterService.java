@@ -199,9 +199,22 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public List<Posting> getAllPostings(){
-
-		return toList(postingRepository.findAll());
+	public List<Posting> getOpenPostings(){
+		//add comments
+		List<Posting> allPostings = toList(postingRepository.findAll());
+		List<Posting> openPostings = new ArrayList<Posting>();
+		for(Posting posting : allPostings) {
+			boolean closedPosting = false;
+			for(Application application : posting.getApplication()) {
+				if(application.getStatus() == ApplicationStatus.accepted) {
+					closedPosting = true;
+				}
+			}
+			if(!closedPosting) {
+				openPostings.add(posting);
+			}
+		}
+		return openPostings;
 	}
 
 	@Transactional
@@ -226,13 +239,24 @@ public class PetShelterService {
 	}
 
 	@Transactional
+	public boolean rejectApplication(Application application) {
+		//TODO: add checks
+		application.setStatus(ApplicationStatus.rejected);
+		applicationRepository.save(application);
+		return true;
+	}
+	
+	@Transactional
 	public boolean approveApplication(Application application){
 		/**
 		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
 		 * Status of this application is changed to approved
-		 * Change the status of other applications on the same posting to rejected 
+		 * Change the status of other applications on the same posting to rejected
+		 * The decision is final
 		 */
-		//TODO: add checks and warnings, check if posting has another application that was approved
+		//TODO: check that this application has a pending status, throw Exception
+		//TOD: check that the application is not null
+		
 		application.setStatus(ApplicationStatus.accepted);
 		applicationRepository.save(application);
 		
@@ -248,7 +272,16 @@ public class PetShelterService {
 
 	@Transactional
 	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
-		//TODO: add checks and warnings
+		//check client is not null 
+		//check posting exists
+		//check hometype is not null 
+		//check incomerange is not null 
+		//check number of residents is more than zero
+		
+		if(client.equals(posting.getProfile())){
+			throw new IllegalArgumentException(ErrorMessages.selfApplication);
+		}
+		
 		Application application = new Application();
 		application.setId(client.getEmail().hashCode() * posting.getId());
 		application.setClient(client);
