@@ -84,7 +84,7 @@ public class PetShelterService {
 		if(profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfileComment);
 		}
-		//check if the content is not just white spaces
+		//check content is not just white spaces
 		String contentWhiteSpaceCheck = content.trim();
 		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
