@@ -137,6 +137,7 @@ public class PetShelterService {
 			Client client = getClient(email);
 			if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
 				return true;
+			}
 		}
 		return false;
 	}
