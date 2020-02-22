@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.dto;
-import ca.mcgill.ecse321.petshelter.model.*;
 import java.sql.Date;
+
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Client;
 
 public class MessageDTO {
 	
