@@ -12,5 +12,10 @@ public class ErrorMessages {
     public static String invalidAddress = "Invalid street address.";
     public static String invalidFirstName = "Invalid first name.";
     public static String invalidLastName = "Invalid last name."; 
-
+    
+    // Comment
+    public static String invalidPostingComment = "Invalid posting.";
+    public static String invalidProfileComment = "Invalid profile.";
+    public static String invalidContentComment = "Cannot post an empty comment.";
+    public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
 }
