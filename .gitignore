@@ -13,3 +13,5 @@ project-group-07.iml
 .idea/misc.xml
 .idea/encodings.xml
 .DS_Store
+.gradle/6.1/fileHashes/fileHashes.lock
+.gradle/checksums/checksums.lock
