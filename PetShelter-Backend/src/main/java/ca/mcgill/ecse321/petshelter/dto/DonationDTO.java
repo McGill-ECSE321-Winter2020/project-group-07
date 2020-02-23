@@ -9,9 +9,9 @@ public class DonationDTO {
 	private Date date;
 	private Integer amount;
 	private Integer id;
-	private Client client;
+	private ClientDTO client;
 	
-	public DonationDTO(Date d, Integer am, Integer Id, Client cl) {
+	public DonationDTO(Date d, Integer am, Integer Id, ClientDTO cl) {
 		this.amount = am;
 		this.client = cl;
 		this.id = Id;
@@ -42,11 +42,11 @@ public class DonationDTO {
 		this.id = id;
 	}
 
-	public Client getClient() {
+	public ClientDTO getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(ClientDTO client) {
 		this.client = client;
 	}
 
