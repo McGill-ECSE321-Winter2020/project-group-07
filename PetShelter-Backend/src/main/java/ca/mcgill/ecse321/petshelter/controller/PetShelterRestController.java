@@ -180,7 +180,8 @@ public class PetShelterRestController {
 		applicationDTO.setStatus(application.getStatus());
 		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
 		applicationDTO.setPosting(application.getPosting());
-		applicationDTO.setClient(application.getClient()); //TODO: change to ClientDTO
+		Client client = application.getClient(); 
+		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getFirstName(), client.getLastName()));
 		return applicationDTO;
 	}
 	
