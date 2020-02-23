@@ -12,6 +12,7 @@ public class DonationDTO {
 	private ClientDTO client;
 	
 
+
 	public Date getDate() {
 		return date;
 	}
