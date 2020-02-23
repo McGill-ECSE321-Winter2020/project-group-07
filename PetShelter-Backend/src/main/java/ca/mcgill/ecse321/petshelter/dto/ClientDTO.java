@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.petshelter.model.*;
 
 import java.sql.Date;
 import java.util.Set; 
+import java.util.List; 
 
 public class ClientDTO {
 
@@ -13,25 +14,25 @@ public class ClientDTO {
     private String password;
     private String phoneNumber;
     private String address;
-    private Set<PostingDTO> postings; 
-    private Set<CommentDTO> comments; 
+    private List<PostingDTO> postings; 
+    private List<CommentDTO> comments; 
     private boolean isLoggedIn;
 
     // Client attributes
     private String firstName; 
     private String lastName; 
-    private Set<DonationDTO> donations;
-    private Set<MessageDTO> messages;
-    private Set<ApplicationDTO> applications; 
+    private List<DonationDTO> donations;
+    private List<MessageDTO> messages;
+    private List<ApplicationDTO> applications; 
 
     // Can add more constructors later based on functionality needed
     public ClientDTO() {
     }
 
     // Creating an account
-    public ClientDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
-                     Set<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, 
-                     Set<DonationDTO> donations, Set<MessageDTO> messages, Set<ApplicationDTO> applications) {
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, List<PostingDTO> postings, 
+                     List<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, 
+                     List<DonationDTO> donations, List<MessageDTO> messages, List<ApplicationDTO> applications) {
         this.dateOfBirth = dob;
         this.email = email; 
         this.phoneNumber = phoneNumber;
@@ -60,7 +61,7 @@ public class ClientDTO {
 
     // Viewing others profile
     public ClientDTO(Date dob, String email, boolean isLoggedIn, 
-                     String firstName, String lastName, Set<PostingDTO> postings) {
+                     String firstName, String lastName, List<PostingDTO> postings) {
         this.dateOfBirth = dob; 
         this.email = email;
         this.isLoggedIn = isLoggedIn;
@@ -121,19 +122,19 @@ public class ClientDTO {
         return this.address;
     }
 
-    public void setPostings(Set<PostingDTO> postings) {
+    public void setPostings(List<PostingDTO> postings) {
 		this.postings = postings;
     }
     
-    public Set<PostingDTO> getPostings() {
+    public List<PostingDTO> getPostings() {
         return this.postings;
     }
 
-    public void setComments(Set<CommentDTO> comments) {
+    public void setComments(List<CommentDTO> comments) {
 		this.comments = comments;
     }
     
-    public Set<CommentDTO> getComments() {
+    public List<CommentDTO> getComments() {
         return this.comments;
     }
 
@@ -153,27 +154,27 @@ public class ClientDTO {
         return this.lastName; 
     }
 
-    public void setDonations(Set<DonationDTO> donations) {
+    public void setDonations(List<DonationDTO> donations) {
 		this.donations = donations;
     }
     
-    public Set<DonationDTO> getDonations() {
+    public List<DonationDTO> getDonations() {
 		return this.donations;
     }
     
-    public void setMessages(Set<MessageDTO> messages) {
+    public void setMessages(List<MessageDTO> messages) {
 		this.messages = messages;
     }
     
-    public Set<MessageDTO> getMessages() {
+    public List<MessageDTO> getMessages() {
 		return this.messages;
     }
     
-    public void setApplications(Set<ApplicationDTO> applications) {
+    public void setApplications(List<ApplicationDTO> applications) {
 		this.applications = applications;
     }
     
-    public Set<ApplicationDTO> getApplications() {
+    public List<ApplicationDTO> getApplications() {
 		return this.applications;
 	}
 
