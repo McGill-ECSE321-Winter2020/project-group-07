@@ -15,14 +15,14 @@ public class PostingDTO {
 	private String petName;
 	private String petBreed;
 	private Date petDateOfBirth;
-	private Profile profile;
-	private Set <Application> applications;
-	private Set <Comment> comments;
+	private ProfileDTO profile;
+	private Set <Application> applications; //CHANGE TO DTO
+	private Set <CommentDTO> comments;
 	
 	//Constructor
 	public PostingDTO(Integer id, Date date, String picture, String description, 
-			String petName, String petBreed,Date petDateOfBirth, Profile profile, 
-			Set<Application> applications, Set<Comment> comments) {
+			String petName, String petBreed,Date petDateOfBirth, ProfileDTO profile, 
+			Set<Application> applications, Set<CommentDTO> comments) {
 		
 		Id = id;
 		this.date = date;
@@ -79,11 +79,11 @@ public class PostingDTO {
 	public void setPetDateOfBirth(Date petDateOfBirth) {
 		this.petDateOfBirth = petDateOfBirth;
 	}
-	public Profile getProfile() {
+	public ProfileDTO getProfile() {
 		return profile;
 	}
 
-	public void setProfile(Profile profile) {
+	public void setProfile(ProfileDTO profile) {
 		this.profile = profile;
 	}
 
@@ -95,11 +95,11 @@ public class PostingDTO {
 		this.applications = applications;
 	}
 
-	public Set<Comment> getComments() {
+	public Set<CommentDTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(Set<CommentDTO> comments) {
 		this.comments = comments;
 	}
 }

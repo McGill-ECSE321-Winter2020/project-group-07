@@ -52,6 +52,14 @@ public abstract class Profile{
 	public String getAddress() {
 		return this.address;
 	}
+	private boolean isLoggedIn;
+	
+	public void setIsLoggedIn(boolean value) {
+		this.isLoggedIn = value;
+	}
+	public boolean getIsLoggedIn() {
+		return this.isLoggedIn;
+	}
 	
 	@ElementCollection(targetClass=Posting.class)
 	private Set<Posting> postings;
