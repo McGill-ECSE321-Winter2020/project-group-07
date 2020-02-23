@@ -73,12 +73,6 @@ public class ClientDTO {
         this.lastName = lastName; 
     }
     
-    // Test constructor -- Remove later
-    public ClientDTO(String firstName, String lastName) {
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    }
-
     // Setters and Getters
     public void setDateOfBirth(Date dob) {
         this.dateOfBirth = dob;
