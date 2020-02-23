@@ -5,7 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,7 +55,7 @@ public class PetShelterRestController {
 	@GetMapping(value = {"/{posting}/applications", "/{posting}/applications/"})
 	public List<ApplicationDTO> getPostingApplications(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
 		List<Application> applications = service.getPostingApplications(posting);
-		return convertToDTO(applications);
+		return convertToDTOApplications(applications);
 	}
 
 
@@ -98,7 +99,6 @@ public class PetShelterRestController {
 											 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
 							null, null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName(), null, null, null);
-
 	}
 
 
@@ -111,9 +111,9 @@ public class PetShelterRestController {
 
 	@PostMapping(value = {"/createapplication", "/createapplication"})
 	public ApplicationDTO createApplication(@RequestParam("client") Client client, @RequestParam("posting") Posting posting, 
-											@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
-											@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
-		
+			@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
+			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
+
 		Application application = service.createApplication(client, posting, homeType, incomeRange, numberOfResidents);
 		return convertToDTO(application);
 	}
@@ -138,21 +138,22 @@ public class PetShelterRestController {
 
 
 	// Convert to DTO functions // 
-
-	// Rahul DTOs
+	
+	//Client Convert to DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
-			Set<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, Set<DonationDTO> donations, 
-			Set<MessageDTO> messages, Set<ApplicationDTO> applications) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, isLoggedIn, firstName, lastName, 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
+			List<Comment> comments, String firstName, String lastName, List<Donation> donations, 
+			List<Message> messages, List<Application> applications) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
 				donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
-	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName, Set<PostingDTO> postings) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings); 
+
+	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
 		return clientDTO; 
 	}
 
@@ -168,12 +169,9 @@ public class PetShelterRestController {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
-	
 
-	
-	
-	
-	// Youssef converToDTOs
+	//Application Convert to DTOs
+
 
 	private ApplicationDTO convertToDTO(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
@@ -187,32 +185,103 @@ public class PetShelterRestController {
 		applicationDTO.setId(application.getId());
 		return applicationDTO;
 	}
-	
-	private List<ApplicationDTO> convertToDTO(List<Application> applications){
+
+	private List<ApplicationDTO> convertToDTOApplications(List<Application> applications){
 		List<ApplicationDTO> applicationsDTO = new ArrayList<>();
 		for(Application application : applications) {
 			applicationsDTO.add(convertToDTO(application));
 		}
 		return applicationsDTO;
 	}
-
-
-
-	// Alex ConvertToDTOs
-
-
-
-
-
-	// Nicolas ConvertToDTOs
-
-
-
-
-
-	// Kaustav ConvertToDTOs
-
-
 	
+	/**
+	 * 
+	 * @param message, that you want to convert to messageDTO
+	 * @return messageDTO
+	 */
+	private MessageDTO convertToDTO(Message message) {
+		MessageDTO messageDTO = new MessageDTO();
+		messageDTO.setAdmin(message.getAdmin());
+		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(),message.getClient().getEmail(),
+				message.getClient().getFirstName(),message.getClient().getLastName(),convertToDTOPostings(service.toList(message.getClient().getPostings()))));
+		messageDTO.setContent(message.getContent());
+		messageDTO.setDate(message.getDate());
+		messageDTO.setId(message.getId());
+		return messageDTO;
+		
+	}
+	
+	/**
+	 * 
+	 * @param messages, a list of messages you want to convert to a list of messageDTO
+	 * @return list of messageDTO
+	 */
+	private List<MessageDTO> convertToDTOMessage(List<Message> messages){
+		List<MessageDTO> messageDTO = new ArrayList<>();
+		for(Message message : messages) {
+			messageDTO.add(convertToDTO(message));
+		}
+		return messageDTO;
+	}
+	
+	/**
+	 * 
+	 * @param donation, that you want to convert to donationDTO
+	 * @return donationDTO
+	 */
+	private DonationDTO convertToDTO(Donation donation) {
+		DonationDTO donDTO = new DonationDTO();
+		donDTO.setAmount(donation.getAmount());
+		Client client = donation.getClient();
+		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getIsLoggedIn(),
+				client.getFirstName(),client.getLastName(),convertToDTOPostings(service.toList(client.getPostings()))));
+	}
+	
+	//Comment Convert to DTOs
+
+	private CommentDTO convertToDTO(Comment comment) {
+		CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getDate(), convertToDTO(comment.getProfile()),
+				convertToDTO(comment.getPosting()), comment.getContent());
+		return commentDTO;
+	}
+
+	private List<CommentDTO> convertToDTOComments(List<Comment> comments){
+		List<CommentDTO> commentsDTO = new ArrayList<CommentDTO>();
+		for(Comment comment : comments) {
+			commentsDTO.add(convertToDTO(comment));
+		}
+		return commentsDTO;
+	}
+	
+	//Posting Convert to DTOs
+
+	private PostingDTO convertToDTO(Posting posting) {
+		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
+				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),convertToDTO(posting.getProfile()),
+				convertToDTOApplications(service.toList(posting.getApplication())), convertToDTOComments(service.toList(posting.getComment())));
+		return postingDTO;
+	}
+
+	private List<PostingDTO> convertToDTOPostings(List<Posting> postings){
+		List<PostingDTO> postingsDTO = new ArrayList<>();
+		for(Posting posting : postings) {
+			postingsDTO.add(convertToDTO(posting));
+		}
+		return postingsDTO;
+	}
+	
+	//Profile Convert to DTOs
+	
+	//needed for messages and comments
+	private ProfileDTO convertToDTO(Profile profile) {
+		ProfileDTO profileDTO = new ProfileDTO();
+		profileDTO.setEmail(profile.getEmail());
+		profileDTO.setAddress(profile.getAddress());
+		profileDTO.setPhoneNumber(profile.getPhoneNumber());
+		profileDTO.setDateOfBirth(profile.getDateOfBirth());
+		profileDTO.setPostings(convertToDTOPostings(service.toList(profile.getPostings())));
+		
+		return profileDTO;
+	}
 
 }

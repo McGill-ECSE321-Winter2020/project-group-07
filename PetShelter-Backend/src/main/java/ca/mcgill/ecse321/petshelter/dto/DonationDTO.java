@@ -11,12 +11,6 @@ public class DonationDTO {
 	private Integer id;
 	private ClientDTO client;
 	
-	public DonationDTO(Date d, Integer am, Integer Id, ClientDTO cl) {
-		this.amount = am;
-		this.client = cl;
-		this.id = Id;
-		this.date = d;
-	}
 
 	public Date getDate() {
 		return date;

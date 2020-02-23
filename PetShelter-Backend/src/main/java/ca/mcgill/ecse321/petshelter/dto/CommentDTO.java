@@ -9,12 +9,12 @@ public class CommentDTO {
 	//Comment Attributes
 	private Integer Id;
 	private Date date;
-	private Profile profile;
+	private ProfileDTO profile;
 	private PostingDTO posting;
 	private String content;
 	
 	//Constructor
-	public CommentDTO(Integer Id, Date date, Profile profile, PostingDTO posting, String content) {
+	public CommentDTO(Integer Id, Date date, ProfileDTO profile, PostingDTO posting, String content) {
 		this.Id = Id;
 		this.date = date;
 		this.profile = profile;
@@ -40,11 +40,11 @@ public class CommentDTO {
 		return this.date;
 	}
 	
-	public void setProfile(Profile profile) {
+	public void setProfile(ProfileDTO profile) {
 		this.profile = profile;
 	}
 	
-	public Profile getProfile() {
+	public ProfileDTO getProfile() {
 		return this.profile;
 	}
 	

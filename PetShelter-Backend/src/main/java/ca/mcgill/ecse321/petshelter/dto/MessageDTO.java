@@ -12,12 +12,6 @@ public class MessageDTO {
 	private Admin admin;
 	private Integer id;
 	
-	public MessageDTO(Date d, String cont, ClientDTO c, Admin a, Integer Id) {
-		this.admin =a;
-		this.client = c;
-		this.date= d;
-		this.id = Id;
-	}
 
 	public Date getDate() {
 		return date;

@@ -413,7 +413,7 @@ public class PetShelterService {
 			return application;
 		}
 
-		private <T> List<T> toList(Iterable<T> iterable){
+		public <T> List<T> toList(Iterable<T> iterable){
 			List<T> resultList = new ArrayList<T>();
 			for (T t : iterable) {
 				resultList.add(t);

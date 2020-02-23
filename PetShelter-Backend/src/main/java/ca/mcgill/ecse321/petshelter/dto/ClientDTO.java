@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.petshelter.dto;
 import ca.mcgill.ecse321.petshelter.model.*;
 
 import java.sql.Date;
-import java.util.Set; 
 import java.util.List; 
 
 public class ClientDTO {
@@ -18,6 +17,7 @@ public class ClientDTO {
     private List<CommentDTO> comments; 
     private boolean isLoggedIn;
 
+
     // Client attributes
     private String firstName; 
     private String lastName; 
@@ -25,10 +25,10 @@ public class ClientDTO {
     private List<MessageDTO> messages;
     private List<ApplicationDTO> applications; 
 
+
     // Can add more constructors later based on functionality needed
     public ClientDTO() {
     }
-
     // Creating an account
     public ClientDTO(Date dob, String email, String phoneNumber, String address, List<PostingDTO> postings, 
                      List<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, 
@@ -151,31 +151,32 @@ public class ClientDTO {
     }
 
     public String getLastName() {
-        return this.lastName; 
+        return this.lastName;
     }
 
+
     public void setDonations(List<DonationDTO> donations) {
-		this.donations = donations;
+		    this.donations = donations;
     }
     
     public List<DonationDTO> getDonations() {
-		return this.donations;
+		    return this.donations;
     }
     
     public void setMessages(List<MessageDTO> messages) {
-		this.messages = messages;
+		    this.messages = messages;
     }
     
     public List<MessageDTO> getMessages() {
-		return this.messages;
+		    return this.messages;
     }
     
     public void setApplications(List<ApplicationDTO> applications) {
-		this.applications = applications;
+		    this.applications = applications;
     }
     
     public List<ApplicationDTO> getApplications() {
-		return this.applications;
+		    return this.applications;
 	}
 
 }
