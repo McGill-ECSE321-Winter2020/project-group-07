@@ -73,18 +73,20 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
+	@PostMapping(value = { "/profile", "/profile/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
-									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
+									@RequestParam("lastName") String lastName, @RequestParam("dob") Date dob, // Will be in format "dd-MM-yyyy"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
 									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
 		
 		// Changing date to SQL object --> Look into Spring DateTimeFormat, may be easier
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		java.util.Date dob_util = sdf.parse(dob);
-		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//		java.util.Date dob_util = sdf.parse(dob);
+//		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime());
 		
-		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
+//		return convertToDTO(firstName, lastName);
+		
+		Client client = service.createClient(dob, email, password, phoneNumber, 
 											 address, firstName, lastName);
 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
@@ -153,7 +155,7 @@ public class PetShelterRestController {
 		return clientDTO;
 	}
 	
-	
+
 	
 	
 	
@@ -176,4 +178,12 @@ public class PetShelterRestController {
 	
 	
 	// Kaustav ConvertToDTOs
+}
+
+	// Test remove later
+	private ClientDTO convertToDTO(String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(firstName, lastName);
+		return clientDTO;
+	}
+
 }
