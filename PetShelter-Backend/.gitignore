@@ -32,6 +32,6 @@ out/
 .vscode/
 /bin/
 
-# Rahul - Local Test File
-src/main/java/ca/mcgill/ecse321/petshelter/test.java
 src/main/java/ca/mcgill/ecse321/petshelter/test.class
+src/main/java/ca/mcgill/ecse321/petshelter/test.java
+.vscode/launch.json
