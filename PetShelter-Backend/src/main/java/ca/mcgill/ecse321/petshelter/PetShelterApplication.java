@@ -13,17 +13,10 @@ public class PetShelterApplication {
     SpringApplication.run(PetShelterApplication.class, args);
   }
 
-<<<<<<< HEAD
   @RequestMapping("/")
   public String greeting(){
     return "Pet Shelter Application running successfully :)";
   }
-=======
-//  @RequestMapping("/")
-//  public String greeting(){
-//    return "Customised";
-//  }
->>>>>>> Tried to test APIs -- failed
   
   
 
