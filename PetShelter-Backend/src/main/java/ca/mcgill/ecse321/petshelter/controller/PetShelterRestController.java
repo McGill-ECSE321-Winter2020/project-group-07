@@ -28,6 +28,7 @@ public class PetShelterRestController {
 
 	// GET Mappings // 
 
+	// Rahul GET Mappings
 	// Get client -- For someone viewing a profile page
 	@GetMapping(value = { "/profile", "/profile/" }) 
 	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException { // Is it okay to have @?
@@ -43,8 +44,34 @@ public class PetShelterRestController {
 
 
 
+	
+	// Youssef GET Mappings
+	
+	
+	
+	
+	
+	// Alex GET Mappings
+	
+	
+	
+	
+	
+	// Nicolas GET Mappings
+	
+	
+	
+	
+	
+	// Kaustav GET Mappings
+	
+	
+	
+	
+	
 	// POST Mappings // 
 
+	// Rahul POST Mappings
 	// Creating an account 
 	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
@@ -67,7 +94,36 @@ public class PetShelterRestController {
 
 
 
+	
+	
+	
+	// Youssef POST Mappings
+	
+	
+	
+	
+	
+	
+	// Alex POST Mappings
+	
+	
+	
+	
+	
+	// Nicolas POST Mappings
+	
+	
+	
+	
+	// Kaustav POST Mappings
+	
+	
+	
+	
+	
 	// Convert to DTO functions // 
+	
+	// Rahul DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
 	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
@@ -96,5 +152,28 @@ public class PetShelterRestController {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, firstName, lastName);
 		return clientDTO;
 	}
-
+	
+	
+	
+	
+	
+	// Youssef converToDTOs
+	
+	
+	
+	
+	
+	// Alex ConvertToDTOs
+	
+	
+	
+	
+	
+	// Nicolas ConvertToDTOs
+	
+	
+	
+	
+	
+	// Kaustav ConvertToDTOs
 }
