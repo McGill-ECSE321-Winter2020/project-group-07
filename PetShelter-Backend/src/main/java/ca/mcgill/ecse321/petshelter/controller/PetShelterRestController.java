@@ -98,7 +98,7 @@ public class PetShelterRestController {
 											 address, firstName, lastName);
 											 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							null, null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName(), null, null, null);
+							null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
 	}
 
 
@@ -142,18 +142,18 @@ public class PetShelterRestController {
 	//Client Convert to DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
-			List<Comment> comments, String firstName, String lastName, List<Donation> donations, 
-			List<Message> messages, List<Application> applications) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<PostingDTO> postings, 
+			List<CommentDTO> comments, String firstName, String lastName, List<DonationDTO> donations, 
+			List<MessageDTO> messages, List<ApplicationDTO> applications, boolean isLoggedIn) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, isLoggedIn, firstName, lastName, 
 				donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
 
-	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
+	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName, List<PostingDTO> postings) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings); 
 		return clientDTO; 
 	}
 
@@ -202,15 +202,15 @@ public class PetShelterRestController {
 	private MessageDTO convertToDTO(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setAdmin(message.getAdmin());
-		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(),message.getClient().getEmail(),
-				message.getClient().getFirstName(),message.getClient().getLastName(),convertToDTOPostings(service.toList(message.getClient().getPostings()))));
+		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(),message.getClient().getEmail(), message.getClient().getPhoneNumber(), 
+				message.getClient().getAddress(), message.getClient().getIsLoggedIn(),
+				message.getClient().getFirstName(),message.getClient().getLastName()));
 		messageDTO.setContent(message.getContent());
 		messageDTO.setDate(message.getDate());
 		messageDTO.setId(message.getId());
 		return messageDTO;
 		
 	}
-	
 	/**
 	 * 
 	 * @param messages, a list of messages you want to convert to a list of messageDTO
@@ -233,8 +233,10 @@ public class PetShelterRestController {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
 		Client client = donation.getClient();
-		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getIsLoggedIn(),
-				client.getFirstName(),client.getLastName(),convertToDTOPostings(service.toList(client.getPostings()))));
+		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getPhoneNumber(), 
+				client.getAddress(), client.getIsLoggedIn(),
+				client.getFirstName(),client.getLastName()));
+		return donDTO;
 	}
 	
 	//Comment Convert to DTOs
