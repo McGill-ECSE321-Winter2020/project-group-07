@@ -13,9 +13,11 @@ public class PetShelterApplication {
     SpringApplication.run(PetShelterApplication.class, args);
   }
 
-  @RequestMapping("/")
-  public String greeting(){
-    return "Customised";
-  }
+//  @RequestMapping("/")
+//  public String greeting(){
+//    return "Customised";
+//  }
+  
+  
 
 }
