@@ -13,24 +13,24 @@ public class ClientDTO {
     private String password;
     private String phoneNumber;
     private String address;
-    private Set<PostingDTO> postings; 
-    private Set<CommentDTO> comments; 
+    private Set<Posting> postings; 
+    private Set<Comment> comments; 
 
     // Client attributes
     private String firstName; 
     private String lastName; 
-    private Set<DonationDTO> donations;
-    private Set<MessageDTO> messages;
-    private Set<Application> applications; //need to change this 
+    private Set<Donation> donations;
+    private Set<Message> messages;
+    private Set<Application> applications; 
 
     // Can add more constructors later based on functionality needed
     public ClientDTO() {
     }
 
     // Viewing your own profile
-    public ClientDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
-                     Set<CommentDTO> comments, String firstName, String lastName, Set<DonationDTO> donations, 
-                     Set<MessageDTO> messages, Set<Application> applications) {
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
+                     Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
+                     Set<Message> messages, Set<Application> applications) {
         this.dateOfBirth = dob;
         this.email = email; // Might get complicated changing the primary key in DB
         this.phoneNumber = phoneNumber;
@@ -56,7 +56,7 @@ public class ClientDTO {
     }
 
     // Viewing others profile
-    public ClientDTO(Date dob, String email, String firstName, String lastName, Set<PostingDTO> postings) {
+    public ClientDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
         this.dateOfBirth = dob; 
         this.email = email;
         this.firstName = firstName; 
@@ -114,19 +114,19 @@ public class ClientDTO {
         return this.address;
     }
 
-    public void setPostings(Set<PostingDTO> postings) {
+    public void setPostings(Set<Posting> postings) {
 		this.postings = postings;
     }
     
-    public Set<PostingDTO> getPostings() {
+    public Set<Posting> getPostings() {
         return this.postings;
     }
 
-    public void setComments(Set<CommentDTO> comments) {
+    public void setComments(Set<Comment> comments) {
 		this.comments = comments;
     }
     
-    public Set<CommentDTO> getComments() {
+    public Set<Comment> getComments() {
         return this.comments;
     }
 
@@ -146,19 +146,19 @@ public class ClientDTO {
         return this.lastName; 
     }
 
-    public void setDonations(Set<DonationDTO> donations) {
+    public void setDonations(Set<Donation> donations) {
 		this.donations = donations;
     }
     
-    public Set<DonationDTO> getDonations() {
+    public Set<Donation> getDonations() {
 		return this.donations;
     }
     
-    public void setMessages(Set<MessageDTO> messages) {
+    public void setMessages(Set<Message> messages) {
 		this.messages = messages;
     }
     
-    public Set<MessageDTO> getMessages() {
+    public Set<Message> getMessages() {
 		return this.messages;
     }
     
