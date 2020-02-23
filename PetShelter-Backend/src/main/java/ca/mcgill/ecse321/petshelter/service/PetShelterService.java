@@ -55,8 +55,11 @@ public class PetShelterService {
 			String address, String firstName, String lastName) {
 
 		// Checking if client exists already
-		if (getClient(email) != null) {
-			throw new IllegalArgumentException(ErrorMessages.accountExists);
+		try {
+			if (getClient(email) != null) { // This throws doesn't exist exception if client doesn't exist
+				throw new IllegalStateException(ErrorMessages.accountExists); // Had to make it a state exception to differ from doesn't exist  
+			}
+		} catch (IllegalArgumentException e) {
 		}
 
 		// Checking if DOB is appropriate -- Need to add check for 18 years of age
@@ -80,7 +83,7 @@ public class PetShelterService {
 		}
 
 		// Checking if phone number is appropriate
-		String phoneNumberRegex = "^\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d-\\d$";
+		String phoneNumberRegex = "^[0-9]{10}$";
 		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
 		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
@@ -122,8 +125,14 @@ public class PetShelterService {
 		return client;
 	}
 
+	 /**
+	  * Use this function if you need to retrieve a client object.
+	  * May need to use try/catch because it throws an exception if no account exists.
+	  * @param email
+	  * @return
+	  */
 	@Transactional
-	public Client getClient(String email) {
+	public Client getClient(String email) { 
 		if (email != null) {
 			Client client = clientRepository.findClientByEmail(email);
 			if (client == null) {
