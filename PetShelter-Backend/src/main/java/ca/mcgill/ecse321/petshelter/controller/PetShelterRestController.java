@@ -97,8 +97,7 @@ public class PetShelterRestController {
 											 address, firstName, lastName);
 											 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-							client.getDonations(), client.getMessages(), client.getApplications());
+							null, null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName(), null, null, null);
 
 	}
 
