@@ -73,6 +73,7 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
+<<<<<<< HEAD
 	@PostMapping(value = { "/profile", "/profile/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, 
@@ -81,6 +82,16 @@ public class PetShelterRestController {
 		
 		// Changing date to SQL object --> Look into Spring DateTimeFormat, may be easier
         Date dob = Date.valueOf(dob_string);//converting string (yyyy-mm-dd) into sql date 
+=======
+	@PostMapping(value = { "/profile", "/profile/" }) 
+	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
+									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "dd-MM-yyyy"
+									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+		
+		// Changing date to SQL object
+        Date dob = Date.valueOf(dob_string);//converting string into sql date  
+>>>>>>> 92ff235ccd7fcac6f0bc41ef266a1b8da66de7ad
 		
 		Client client = service.createClient(dob, email, password, phoneNumber, 
 											 address, firstName, lastName);

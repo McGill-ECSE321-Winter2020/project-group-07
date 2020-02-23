@@ -19,5 +19,8 @@ public class PetShelterApplication {
   }
   
   
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92ff235ccd7fcac6f0bc41ef266a1b8da66de7ad
 }
