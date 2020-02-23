@@ -220,8 +220,8 @@ public class PetShelterService {
 		Message curr = itr.next();
 		String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
 		String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
-		String month = new String(new char[] {date.toString().charAt(6),date.toString().charAt(7)});
-		String monthcurr = new String(new char[] {curr.getDate().toString().charAt(6),curr.getDate().toString().charAt(7)});
+		String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
+		String monthcurr = new String(new char[] {curr.getDate().toString().charAt(5),curr.getDate().toString().charAt(6)});
 		if(curr.getContent().equalsIgnoreCase(content)) {
 			if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
 				throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
