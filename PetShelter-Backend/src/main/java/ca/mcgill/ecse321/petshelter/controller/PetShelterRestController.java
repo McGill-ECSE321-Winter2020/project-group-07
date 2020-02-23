@@ -38,99 +38,106 @@ public class PetShelterRestController {
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
 		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-									  client.getLastName(), client.getPostings());
+				client.getLastName(), client.getPostings());
 		return cDTO;
 	}
 
 
 
-	
+
 	// Youssef GET Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Alex GET Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Nicolas GET Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Kaustav GET Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// POST Mappings // 
 
 	// Rahul POST Mappings
 	// Creating an account 
 	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
-									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
-									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
-									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
-		
+			@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+			@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+
 		// Changing date to SQL object --> Look into Spring DateTimeFormat, may be easier
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		java.util.Date dob_util = sdf.parse(dob);
 		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
-		
+
 		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
-											 address, firstName, lastName);
+				address, firstName, lastName);
 
 		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-							client.getDonations(), client.getMessages(), client.getApplications());
+				client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
+				client.getDonations(), client.getMessages(), client.getApplications());
 	}
 
 
 
-	
-	
-	
+
+
+
 	// Youssef POST Mappings
-	
-	
-	
-	
-	
-	
+
+
+	@PostMapping(value = {"/createapplication", "/createapplication"})
+	public ApplicationDTO createApplication(@RequestParam("client") Client client, @RequestParam("posting") Posting posting, 
+											@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
+											@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
+		
+		Application application = service.createApplication(client, posting, homeType, incomeRange, numberOfResidents);
+		return convertToDTO(application);
+	}
+
+
+
 	// Alex POST Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Nicolas POST Mappings
-	
-	
-	
-	
+
+
+
+
 	// Kaustav POST Mappings
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Convert to DTO functions // 
-	
+
 	// Rahul DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
 	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
-								   Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
-								   Set<Message> messages, Set<Application> applications) {
+			Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
+			Set<Message> messages, Set<Application> applications) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
-											donations, messages, applications);
+				donations, messages, applications);
 		return clientDTO;
 	}
 
@@ -148,32 +155,41 @@ public class PetShelterRestController {
 
 	// For updating profile information
 	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, String firstName, // May have to remove email
-								   String lastName) {
+			String lastName) {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, firstName, lastName);
 		return clientDTO;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Youssef converToDTOs
-	
-	
-	
-	
-	
+
+	private ApplicationDTO convertToDTO(Application application) {
+		ApplicationDTO applicationDTO = new ApplicationDTO();
+		applicationDTO.setHomeType(application.getHomeType());
+		applicationDTO.setIncomeRange(application.getIncomeRange());
+		applicationDTO.setStatus(application.getStatus());
+		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
+		applicationDTO.setPosting(application.getPosting());
+		applicationDTO.setClient(application.getClient());
+		return applicationDTO;
+	}
+
+
+
 	// Alex ConvertToDTOs
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Nicolas ConvertToDTOs
-	
-	
-	
-	
-	
+
+
+
+
+
 	// Kaustav ConvertToDTOs
 }
