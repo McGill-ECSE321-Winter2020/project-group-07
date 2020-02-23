@@ -140,8 +140,8 @@ public class PetShelterRestController {
 
 
 	// Convert to DTO functions // 
-
-	// Rahul DTOs
+	
+	//Client Convert to DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
 	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
@@ -172,10 +172,7 @@ public class PetShelterRestController {
 	}
 
 
-
-
-
-	// Youssef converToDTOs
+	//Application Convert to DTOs
 
 	private ApplicationDTO convertToDTO(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
@@ -197,16 +194,51 @@ public class PetShelterRestController {
 		}
 		return applicationsDTO;
 	}
-
-
-
-	// Alex ConvertToDTOs
-
-
-
-
-
-	// Nicolas ConvertToDTOs
+	
+	/**
+	 * 
+	 * @param message, that you want to convert to messageDTO
+	 * @return messageDTO
+	 */
+	private MessageDTO convertToDTO(Message message) {
+		MessageDTO messageDTO = new MessageDTO();
+		messageDTO.setAdmin(message.getAdmin());
+		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(),message.getClient().getEmail(),
+				message.getClient().getFirstName(),message.getClient().getLastName(),convertToDTOPostings(service.toList(message.getClient().getPostings()))));
+		messageDTO.setContent(message.getContent());
+		messageDTO.setDate(message.getDate());
+		messageDTO.setId(message.getId());
+		return messageDTO;
+		
+	}
+	
+	/**
+	 * 
+	 * @param messages, a list of messages you want to convert to a list of messageDTO
+	 * @return list of messageDTO
+	 */
+	private List<MessageDTO> convertToDTOMessage(List<Message> messages){
+		List<MessageDTO> messageDTO = new ArrayList<>();
+		for(Message message : messages) {
+			messageDTO.add(convertToDTO(message));
+		}
+		return messageDTO;
+	}
+	
+	/**
+	 * 
+	 * @param donation, that you want to convert to donationDTO
+	 * @return donationDTO
+	 */
+	private DonationDTO convertToDTO(Donation donation) {
+		DonationDTO donDTO = new DonationDTO();
+		donDTO.setAmount(donation.getAmount());
+		Client client = donation.getClient();
+		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getIsLoggedIn(),
+				client.getFirstName(),client.getLastName(),convertToDTOPostings(service.toList(client.getPostings()))));
+	}
+	
+	//Comment Convert to DTOs
 
 	private CommentDTO convertToDTO(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getDate(), convertToDTO(comment.getProfile()),
@@ -221,6 +253,8 @@ public class PetShelterRestController {
 		}
 		return commentsDTO;
 	}
+	
+	//Posting Convert to DTOs
 
 	private PostingDTO convertToDTO(Posting posting) {
 		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
@@ -237,6 +271,7 @@ public class PetShelterRestController {
 		return postingsDTO;
 	}
 	
+	//Profile Convert to DTOs
 	
 	//needed for messages and comments
 	private ProfileDTO convertToDTO(Profile profile) {
@@ -249,7 +284,4 @@ public class PetShelterRestController {
 		
 		return profileDTO;
 	}
-
-
-	// Kaustav ConvertToDTOs
 }
