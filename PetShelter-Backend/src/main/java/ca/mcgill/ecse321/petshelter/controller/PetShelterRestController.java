@@ -350,7 +350,8 @@ public class PetShelterRestController {
 		return applicationsDTO;
 	}
 	
-
+	// Alex ConvertToDTOs
+	
 	/**
 	 * 
 	 * @param message, that you want to convert to messageDTO
