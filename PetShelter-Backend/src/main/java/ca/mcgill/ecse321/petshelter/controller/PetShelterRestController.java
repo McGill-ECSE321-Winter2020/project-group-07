@@ -143,30 +143,30 @@ public class PetShelterRestController {
 	// Rahul DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
-			Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
-			Set<Message> messages, Set<Application> applications) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
+			Set<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, Set<DonationDTO> donations, 
+			Set<MessageDTO> messages, Set<ApplicationDTO> applications) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, isLoggedIn, firstName, lastName, 
 				donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
-	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
+	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName, Set<PostingDTO> postings) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings); 
 		return clientDTO; 
 	}
 
 	// For the person who posted your accepted application
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, String firstName, String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, firstName, lastName); 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, boolean isLoggedIn, String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, isLoggedIn, firstName, lastName); 
 		return clientDTO; 
 	}
 
 	// For updating profile information
-	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, String firstName, // May have to remove email
+	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, boolean isLoggedIn, String firstName, 
 			String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, firstName, lastName);
+		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
 
@@ -184,7 +184,7 @@ public class PetShelterRestController {
 		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
 		applicationDTO.setPosting(application.getPosting());
 		Client client = application.getClient(); 
-		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getFirstName(), client.getLastName()));
+		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
 		applicationDTO.setId(application.getId());
 		return applicationDTO;
 	}
