@@ -3,7 +3,7 @@ package ca.mcgill.ecse321.petshelter.dto;
 import ca.mcgill.ecse321.petshelter.model.*;
 
 import java.sql.Date;
-import java.util.Set; 
+import java.util.List; 
 
 public class ClientDTO {
 
@@ -13,24 +13,24 @@ public class ClientDTO {
     private String password;
     private String phoneNumber;
     private String address;
-    private Set<Posting> postings; 
-    private Set<Comment> comments; 
+    private List<Posting> postings; 
+    private List<Comment> comments; 
 
     // Client attributes
     private String firstName; 
     private String lastName; 
-    private Set<Donation> donations;
-    private Set<Message> messages;
-    private Set<Application> applications; 
+    private List<Donation> donations;
+    private List<Message> messages;
+    private List<Application> applications; 
 
     // Can add more constructors later based on functionality needed
     public ClientDTO() {
     }
 
     // Viewing your own profile
-    public ClientDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
-                     Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
-                     Set<Message> messages, Set<Application> applications) {
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
+                     List<Comment> comments, String firstName, String lastName, List<Donation> donations, 
+                     List<Message> messages, List<Application> applications) {
         this.dateOfBirth = dob;
         this.email = email; // Might get complicated changing the primary key in DB
         this.phoneNumber = phoneNumber;
@@ -56,7 +56,7 @@ public class ClientDTO {
     }
 
     // Viewing others profile
-    public ClientDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
+    public ClientDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
         this.dateOfBirth = dob; 
         this.email = email;
         this.firstName = firstName; 
@@ -73,7 +73,7 @@ public class ClientDTO {
         this.lastName = lastName; 
     }
 
-    // Setters and Getters
+    // Listters and Getters
     public void setDateOfBirth(Date dob) {
         this.dateOfBirth = dob;
     }
@@ -114,19 +114,19 @@ public class ClientDTO {
         return this.address;
     }
 
-    public void setPostings(Set<Posting> postings) {
+    public void setPostings(List<Posting> postings) {
 		this.postings = postings;
     }
     
-    public Set<Posting> getPostings() {
+    public List<Posting> getPostings() {
         return this.postings;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
 		this.comments = comments;
     }
     
-    public Set<Comment> getComments() {
+    public List<Comment> getComments() {
         return this.comments;
     }
 
@@ -146,27 +146,27 @@ public class ClientDTO {
         return this.lastName; 
     }
 
-    public void setDonations(Set<Donation> donations) {
+    public void setDonations(List<Donation> donations) {
 		this.donations = donations;
     }
     
-    public Set<Donation> getDonations() {
+    public List<Donation> getDonations() {
 		return this.donations;
     }
     
-    public void setMessages(Set<Message> messages) {
+    public void setMessages(List<Message> messages) {
 		this.messages = messages;
     }
     
-    public Set<Message> getMessages() {
+    public List<Message> getMessages() {
 		return this.messages;
     }
     
-    public void setApplications(Set<Application> applications) {
+    public void setApplications(List<Application> applications) {
 		this.applications = applications;
     }
     
-    public Set<Application> getApplications() {
+    public List<Application> getApplications() {
 		return this.applications;
 	}
 

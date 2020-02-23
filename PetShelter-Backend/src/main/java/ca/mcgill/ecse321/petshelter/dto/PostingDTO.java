@@ -3,7 +3,7 @@ package ca.mcgill.ecse321.petshelter.dto;
 import ca.mcgill.ecse321.petshelter.model.*;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 public class PostingDTO {
 	
@@ -16,13 +16,13 @@ public class PostingDTO {
 	private String petBreed;
 	private Date petDateOfBirth;
 	private ProfileDTO profile;
-	private Set <ApplicationDTO> applications;
-	private Set <CommentDTO> comments;
+	private List <ApplicationDTO> applications;
+	private List <CommentDTO> comments;
 	
 	//Constructor
 	public PostingDTO(Integer id, Date date, String picture, String description, 
 			String petName, String petBreed,Date petDateOfBirth, ProfileDTO profile, 
-			Set<ApplicationDTO> applications, Set<CommentDTO> comments) {
+			List<ApplicationDTO> applications, List<CommentDTO> comments) {
 		
 		Id = id;
 		this.date = date;
@@ -87,19 +87,19 @@ public class PostingDTO {
 		this.profile = profile;
 	}
 
-	public Set<ApplicationDTO> getApplications() {
+	public List<ApplicationDTO> getApplications() {
 		return applications;
 	}
 
-	public void setApplications(Set<ApplicationDTO> applications) {
+	public void setApplications(List<ApplicationDTO> applications) {
 		this.applications = applications;
 	}
 
-	public Set<CommentDTO> getComments() {
+	public List<CommentDTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<CommentDTO> comments) {
+	public void setComments(List<CommentDTO> comments) {
 		this.comments = comments;
 	}
 }

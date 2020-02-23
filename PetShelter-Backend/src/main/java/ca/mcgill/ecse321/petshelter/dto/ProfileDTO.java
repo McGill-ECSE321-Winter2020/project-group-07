@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 import ca.mcgill.ecse321.petshelter.model.*;
 
@@ -13,23 +13,10 @@ public class ProfileDTO {
     private String password;
     private String phoneNumber;
     private String address;
-    private Set<PostingDTO> postings; 
-    private Set<CommentDTO> comments;
+    private List<PostingDTO> postings; 
+    private List<CommentDTO> comments;
     private boolean isLoggedIn;
     
-    
-    //Constructor
-	public ProfileDTO(Date dateOfBirth, String email, String password, String phoneNumber, String address,
-			Set<PostingDTO> postings, Set<CommentDTO> comments, boolean isLoggedIn) {
-		this.dateOfBirth = dateOfBirth;
-		this.email = email;
-		this.password = password;
-		this.phoneNumber = phoneNumber;
-		this.address = address;
-		this.postings = postings;
-		this.comments = comments;
-		this.isLoggedIn = isLoggedIn;
-	}
     
 	//Getters and Setters
     public Date getDateOfBirth() {
@@ -62,16 +49,16 @@ public class ProfileDTO {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public Set<PostingDTO> getPostings() {
+	public List<PostingDTO> getPostings() {
 		return postings;
 	}
-	public void setPostings(Set<PostingDTO> postings) {
+	public void setPostings(List<PostingDTO> postings) {
 		this.postings = postings;
 	}
-	public Set<CommentDTO> getComments() {
+	public List<CommentDTO> getComments() {
 		return comments;
 	}
-	public void setComments(Set<CommentDTO> comments) {
+	public void setComments(List<CommentDTO> comments) {
 		this.comments = comments;
 	}
 	public boolean isLoggedIn() {

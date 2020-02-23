@@ -5,7 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,7 +55,7 @@ public class PetShelterRestController {
 	@GetMapping(value = {"/{posting}/applications", "/{posting}/applications/"})
 	public List<ApplicationDTO> getPostingApplications(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
 		List<Application> applications = service.getPostingApplications(posting);
-		return convertToDTO(applications);
+		return convertToDTOApplications(applications);
 	}
 
 
@@ -95,9 +96,9 @@ public class PetShelterRestController {
 		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
 				address, firstName, lastName);
 
-//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-//							client.getDonations(), client.getMessages(), client.getApplications());
+		//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
+		//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
+		//							client.getDonations(), client.getMessages(), client.getApplications());
 		return null;
 
 	}
@@ -112,9 +113,9 @@ public class PetShelterRestController {
 
 	@PostMapping(value = {"/createapplication", "/createapplication"})
 	public ApplicationDTO createApplication(@RequestParam("client") Client client, @RequestParam("posting") Posting posting, 
-											@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
-											@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
-		
+			@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
+			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
+
 		Application application = service.createApplication(client, posting, homeType, incomeRange, numberOfResidents);
 		return convertToDTO(application);
 	}
@@ -143,16 +144,16 @@ public class PetShelterRestController {
 	// Rahul DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
-			Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
-			Set<Message> messages, Set<Application> applications) {
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
+			List<Comment> comments, String firstName, String lastName, List<Donation> donations, 
+			List<Message> messages, List<Application> applications) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
 				donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
-	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
+	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
 		return clientDTO; 
 	}
@@ -188,8 +189,8 @@ public class PetShelterRestController {
 		applicationDTO.setId(application.getId());
 		return applicationDTO;
 	}
-	
-	private List<ApplicationDTO> convertToDTO(List<Application> applications){
+
+	private List<ApplicationDTO> convertToDTOApplications(List<Application> applications){
 		List<ApplicationDTO> applicationsDTO = new ArrayList<>();
 		for(Application application : applications) {
 			applicationsDTO.add(convertToDTO(application));
@@ -207,8 +208,47 @@ public class PetShelterRestController {
 
 	// Nicolas ConvertToDTOs
 
+	private CommentDTO convertToDTO(Comment comment) {
+		CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getDate(), convertToDTO(comment.getProfile()),
+				convertToDTO(comment.getPosting()), comment.getContent());
+		return commentDTO;
+	}
 
+	private List<CommentDTO> convertToDTOComments(List<Comment> comments){
+		List<CommentDTO> commentsDTO = new ArrayList<CommentDTO>();
+		for(Comment comment : comments) {
+			commentsDTO.add(convertToDTO(comment));
+		}
+		return commentsDTO;
+	}
 
+	private PostingDTO convertToDTO(Posting posting) {
+		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
+				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),convertToDTO(posting.getProfile()),
+				convertToDTOApplications(service.toList(posting.getApplication())), convertToDTOComments(service.toList(posting.getComment())));
+		return postingDTO;
+	}
+
+	private List<PostingDTO> convertToDTOPostings(List<Posting> postings){
+		List<PostingDTO> postingsDTO = new ArrayList<>();
+		for(Posting posting : postings) {
+			postingsDTO.add(convertToDTO(posting));
+		}
+		return postingsDTO;
+	}
+	
+	
+	//needed for messages and comments
+	private ProfileDTO convertToDTO(Profile profile) {
+		ProfileDTO profileDTO = new ProfileDTO();
+		profileDTO.setEmail(profile.getEmail());
+		profileDTO.setAddress(profile.getAddress());
+		profileDTO.setPhoneNumber(profile.getPhoneNumber());
+		profileDTO.setDateOfBirth(profile.getDateOfBirth());
+		profileDTO.setPostings(convertToDTOPostings(service.toList(profile.getPostings())));
+		
+		return profileDTO;
+	}
 
 
 	// Kaustav ConvertToDTOs
