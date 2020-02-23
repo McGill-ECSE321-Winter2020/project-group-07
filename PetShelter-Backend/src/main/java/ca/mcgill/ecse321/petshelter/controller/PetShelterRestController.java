@@ -40,9 +40,10 @@ public class PetShelterRestController {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
-		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-				client.getLastName(), client.getPostings());
-		return cDTO;
+		//ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
+		//							  client.getLastName(), client.getPostings());
+		//return cDTO;
+		return null;
 	}
 
 
@@ -94,9 +95,11 @@ public class PetShelterRestController {
 		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
 				address, firstName, lastName);
 
-		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-				client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-				client.getDonations(), client.getMessages(), client.getApplications());
+//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
+//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
+//							client.getDonations(), client.getMessages(), client.getApplications());
+		return null;
+
 	}
 
 
