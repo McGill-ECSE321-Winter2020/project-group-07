@@ -13,30 +13,33 @@ public class ClientDTO {
     private String password;
     private String phoneNumber;
     private String address;
-    private List<Posting> postings; 
-    private List<Comment> comments; 
+    private List<PostingDTO> postings; 
+    private List<CommentDTO> comments; 
+    private boolean isLoggedIn;
+
 
     // Client attributes
     private String firstName; 
     private String lastName; 
-    private List<Donation> donations;
-    private List<Message> messages;
-    private List<Application> applications; 
+    private List<DonationDTO> donations;
+    private List<MessageDTO> messages;
+    private List<ApplicationDTO> applications; 
+
 
     // Can add more constructors later based on functionality needed
     public ClientDTO() {
     }
-
-    // Viewing your own profile
-    public ClientDTO(Date dob, String email, String phoneNumber, String address, List<Posting> postings, 
-                     List<Comment> comments, String firstName, String lastName, List<Donation> donations, 
-                     List<Message> messages, List<Application> applications) {
+    // Creating an account
+    public ClientDTO(Date dob, String email, String phoneNumber, String address, List<PostingDTO> postings, 
+                     List<CommentDTO> comments, boolean isLoggedIn, String firstName, String lastName, 
+                     List<DonationDTO> donations, List<MessageDTO> messages, List<ApplicationDTO> applications) {
         this.dateOfBirth = dob;
-        this.email = email; // Might get complicated changing the primary key in DB
+        this.email = email; 
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.postings = postings;
-        this.comments = comments; 
+        this.comments = comments;
+        this.isLoggedIn = isLoggedIn;
         this.firstName = firstName;
         this.lastName = lastName; 
         this.donations = donations;
@@ -45,35 +48,40 @@ public class ClientDTO {
     }
 
     // Updating information
-    public ClientDTO(Date dob, String password, String phoneNumber, 
-                     String address, String firstName, String lastName) {
+    public ClientDTO(Date dob, String password, String phoneNumber, String address, 
+                     boolean isLoggedIn, String firstName, String lastName) {
         this.dateOfBirth = dob;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.isLoggedIn = isLoggedIn;
         this.firstName = firstName;
         this.lastName = lastName; 
     }
 
     // Viewing others profile
-    public ClientDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
+    public ClientDTO(Date dob, String email, boolean isLoggedIn, 
+                     String firstName, String lastName, List<PostingDTO> postings) {
         this.dateOfBirth = dob; 
         this.email = email;
+        this.isLoggedIn = isLoggedIn;
         this.firstName = firstName; 
         this.lastName = lastName; 
         this.postings = postings;
     }
 
     // The person who posted your accepted application
-    public ClientDTO(Date dob, String phoneNumber, String address, String firstName, String lastName) {
+    public ClientDTO(Date dob, String phoneNumber, String address, 
+                     boolean isLoggedIn, String firstName, String lastName) {
         this.dateOfBirth = dob;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.isLoggedIn = isLoggedIn;
         this.firstName = firstName;
         this.lastName = lastName; 
     }
-
-    // Listters and Getters
+    
+    // Setters and Getters
     public void setDateOfBirth(Date dob) {
         this.dateOfBirth = dob;
     }
@@ -114,19 +122,19 @@ public class ClientDTO {
         return this.address;
     }
 
-    public void setPostings(List<Posting> postings) {
+    public void setPostings(List<PostingDTO> postings) {
 		this.postings = postings;
     }
     
-    public List<Posting> getPostings() {
+    public List<PostingDTO> getPostings() {
         return this.postings;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<CommentDTO> comments) {
 		this.comments = comments;
     }
     
-    public List<Comment> getComments() {
+    public List<CommentDTO> getComments() {
         return this.comments;
     }
 
@@ -143,31 +151,32 @@ public class ClientDTO {
     }
 
     public String getLastName() {
-        return this.lastName; 
+        return this.lastName;
     }
 
-    public void setDonations(List<Donation> donations) {
-		this.donations = donations;
+
+    public void setDonations(List<DonationDTO> donations) {
+		    this.donations = donations;
     }
     
-    public List<Donation> getDonations() {
-		return this.donations;
+    public List<DonationDTO> getDonations() {
+		    return this.donations;
     }
     
-    public void setMessages(List<Message> messages) {
-		this.messages = messages;
+    public void setMessages(List<MessageDTO> messages) {
+		    this.messages = messages;
     }
     
-    public List<Message> getMessages() {
-		return this.messages;
+    public List<MessageDTO> getMessages() {
+		    return this.messages;
     }
     
-    public void setApplications(List<Application> applications) {
-		this.applications = applications;
+    public void setApplications(List<ApplicationDTO> applications) {
+		    this.applications = applications;
     }
     
-    public List<Application> getApplications() {
-		return this.applications;
+    public List<ApplicationDTO> getApplications() {
+		    return this.applications;
 	}
 
 }

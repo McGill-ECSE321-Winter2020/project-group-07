@@ -12,6 +12,7 @@ public class ErrorMessages {
     public static String invalidAddress = "Invalid street address.";
     public static String invalidFirstName = "Invalid first name.";
     public static String invalidLastName = "Invalid last name."; 
+    public static String under18 = "Must be at least 18 years of age to register.";
     
     // Comment
     public static String invalidPosting = "Invalid posting.";

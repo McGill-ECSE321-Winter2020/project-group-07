@@ -9,7 +9,7 @@ public class DonationDTO {
 	private Date date;
 	private Integer amount;
 	private Integer id;
-	private Client client;
+	private ClientDTO client;
 	
 
 	public Date getDate() {
@@ -36,11 +36,11 @@ public class DonationDTO {
 		this.id = id;
 	}
 
-	public Client getClient() {
+	public ClientDTO getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(ClientDTO client) {
 		this.client = client;
 	}
 

@@ -82,25 +82,23 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
+
+
+
+	@PostMapping(value = { "/profile", "/profile/" }) 
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
-			@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
-			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
-			@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
+									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+		
+		// Changing date to SQL object
+        Date dob = Date.valueOf(dob_string);//converting string into sql date  
 
-		// Changing date to SQL object --> Look into Spring DateTimeFormat, may be easier
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		java.util.Date dob_util = sdf.parse(dob);
-		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
-
-		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
-				address, firstName, lastName);
-
-		//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-		//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-		//							client.getDonations(), client.getMessages(), client.getApplications());
-		return null;
-
+		Client client = service.createClient(dob, email, password, phoneNumber, 
+											 address, firstName, lastName);
+											 
+		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
+							null, null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName(), null, null, null);
 	}
 
 
@@ -153,26 +151,27 @@ public class PetShelterRestController {
 	}
 
 	// For viewing people's profile pages
+
 	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, List<Posting> postings) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
 		return clientDTO; 
 	}
 
 	// For the person who posted your accepted application
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, String firstName, String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, firstName, lastName); 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, boolean isLoggedIn, String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, isLoggedIn, firstName, lastName); 
 		return clientDTO; 
 	}
 
 	// For updating profile information
-	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, String firstName, // May have to remove email
+	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, boolean isLoggedIn, String firstName, 
 			String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, firstName, lastName);
+		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
 
-
 	//Application Convert to DTOs
+
 
 	private ApplicationDTO convertToDTO(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
@@ -182,7 +181,7 @@ public class PetShelterRestController {
 		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
 		applicationDTO.setPosting(application.getPosting());
 		Client client = application.getClient(); 
-		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getFirstName(), client.getLastName()));
+		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
 		applicationDTO.setId(application.getId());
 		return applicationDTO;
 	}
@@ -284,4 +283,5 @@ public class PetShelterRestController {
 		
 		return profileDTO;
 	}
+
 }

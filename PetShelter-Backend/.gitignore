@@ -31,3 +31,7 @@ out/
 ### VS Code ###
 .vscode/
 /bin/
+
+src/main/java/ca/mcgill/ecse321/petshelter/test.class
+src/main/java/ca/mcgill/ecse321/petshelter/test.java
+.vscode/launch.json

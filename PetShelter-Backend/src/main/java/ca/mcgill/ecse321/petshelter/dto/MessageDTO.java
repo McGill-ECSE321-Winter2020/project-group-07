@@ -8,7 +8,7 @@ public class MessageDTO {
 	
 	private Date date;
 	private String content;
-	private Client client;
+	private ClientDTO client;
 	private Admin admin;
 	private Integer id;
 	
@@ -29,11 +29,11 @@ public class MessageDTO {
 		this.content = content;
 	}
 
-	public Client getClient() {
+	public ClientDTO getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(ClientDTO client) {
 		this.client = client;
 	}
 
