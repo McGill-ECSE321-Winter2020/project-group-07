@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.dto.ClientDTO;
 
 public class ApplicationDTO {
+	private Integer id;
 	private HomeType homeType;
 	private IncomeRange incomeRange;
 	private ApplicationStatus status;
@@ -11,6 +12,12 @@ public class ApplicationDTO {
 	private Posting posting;
 	private ClientDTO clientDTO;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public ClientDTO getClientDTO() {
 		return clientDTO;
 	}
