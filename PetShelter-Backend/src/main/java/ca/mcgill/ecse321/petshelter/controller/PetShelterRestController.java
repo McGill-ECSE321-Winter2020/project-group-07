@@ -45,9 +45,6 @@ public class PetShelterRestController {
 		//return cDTO;
 		return null;
 
-		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-				client.getLastName(), client.getPostings());
-		return cDTO;
 
 	}
 
@@ -152,7 +149,7 @@ public class PetShelterRestController {
 	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
 								   Set<CommentDTO> comments, String firstName, String lastName, Set<DonationDTO> donations, 
 								   Set<MessageDTO> messages, Set<Application> applications) {
-
+  
 		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
 				donations, messages, applications);
 		return clientDTO;
