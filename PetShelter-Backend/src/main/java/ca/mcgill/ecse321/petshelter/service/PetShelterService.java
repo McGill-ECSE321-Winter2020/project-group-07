@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.dao.*;
-import ca.mcgill.ecse321.petshelter.ErrorMessages;;
+import ca.mcgill.ecse321.petshelter.ErrorMessages;
 
 @Service
 public class PetShelterService {
@@ -240,24 +240,15 @@ public class PetShelterService {
 
 		}
 
-
-		/**
-		 * 
-		 * @param profile
-		 * @param posting
-		 * @param content
-		 * @param date
-		 * @return comment
-		 */
 		@Transactional
 		public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
 
 			//check inputs are valid
 			if(posting == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPostingComment);
+				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 			}
 			if(profile == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidProfileComment);
+				throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 			}
 			//check content is not just white spaces
 			String contentWhiteSpaceCheck = content.trim();
@@ -283,7 +274,7 @@ public class PetShelterService {
 
 		@Transactional
 		public List<Posting> getOpenPostings(){
-			//add comments
+			//get all postings in database and check which ones are still "open" i.e. do not have approved applications 
 			List<Posting> allPostings = toList(postingRepository.findAll());
 			List<Posting> openPostings = new ArrayList<Posting>();
 			for(Posting posting : allPostings) {
@@ -317,13 +308,20 @@ public class PetShelterService {
 
 		@Transactional
 		public List<Application> getPostingApplications(Posting posting){
-			//TODO: add checks and warnings, check if posting has another application that was approved
+			if(posting == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+			}
 			return toList(posting.getApplication()); //returns ArrayList of applications associated with the posting 
 		}
 
 		@Transactional
 		public boolean rejectApplication(Application application) {
-			//TODO: add checks
+			if(application == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+			}
+			if(application.getStatus() == ApplicationStatus.accepted) {
+				throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
+			}
 			application.setStatus(ApplicationStatus.rejected);
 			applicationRepository.save(application);
 			return true;
@@ -331,15 +329,18 @@ public class PetShelterService {
 
 		@Transactional
 		public boolean approveApplication(Application application){
-			/**
+			/*
 			 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
-			 * Status of this application is changed to approved
-			 * Change the status of other applications on the same posting to rejected
-			 * The decision is final
+			 * Status of this application is changed to "approved".
+			 * Change the status of other applications on the same posting to "rejected".
+			 * The decision is final.
 			 */
-			//TODO: check that this application has a pending status, throw Exception
-			//TOD: check that the application is not null
-
+			if(application == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+			}
+			if(application.getStatus() != ApplicationStatus.pending) {
+				throw new IllegalArgumentException(ErrorMessages.notPendingApp);
+			}
 			application.setStatus(ApplicationStatus.accepted);
 			applicationRepository.save(application);
 
@@ -355,14 +356,23 @@ public class PetShelterService {
 
 		@Transactional
 		public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
-			//check client is not null 
-			//check posting exists
-			//check hometype is not null 
-			//check incomerange is not null 
-			//check number of residents is more than zero
-
+			if (client == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+			}
+			if(posting == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+			}
 			if(client.equals(posting.getProfile())){
 				throw new IllegalArgumentException(ErrorMessages.selfApplication);
+			}
+			if(homeType == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
+			}
+			if(incomeRange == null) {
+				throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
+			}
+			if(numberOfResidents <= 0) {
+				throw new IllegalArgumentException(ErrorMessages.invalidNOR);
 			}
 
 			Application application = new Application();

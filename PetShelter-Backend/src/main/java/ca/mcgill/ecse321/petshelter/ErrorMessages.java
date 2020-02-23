@@ -14,13 +14,19 @@ public class ErrorMessages {
     public static String invalidLastName = "Invalid last name."; 
     
     // Comment
-    public static String invalidPostingComment = "Invalid posting.";
-    public static String invalidProfileComment = "Invalid profile.";
+    public static String invalidPosting = "Invalid posting.";
+    public static String invalidProfile= "Invalid profile.";
     public static String invalidContentComment = "Cannot post an empty comment.";
     public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
     
     //Application 
     public static String selfApplication = "Cannot apply to your own posting.";
+    public static String invalidApplication = "Invalid Application.";
+    public static String rejectingApprovedApp = "Cannot reject approved application.";
+    public static String notPendingApp = "Cannot approve an application that is not pending.";
+    public static String invalidHomeType= "Invalid home type.";
+    public static String invalidIncomeRange = "Invalid income range.";
+    public static String invalidNOR= "Number of residents should be larger than 0.";
     
     //Donations
     public static String negAmount = "Amount needs to be whole and positive number!";
