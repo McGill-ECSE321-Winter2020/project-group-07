@@ -3,11 +3,14 @@ package ca.mcgill.ecse321.petshelter.controller;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +50,11 @@ public class PetShelterRestController {
 
 	// Youssef GET Mappings
 
-
+	@GetMapping(value = {"/{posting}/applications", "/{posting}/applications/"})
+	public List<ApplicationDTO> getPostingApplications(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
+		List<Application> applications = service.getPostingApplications(posting);
+		return convertToDTO(applications);
+	}
 
 
 
@@ -173,8 +180,16 @@ public class PetShelterRestController {
 		applicationDTO.setStatus(application.getStatus());
 		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
 		applicationDTO.setPosting(application.getPosting());
-		applicationDTO.setClient(application.getClient());
+		applicationDTO.setClient(application.getClient()); //TODO: change to ClientDTO
 		return applicationDTO;
+	}
+	
+	private List<ApplicationDTO> convertToDTO(List<Application> applications){
+		List<ApplicationDTO> applicationsDTO = new ArrayList<>();
+		for(Application application : applications) {
+			applicationsDTO.add(convertToDTO(application));
+		}
+		return applicationsDTO;
 	}
 
 
