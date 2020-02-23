@@ -8,11 +8,11 @@ public class MessageDTO {
 	
 	private Date date;
 	private String content;
-	private Client client;
+	private ClientDTO client;
 	private Admin admin;
 	private Integer id;
 	
-	public MessageDTO(Date d, String cont, Client c, Admin a, Integer Id) {
+	public MessageDTO(Date d, String cont, ClientDTO c, Admin a, Integer Id) {
 		this.admin =a;
 		this.client = c;
 		this.date= d;
@@ -35,11 +35,11 @@ public class MessageDTO {
 		this.content = content;
 	}
 
-	public Client getClient() {
+	public ClientDTO getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(ClientDTO client) {
 		this.client = client;
 	}
 
