@@ -10,11 +10,11 @@ public class CommentDTO {
 	private Integer Id;
 	private Date date;
 	private Profile profile;
-	private Posting posting;
+	private PostingDTO posting;
 	private String content;
 	
 	//Constructor
-	public CommentDTO(Integer Id, Date date, Profile profile, Posting posting, String content) {
+	public CommentDTO(Integer Id, Date date, Profile profile, PostingDTO posting, String content) {
 		this.Id = Id;
 		this.date = date;
 		this.profile = profile;
@@ -48,11 +48,11 @@ public class CommentDTO {
 		return this.profile;
 	}
 	
-	public void setPosting(Posting posting) {
+	public void setPosting(PostingDTO posting) {
 		this.posting = posting;
 	}
 	
-	public Posting getPosting() {
+	public PostingDTO getPosting() {
 		return this.posting;
 	}
 	
