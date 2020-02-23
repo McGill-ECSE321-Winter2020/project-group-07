@@ -178,7 +178,7 @@ public class PetShelterRestController {
 	
 	
 	// Kaustav ConvertToDTOs
-}
+
 
 	// Test remove later
 	private ClientDTO convertToDTO(String firstName, String lastName) {
