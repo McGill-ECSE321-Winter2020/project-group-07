@@ -21,7 +21,7 @@ public class PetShelterRepository {
 	EntityManager entityManager;
 
 	@Transactional
-	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password, String phoneNumber, Set<Posting> postings) {
+	public Admin createAdmin(String email, String address, Set<Comment> comments, Date birthdate, Set<Message> messages, String password, String phoneNumber, Set<Posting> postings, boolean isLoggedIn) {
 		Admin p = new Admin();
 		p.setAddress(address);
 		p.setComments(comments);
@@ -31,6 +31,7 @@ public class PetShelterRepository {
 		p.setPhoneNumber(phoneNumber);
 		p.setPostings(postings);
 		p.setEmail(email);
+		p.setIsLoggedIn(isLoggedIn);
 		entityManager.persist(p);
 		return p;
 	}
@@ -41,7 +42,7 @@ public class PetShelterRepository {
 		return p;
 	}
 	@Transactional
-	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,String phoneNumber, Set<Posting> postings) {
+	public Client createClient(String email, String address, Set<Application> applications, Set<Comment> comments, Date birthdate, Set<Donation> donations, Set<Message> messages, String password,String phoneNumber, Set<Posting> postings, boolean isLoggedIn) {
 		Client p = new Client();
 		p.setAddress(address);
 		p.setApplications(applications);
@@ -53,6 +54,7 @@ public class PetShelterRepository {
 		p.setPhoneNumber(phoneNumber);
 		p.setPostings(postings);
 		p.setEmail(email);
+		p.setIsLoggedIn(isLoggedIn);
 		entityManager.persist(p);
 		return p;
 	}
