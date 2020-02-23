@@ -267,6 +267,7 @@ public class PetShelterRestController {
 		return commentDTO;
 	}
 
+
 	private List<CommentDTO> convertToDTOComments(List<Comment> comments){
 		List<CommentDTO> commentsDTO = new ArrayList<CommentDTO>();
 		for(Comment comment : comments) {
