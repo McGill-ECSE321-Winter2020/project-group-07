@@ -36,9 +36,10 @@ public class PetShelterRestController {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
-		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-									  client.getLastName(), client.getPostings());
-		return cDTO;
+		//ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
+		//							  client.getLastName(), client.getPostings());
+		//return cDTO;
+		return null;
 	}
 
 
@@ -60,9 +61,10 @@ public class PetShelterRestController {
 		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
 											 address, firstName, lastName);
 
-		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-							client.getDonations(), client.getMessages(), client.getApplications());
+//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
+//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
+//							client.getDonations(), client.getMessages(), client.getApplications());
+		return null;
 	}
 
 
@@ -70,16 +72,16 @@ public class PetShelterRestController {
 	// Convert to DTO functions // 
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<Posting> postings, 
-								   Set<Comment> comments, String firstName, String lastName, Set<Donation> donations, 
-								   Set<Message> messages, Set<Application> applications) {
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, Set<PostingDTO> postings, 
+								   Set<CommentDTO> comments, String firstName, String lastName, Set<DonationDTO> donations, 
+								   Set<MessageDTO> messages, Set<Application> applications) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, firstName, lastName, 
 											donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
-	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, Set<Posting> postings) {
+	private ClientDTO convertToDTO(Date dob, String email, String firstName, String lastName, Set<PostingDTO> postings) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, firstName, lastName, postings); 
 		return clientDTO; 
 	}
