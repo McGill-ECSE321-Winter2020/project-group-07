@@ -73,7 +73,7 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
+	@PostMapping(value = { "/profile", "/profile/" }) // Probably need to switch this to @RequestBody
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "dd-MM-yyyy"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
