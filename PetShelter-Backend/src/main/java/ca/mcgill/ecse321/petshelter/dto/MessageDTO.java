@@ -4,6 +4,13 @@ import java.sql.Date;
 import ca.mcgill.ecse321.petshelter.model.Admin;
 import ca.mcgill.ecse321.petshelter.model.Client;
 
+
+/**
+ * This class is the data transfer object class for messages, 
+ * implements all the getters and setters for messages.
+ * @author Alexander
+ *
+ */
 public class MessageDTO {
 	
 	private Date date;

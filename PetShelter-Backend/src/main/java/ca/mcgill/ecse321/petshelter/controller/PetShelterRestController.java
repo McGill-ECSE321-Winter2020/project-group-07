@@ -214,6 +214,11 @@ public class PetShelterRestController {
 		return applicationsDTO;
 	}
 	
+<<<<<<< HEAD
+=======
+	// Alex ConvertToDTOs
+	
+>>>>>>> added some javadoc
 	/**
 	 * 
 	 * @param message, that you want to convert to messageDTO
@@ -231,6 +236,10 @@ public class PetShelterRestController {
 		return messageDTO;
 		
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> added some javadoc
 	/**
 	 * 
 	 * @param messages, a list of messages you want to convert to a list of messageDTO
