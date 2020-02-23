@@ -15,7 +15,8 @@ public class PetShelterApplication {
 
   @RequestMapping("/")
   public String greeting(){
-    return "Customised";
+    return "Pet Shelter Application running successfully :)";
   }
-
+  
+  
 }

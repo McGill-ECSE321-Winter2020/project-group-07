@@ -81,24 +81,23 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) // Probably need to switch this to @RequestBody
+
+
+
+	@PostMapping(value = { "/profile", "/profile/" }) 
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
-			@RequestParam("lastName") String lastName, @RequestParam("dob") String dob, // Will be in format "dd-MM-yyyy"
-			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
-			@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
+									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
+		
+		// Changing date to SQL object
+        Date dob = Date.valueOf(dob_string);//converting string into sql date  
 
-		// Changing date to SQL object --> Look into Spring DateTimeFormat, may be easier
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		java.util.Date dob_util = sdf.parse(dob);
-		java.sql.Date dob_sql = new java.sql.Date(dob_util.getTime()); 
-
-		Client client = service.createClient(dob_sql, email, password, phoneNumber, 
-				address, firstName, lastName);
-
-//		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-//							client.getPostings(), client.getComments(), client.getFirstName(), client.getLastName(), 
-//							client.getDonations(), client.getMessages(), client.getApplications());
-		return null;
+		Client client = service.createClient(dob, email, password, phoneNumber, 
+											 address, firstName, lastName);
+											 
+		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
+							null, null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName(), null, null, null);
 
 	}
 
@@ -169,11 +168,11 @@ public class PetShelterRestController {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
+	
 
-
-
-
-
+	
+	
+	
 	// Youssef converToDTOs
 
 	private ApplicationDTO convertToDTO(Application application) {
@@ -212,4 +211,8 @@ public class PetShelterRestController {
 
 
 	// Kaustav ConvertToDTOs
+
+
+	
+
 }
