@@ -14,10 +14,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-// Used for checking for valid email
+// Used for validation
 import java.util.regex.Matcher; 
 import java.util.regex.Pattern; 
-
+import java.util.concurrent.TimeUnit;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +62,25 @@ public class PetShelterService {
 		} catch (IllegalArgumentException e) {
 		}
 
-		// Checking if DOB is appropriate -- Need to add check for 18 years of age
+		// Checking if DOB is not null
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
 		}
+		
+		// Getting date object of 18 years ago 
+		long curr_date_ms = System.currentTimeMillis();
+        Date curr_date = new java.sql.Date(curr_date_ms);  
+        String curr_date_str = curr_date.toString();
+        String monthcurr = new String(new char[] {curr_date_str.toString().charAt(5),curr_date_str.toString().charAt(6)});
+        String daycurr = new String(new char[] {curr_date_str.toString().charAt(8),curr_date_str.toString().charAt(9)});
+        String str_18y_ago = "2002-" + monthcurr + "-" + daycurr; // Not ideal, may fix later 
+        Date dt_18y_ago = Date.valueOf(str_18y_ago); 
+
+		// Checking if 18 years old or over
+        int of_age = dob.compareTo(dt_18y_ago); 
+        if(of_age > 0) {
+            throw new IllegalArgumentException(ErrorMessages.under18);
+        }
 
 		// Checking if email is appropriate
 		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
