@@ -286,6 +286,7 @@ public class PetShelterRestController {
 		return applicationsDTO;
 	}
 	
+
 	/**
 	 * 
 	 * @param message, that you want to convert to messageDTO
@@ -303,6 +304,7 @@ public class PetShelterRestController {
 		return messageDTO;
 		
 	}
+
 	/**
 	 * 
 	 * @param messages, a list of messages you want to convert to a list of messageDTO

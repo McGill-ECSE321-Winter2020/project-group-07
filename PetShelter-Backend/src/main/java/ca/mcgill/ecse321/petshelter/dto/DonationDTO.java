@@ -5,7 +5,8 @@ import java.sql.Date;
 import ca.mcgill.ecse321.petshelter.model.Client;
 
 /**
- * This is the data transfer object class for donations.
+ * This class is for the data transfer object for donation,
+ * implements all the getters and setters to create and use DTOs.
  *
  */
 public class DonationDTO {
