@@ -144,7 +144,7 @@ public class PetShelterService {
 	  * Use this function if you need to retrieve a client object.
 	  * May need to use try/catch because it throws an exception if no account exists.
 	  * @param email
-	  * @return
+	  * @return Client
 	  */
 	@Transactional
 	public Client getClient(String email) { 
@@ -171,14 +171,47 @@ public class PetShelterService {
 
 
 	@Transactional
-	public boolean clientLogin(String email, String password) {
-		if (email != null) {
-			Client client = getClient(email);
-			if (password.equals(client.getPassword())) { // Change if we end up storing passwords in ciphertext
-				return true;
-			}
+	public boolean profileLogin(String email, String password) {
+
+		if (email == null || password == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		return false;
+
+		Profile profile = profileRepository.findProfileByEmail(email);
+
+		if (profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+
+		// Checking if password is correct and account isn't logged in
+		if (password.equals(profile.getPassword()) && !profile.getIsLoggedIn()) {
+			profile.setIsLoggedIn(true);
+			profileRepository.save(profile);
+			return true;
+		} else if (profile.getIsLoggedIn()) { 
+			throw new IllegalArgumentException(ErrorMessages.loggedIn); 
+		} else {
+			return false;
+		}
+	}
+
+	@Transactional
+	public boolean profileLogout(String email) {
+
+		if (email == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+
+		Profile profile = profileRepository.findProfileByEmail(email); 
+
+		if (!profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		} else {
+			profile.setIsLoggedIn(false); 
+			profileRepository.save(profile);
+			return true; 
+		}
+		
 	}
 
 	@Transactional
