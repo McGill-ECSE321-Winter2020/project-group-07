@@ -2,9 +2,7 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.List;
 
 
@@ -35,7 +33,7 @@ public class PetShelterRestController {
 	// Rahul GET Mappings
 	// Get client -- For someone viewing a profile page
 	@GetMapping(value = { "/profile", "/profile/" }) 
-	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException { // Is it okay to have @?
+	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException { 
 		Client client = service.getClient(email);
 		if (client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -47,7 +45,16 @@ public class PetShelterRestController {
 		return null;
 	}
 
-
+	// Verifying login
+	@GetMapping(value = { "/login", "/login/" }) 
+	public ProfileDTO verifyCredentials(@RequestParam("email") String email, @RequestParam("password") String password) throws IllegalArgumentException { 
+		if (service.profileLogin(email, password)) {
+			ProfileDTO profileDTO = convertToDTO(email, true); 
+			return profileDTO; 
+		} else {
+			throw new IllegalArgumentException(ErrorMessages.loginFailed); // This really should never happen, but just in case
+		}
+	}
 
 
 	// Youssef GET Mappings
@@ -82,10 +89,7 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-
-
-
-	@PostMapping(value = { "/profile", "/profile/" }) 
+	@PostMapping(value = { "/createaccount", "/createaccount/" }) 
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
@@ -101,7 +105,15 @@ public class PetShelterRestController {
 							null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
 	}
 
-
+	// Logging out
+	@PostMapping(value = { "/logout", "/logout/"})
+	public ProfileDTO logoutProfile(@RequestParam("email") String email) {
+		if (service.profileLogout(email)) {
+			return convertToDTO(email, false); 
+		} else {
+			throw new IllegalArgumentException("Logout failed."); // Really should never happen, but just incase
+		}
+	}
 
 
 
@@ -151,7 +163,6 @@ public class PetShelterRestController {
 	}
 
 	// For viewing people's profile pages
-
 	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName, List<PostingDTO> postings) {
 		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings); 
 		return clientDTO; 
@@ -169,6 +180,8 @@ public class PetShelterRestController {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
+
+
 
 	//Application Convert to DTOs
 
@@ -282,7 +295,14 @@ public class PetShelterRestController {
 		profileDTO.setPhoneNumber(profile.getPhoneNumber());
 		profileDTO.setDateOfBirth(profile.getDateOfBirth());
 		profileDTO.setPostings(convertToDTOPostings(service.toList(profile.getPostings())));
-		
+		return profileDTO;
+	}
+
+	//For logging in 
+	private ProfileDTO convertToDTO(String email, boolean isLoggedIn) {
+		ProfileDTO profileDTO = new ProfileDTO();
+		profileDTO.setEmail(email);
+		profileDTO.setLoggedIn(isLoggedIn);
 		return profileDTO;
 	}
 

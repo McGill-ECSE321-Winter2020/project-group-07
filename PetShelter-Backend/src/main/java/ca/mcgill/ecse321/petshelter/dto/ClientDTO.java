@@ -80,7 +80,7 @@ public class ClientDTO {
         this.firstName = firstName;
         this.lastName = lastName; 
     }
-    
+   
     // Setters and Getters
     public void setDateOfBirth(Date dob) {
         this.dateOfBirth = dob;

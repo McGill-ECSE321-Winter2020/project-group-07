@@ -13,6 +13,11 @@ public class ErrorMessages {
     public static String invalidFirstName = "Invalid first name.";
     public static String invalidLastName = "Invalid last name."; 
     public static String under18 = "Must be at least 18 years of age to register.";
+    public static String notLoggedIn = "Account not currently logged in.";
+    public static String loggedIn = "Account is already logged in.";
+    public static String loginFailed = "Login failed.";
+    public static String logoutFailed = "Logout failed.";
+
     
     // Comment
     public static String invalidPosting = "Invalid posting.";
