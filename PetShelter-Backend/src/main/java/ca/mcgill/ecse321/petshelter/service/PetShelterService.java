@@ -211,7 +211,7 @@ public class PetShelterService {
 			profileRepository.save(profile);
 			return true; 
 		}
-		
+
 	}
 
 	@Transactional
@@ -256,201 +256,199 @@ public class PetShelterService {
 
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
-		
 
-	if(content.length() == 0 ) {
-		throw new IllegalArgumentException(ErrorMessages.NoContent);
-	}
-	if(content.length() >1000) {
-		throw new IllegalArgumentException(ErrorMessages.tooLong);
-	}
-	if(date == null) {
-		throw new IllegalArgumentException(ErrorMessages.dateMessage);
-	}
-
-	//To avoid spam on admin account, checking if content has already been sent as a message.
-	java.util.Set<Message> allMess;
-	allMess = client.getMessages();
-	Iterator<Message> itr = allMess.iterator();
-
-	while(itr.hasNext()) {
-		Message curr = itr.next();
-		String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
-		String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
-		String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
-		String monthcurr = new String(new char[] {curr.getDate().toString().charAt(5),curr.getDate().toString().charAt(6)});
-		if(curr.getContent().equalsIgnoreCase(content)) {
-			if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
-				throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
-			}
-			
+		if(content.length() == 0 ) {
+			throw new IllegalArgumentException(ErrorMessages.NoContent);
 		}
-	}
-	Message message = new Message();
-	message.setAdmin(admin);
-	message.setClient(client);
-	message.setContent(content);
-	message.setDate(date);
-	message.setId(client.getEmail().hashCode()*date.hashCode());
-	messageRepository.save(message);
-	return message;
-
+		if(content.length() >1000) {
+			throw new IllegalArgumentException(ErrorMessages.tooLong);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.dateMessage);
 		}
 
-		@Transactional
-		public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
+		//To avoid spam on admin account, checking if content has already been sent as a message.
+		java.util.Set<Message> allMess;
+		allMess = client.getMessages();
+		Iterator<Message> itr = allMess.iterator();
 
-			//check inputs are valid
-			if(posting == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
-			}
-			if(profile == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidProfile);
-			}
-			//check content is not just white spaces
-			String contentWhiteSpaceCheck = content.trim();
-			if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
-			}
-			if(date == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
-			}
-
-
-			//create comment object and set all its attributes
-			Comment comment = new Comment();
-			comment.setPosting(posting);
-			comment.setProfile(profile);
-			comment.setContent(content);
-			comment.setDate(date);
-			comment.setId(profile.getEmail().hashCode()*posting.getId()*date.hashCode());
-
-			commentRepository.save(comment);
-			return comment;
-		}
-
-		@Transactional
-		public List<Posting> getOpenPostings(){
-			//get all postings in database and check which ones are still "open" i.e. do not have approved applications 
-			List<Posting> allPostings = toList(postingRepository.findAll());
-			List<Posting> openPostings = new ArrayList<Posting>();
-			for(Posting posting : allPostings) {
-				boolean closedPosting = false;
-				for(Application application : posting.getApplication()) {
-					if(application.getStatus() == ApplicationStatus.accepted) {
-						closedPosting = true;
-					}
+		while(itr.hasNext()) {
+			Message curr = itr.next();
+			String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
+			String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
+			String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
+			String monthcurr = new String(new char[] {curr.getDate().toString().charAt(5),curr.getDate().toString().charAt(6)});
+			if(curr.getContent().equalsIgnoreCase(content)) {
+				if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
+					throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
 				}
-				if(!closedPosting) {
-					openPostings.add(posting);
+				
+			}
+		}
+		Message message = new Message();
+		message.setAdmin(admin);
+		message.setClient(client);
+		message.setContent(content);
+		message.setDate(date);
+		message.setId(client.getEmail().hashCode()*date.hashCode());
+		messageRepository.save(message);
+		return message;
+	}
+
+	@Transactional
+	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
+
+		//check inputs are valid
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		if(profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
+		}
+		//check content is not just white spaces
+		String contentWhiteSpaceCheck = content.trim();
+		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+		}
+
+
+		//create comment object and set all its attributes
+		Comment comment = new Comment();
+		comment.setPosting(posting);
+		comment.setProfile(profile);
+		comment.setContent(content);
+		comment.setDate(date);
+		comment.setId(profile.getEmail().hashCode()*posting.getId()*date.hashCode());
+
+		commentRepository.save(comment);
+		return comment;
+	}
+
+	@Transactional
+	public List<Posting> getOpenPostings(){
+		//get all postings in database and check which ones are still "open" i.e. do not have approved applications 
+		List<Posting> allPostings = toList(postingRepository.findAll());
+		List<Posting> openPostings = new ArrayList<Posting>();
+		for(Posting posting : allPostings) {
+			boolean closedPosting = false;
+			for(Application application : posting.getApplication()) {
+				if(application.getStatus() == ApplicationStatus.accepted) {
+					closedPosting = true;
 				}
 			}
-			return openPostings;
+			if(!closedPosting) {
+				openPostings.add(posting);
+			}
 		}
-
-		@Transactional
-		public Posting createPosting() {
-			return null;
-		}
-
-		@Transactional
-		public Posting deletePosting() {
-			return null;
-		}
-
-		@Transactional
-		public Posting updatePostingInfo() {
-			return null;
-		}
-
-		@Transactional
-		public List<Application> getPostingApplications(Posting posting){
-			if(posting == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
-			}
-			return toList(posting.getApplication()); //returns ArrayList of applications associated with the posting 
-		}
-
-		@Transactional
-		public boolean rejectApplication(Application application) {
-			if(application == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidApplication);
-			}
-			if(application.getStatus() == ApplicationStatus.accepted) {
-				throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
-			}
-			application.setStatus(ApplicationStatus.rejected);
-			applicationRepository.save(application);
-			return true;
-		}
-
-		@Transactional
-		public boolean approveApplication(Application application){
-			/*
-			 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
-			 * Status of this application is changed to "approved".
-			 * Change the status of other applications on the same posting to "rejected".
-			 * The decision is final.
-			 */
-			if(application == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidApplication);
-			}
-			if(application.getStatus() != ApplicationStatus.pending) {
-				throw new IllegalArgumentException(ErrorMessages.notPendingApp);
-			}
-			application.setStatus(ApplicationStatus.accepted);
-			applicationRepository.save(application);
-
-			for(Application a : getPostingApplications(application.getPosting())) {
-				if(a != application) {
-					a.setStatus(ApplicationStatus.rejected);
-					applicationRepository.save(a);
-				}
-			}
-
-			return true;
-		}
-
-		@Transactional
-		public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
-			if (client == null) {
-				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-			}
-			if(posting == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPosting);
-			}
-			if(client.equals(posting.getProfile())){
-				throw new IllegalArgumentException(ErrorMessages.selfApplication);
-			}
-			if(homeType == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
-			}
-			if(incomeRange == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
-			}
-			if(numberOfResidents <= 0) {
-				throw new IllegalArgumentException(ErrorMessages.invalidNOR);
-			}
-
-			Application application = new Application();
-			application.setId(client.getEmail().hashCode() * posting.getId());
-			application.setClient(client);
-			application.setPosting(posting);
-			application.setHomeType(homeType);
-			application.setIncomeRange(incomeRange);
-			application.setNumberOfResidents(numberOfResidents);
-			application.setStatus(ApplicationStatus.pending);
-
-			applicationRepository.save(application);
-
-			return application;
-		}
-
-		public <T> List<T> toList(Iterable<T> iterable){
-			List<T> resultList = new ArrayList<T>();
-			for (T t : iterable) {
-				resultList.add(t);
-			}
-			return resultList;
-		}
+		return openPostings;
 	}
+
+	@Transactional
+	public Posting createPosting() {
+		return null;
+	}
+
+	@Transactional
+	public Posting deletePosting() {
+		return null;
+	}
+
+	@Transactional
+	public Posting updatePostingInfo() {
+		return null;
+	}
+
+	@Transactional
+	public List<Application> getPostingApplications(Posting posting){
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		return toList(posting.getApplication()); //returns ArrayList of applications associated with the posting 
+	}
+
+	@Transactional
+	public boolean rejectApplication(Application application) {
+		if(application == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+		}
+		if(application.getStatus() == ApplicationStatus.accepted) {
+			throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
+		}
+		application.setStatus(ApplicationStatus.rejected);
+		applicationRepository.save(application);
+		return true;
+	}
+
+	@Transactional
+	public boolean approveApplication(Application application){
+		/*
+			* Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
+			* Status of this application is changed to "approved".
+			* Change the status of other applications on the same posting to "rejected".
+			* The decision is final.
+			*/
+		if(application == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+		}
+		if(application.getStatus() != ApplicationStatus.pending) {
+			throw new IllegalArgumentException(ErrorMessages.notPendingApp);
+		}
+		application.setStatus(ApplicationStatus.accepted);
+		applicationRepository.save(application);
+
+		for(Application a : getPostingApplications(application.getPosting())) {
+			if(a != application) {
+				a.setStatus(ApplicationStatus.rejected);
+				applicationRepository.save(a);
+			}
+		}
+
+		return true;
+	}
+
+	@Transactional
+	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
+		if (client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		if(client.equals(posting.getProfile())){
+			throw new IllegalArgumentException(ErrorMessages.selfApplication);
+		}
+		if(homeType == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
+		}
+		if(incomeRange == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
+		}
+		if(numberOfResidents <= 0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidNOR);
+		}
+
+		Application application = new Application();
+		application.setId(client.getEmail().hashCode() * posting.getId());
+		application.setClient(client);
+		application.setPosting(posting);
+		application.setHomeType(homeType);
+		application.setIncomeRange(incomeRange);
+		application.setNumberOfResidents(numberOfResidents);
+		application.setStatus(ApplicationStatus.pending);
+
+		applicationRepository.save(application);
+
+		return application;
+	}
+
+	public <T> List<T> toList(Iterable<T> iterable){
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
+	}
+}
