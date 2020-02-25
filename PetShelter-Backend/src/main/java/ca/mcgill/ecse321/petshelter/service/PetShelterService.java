@@ -154,23 +154,40 @@ public class PetShelterService {
 				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 			}
 			return client;
+		} else {
+			return null; 
 		}
-		return null; 
 	}
 
 
 	@Transactional
-	public Client deleteClient(String email) {
-		if (email != null) {
-			Client client = getClient(email);
-			if (client == null) {
-				return null;
-			} else {
-				clientRepository.delete(client); 
-				return client;
+	public Client deleteClient(String deleterEmail, String deleteeEmail) {
+		// Checking if person trying to delete is logged in 
+		if (deleterEmail == null) {
+			return null;
+		} else {
+			Profile profile = profileRepository.findProfileByEmail(deleterEmail);
+			if (profile == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+			}
+			if (!profile.getIsLoggedIn()) {
+				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 			}
 		}
-		return null; 
+	
+		// Deleting client 
+		if (deleteeEmail == null) {
+			return null; 
+		} else if (deleterEmail.equals(deleteeEmail) || deleterEmail.equals("pet_shelter@petshelter.com")) { // Checking if it's admin or they're deleting themselves
+			Client client_to_delete = getClient(deleteeEmail); 
+			if (client_to_delete == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+			}
+			clientRepository.delete(client_to_delete); // Deleting client
+			return client_to_delete;
+		} else {
+			throw new IllegalArgumentException(ErrorMessages.permissionDenied);
+		}		
 	}
 
 

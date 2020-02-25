@@ -40,7 +40,7 @@ public class AdminServiceTests {
 
     // Dummy profile attributes
     private static final Date PROFILE_DOB = Date.valueOf("2000-01-01");
-    private static final String PROFILE_EMAIL_LOGGEDIN = "pets_r_us@gmail.com"; // Testing logged in account
+    private static final String PROFILE_EMAIL_LOGGEDIN = "pet_shelter@petshelter.com"; // Testing logged in account
     private static final String PROFILE_EMAIL_LOGGEDOUT = "pets_r_not_us@gmail.com"; // Testing logged out account
     private static final String PROFILE_PASSWORD = "password1337";
     private static final String PROFILE_PHONENUMBER = "5555555555";

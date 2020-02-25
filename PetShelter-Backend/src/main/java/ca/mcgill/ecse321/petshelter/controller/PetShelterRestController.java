@@ -115,6 +115,9 @@ public class PetShelterRestController {
 		}
 	}
 
+	// Deleting an account
+	// @PostMapping(value = { "/deleteaccount"})
+
 
 
 

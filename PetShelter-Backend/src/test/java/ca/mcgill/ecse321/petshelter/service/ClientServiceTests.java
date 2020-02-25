@@ -45,6 +45,7 @@ public class ClientServiceTests {
     private static final Date PROFILE_DOB = Date.valueOf("2000-01-01");
     private static final String PROFILE_EMAIL_LOGGEDIN = "muffin_man@gmail.com"; // Testing logged in account
     private static final String PROFILE_EMAIL_LOGGEDOUT = "muffin_woman@gmail.com"; // Testing logged out account
+    private static final String ADMIN_EMAIL = "pet_shelter@petshelter.com"; // Testing admin account
     private static final String PROFILE_PASSWORD = "password1337";
     private static final String PROFILE_PHONENUMBER = "5555555555";
     private static final String PROFILE_ADDRESS = "1729 Drury Lane";
@@ -83,6 +84,15 @@ public class ClientServiceTests {
                 client.setFirstName(CLIENT_FNAME);
                 client.setLastName(CLIENT_LNAME); 
 				return client;
+            } else if (invocation.getArgument(0).equals(ADMIN_EMAIL)) {
+                Admin admin = new Admin(); // Dummy logged in admin account.
+                admin.setDateOfBirth(PROFILE_DOB);
+                admin.setEmail(PROFILE_EMAIL_LOGGEDIN);
+                admin.setPassword(PROFILE_PASSWORD);
+                admin.setPhoneNumber(PROFILE_PHONENUMBER);
+                admin.setAddress(PROFILE_ADDRESS);
+                admin.setIsLoggedIn(PROFILE_LOGGEDIN); 
+                return admin;
             } else {
 				return null;
 			}
@@ -266,10 +276,10 @@ public class ClientServiceTests {
 
     // Delete client tests
     @Test
-    public void testDeleteClient() { // Testing if a legitimate account can be deleted. 
-        String email = PROFILE_EMAIL_LOGGEDIN; // Doesn't really matter if logged in or not
+    public void testDeleteClient() { // Testing if a legitimate, logged in client can delete their own account. 
+        String email = PROFILE_EMAIL_LOGGEDIN; 
         try {
-            Client client = service.deleteClient(email);
+            Client client = service.deleteClient(email, email);
             assertEquals(email, client.getEmail());
         } catch (Exception e) {
             // In case of other errors
@@ -278,10 +288,44 @@ public class ClientServiceTests {
     }
 
     @Test
+    public void testDeleteClientLO() { // Testing if a logged out client can delete their account. 
+        String email = PROFILE_EMAIL_LOGGEDOUT; 
+        try {
+            Client client = service.deleteClient(email, email);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.notLoggedIn, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAdminDeleteClient() { // Testing if logged in admin can delete a client account. 
+        String deleterEmail = ADMIN_EMAIL;
+        String deleteeEmail = PROFILE_EMAIL_LOGGEDOUT; 
+        try {
+            Client client = service.deleteClient(deleterEmail, deleteeEmail);
+            assertEquals(deleteeEmail, client.getEmail());
+        } catch (Exception e) {
+            // In case of other errors
+            fail();
+        }
+    }
+
+    @Test
+    public void testDeleteAnotherClient() { // Testing if a client can delete another client's account. 
+        String deleterEmail = PROFILE_EMAIL_LOGGEDIN;
+        String deleteeEmail = PROFILE_EMAIL_LOGGEDOUT;
+        try {
+            Client client = service.deleteClient(deleterEmail, deleteeEmail);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.permissionDenied, e.getMessage());
+        }
+    }
+
+    @Test
     public void testDeleteClientUR() { // Testing if an unregistered user tries to be deleted.
         String email = UNREGISTERED_CLIENT_EMAIL; 
         try {
-            Client client = service.deleteClient(email);
+            Client client = service.deleteClient(email, email);
         } catch (Exception e) {
             assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
         }
@@ -291,7 +335,7 @@ public class ClientServiceTests {
     public void testDeleteClientEN() { // Testing if a null email tried to be deleted.
         String email = null; 
         try {
-            Client client = service.deleteClient(email);
+            Client client = service.deleteClient(email, email);
             assertNull(client);
         } catch (Exception e) {
             // In case of other errors
