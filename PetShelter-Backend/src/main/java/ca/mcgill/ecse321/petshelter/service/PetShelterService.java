@@ -426,7 +426,7 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public boolean rejectApplication(Application application) {
+	public Application rejectApplication(Application application) {
 		if(application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
@@ -435,11 +435,11 @@ public class PetShelterService {
 		}
 		application.setStatus(ApplicationStatus.rejected);
 		applicationRepository.save(application);
-		return true;
+		return application;
 	}
 
 	@Transactional
-	public boolean approveApplication(Application application){
+	public Application approveApplication(Application application){
 		/*
 			* Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
 			* Status of this application is changed to "approved".
@@ -462,7 +462,7 @@ public class PetShelterService {
 			}
 		}
 
-		return true;
+		return application;
 	}
 
 	@Transactional
