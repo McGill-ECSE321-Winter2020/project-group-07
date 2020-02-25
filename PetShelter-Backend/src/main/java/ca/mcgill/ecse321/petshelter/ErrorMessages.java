@@ -17,6 +17,7 @@ public class ErrorMessages {
     public static String loggedIn = "Account is already logged in.";
     public static String loginFailed = "Login failed.";
     public static String logoutFailed = "Logout failed.";
+    public static String permissionDenied = "You do not have permission to perform this operation.";
 
     
     // Comment

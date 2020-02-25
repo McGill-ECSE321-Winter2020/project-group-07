@@ -8,9 +8,6 @@ import java.util.Collection;
 
 import java.util.Iterator;
 
-
-import java.util.Iterator;
-
 import java.util.List;
 import java.util.Set;
 
@@ -154,24 +151,45 @@ public class PetShelterService {
 				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 			}
 			return client;
+		} else {
+			return null; 
 		}
-		return null; 
 	}
 
 
 	@Transactional
-	public Client deleteClient(String email) {
-		if (email != null) {
-			Client client = getClient(email);
-			clientRepository.delete(client); 
-			return client;
+	public Client deleteClient(String deleterEmail, String deleteeEmail) {
+		// Checking if person trying to delete is logged in 
+		if (deleterEmail == null) {
+			return null;
+		} else {
+			Profile profile = profileRepository.findProfileByEmail(deleterEmail);
+			if (profile == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+			}
+			if (!profile.getIsLoggedIn()) {
+				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+			}
 		}
-		return null; 
+	
+		// Deleting client 
+		if (deleteeEmail == null) {
+			return null; 
+		} else if (deleterEmail.equals(deleteeEmail) || deleterEmail.equals("pet_shelter@petshelter.com")) { // Checking if it's admin or they're deleting themselves
+			Client client_to_delete = getClient(deleteeEmail); 
+			if (client_to_delete == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+			}
+			clientRepository.delete(client_to_delete); // Deleting client
+			return client_to_delete;
+		} else {
+			throw new IllegalArgumentException(ErrorMessages.permissionDenied);
+		}		
 	}
 
 
 	@Transactional
-	public boolean profileLogin(String email, String password) {
+	public Profile profileLogin(String email, String password) {
 
 		if (email == null || password == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -187,16 +205,19 @@ public class PetShelterService {
 		if (password.equals(profile.getPassword()) && !profile.getIsLoggedIn()) {
 			profile.setIsLoggedIn(true);
 			profileRepository.save(profile);
-			return true;
+			return profile;
 		} else if (profile.getIsLoggedIn()) { 
 			throw new IllegalArgumentException(ErrorMessages.loggedIn); 
-		} else {
-			return false;
+		} else if (!password.equals(profile.getPassword())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
+		}
+		  else {
+			return null;
 		}
 	}
 
 	@Transactional
-	public boolean profileLogout(String email) {
+	public Profile profileLogout(String email) {
 
 		if (email == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -204,15 +225,39 @@ public class PetShelterService {
 
 		Profile profile = profileRepository.findProfileByEmail(email); 
 
+		if (profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+
 		if (!profile.getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 		} else {
 			profile.setIsLoggedIn(false); 
 			profileRepository.save(profile);
-			return true; 
+			return profile; 
 		}
 
 	}
+
+	 /**
+	  * Everyone should use this function if they need to retrieve the current active logged in Profile.
+	  * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
+	  * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
+	  * Throws an exception if no account is logged in.
+	  * @return Profile
+	  */
+	@Transactional // Everyone should use this 
+	public Profile getLoggedInUser(){
+		// Get all profiles in database and check which one is logged in 
+		List<Profile> allProfiles = toList(profileRepository.findAll());
+		for(Profile profile : allProfiles) {
+			if (profile.getIsLoggedIn()) {
+				return profile; 
+			}
+		}
+		throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+	}
+
 
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
