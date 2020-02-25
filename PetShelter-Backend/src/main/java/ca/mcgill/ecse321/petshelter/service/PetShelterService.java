@@ -228,6 +228,10 @@ public class PetShelterService {
 
 		Profile profile = profileRepository.findProfileByEmail(email); 
 
+		if (profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+
 		if (!profile.getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 		} else {

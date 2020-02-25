@@ -179,6 +179,17 @@ public class ClientServiceTests {
     }
 
     @Test
+	public void testClientLoginUR() { // Testing if an unregistered client account can login.
+		String email = UNREGISTERED_CLIENT_EMAIL;
+        String password = PROFILE_PASSWORD;
+		try {
+            Client client = (Client) service.profileLogin(email, password);
+		} catch (IllegalArgumentException e) {
+            assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
+		}
+    }
+
+    @Test
 	public void testClientLoginEN() { // Testing if a client account with a null email can login.
 		String email = null;
         String password = PROFILE_PASSWORD;
@@ -216,12 +227,22 @@ public class ClientServiceTests {
     }
 
     @Test
-	public void testClientLogoutLO() { // Testing if a already logged out client account can logout. 
+	public void testClientLogoutLO() { // Testing if an already logged out client account can logout. 
 		String email = PROFILE_EMAIL_LOGGEDOUT;
 		try {
             Client client = (Client) service.profileLogout(email);
 		} catch (IllegalArgumentException e) {
             assertEquals(ErrorMessages.notLoggedIn, e.getMessage());
+		}
+    }
+
+    @Test
+	public void testClientLogoutUR() { // Testing if an unregistered user can logout. 
+		String email = UNREGISTERED_CLIENT_EMAIL;
+		try {
+            Client client = (Client) service.profileLogout(email);
+		} catch (IllegalArgumentException e) {
+            assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
 		}
     }
 
