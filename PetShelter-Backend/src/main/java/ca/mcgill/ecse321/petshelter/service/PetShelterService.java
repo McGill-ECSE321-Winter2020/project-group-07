@@ -363,13 +363,28 @@ public class PetShelterService {
 	
 	@Transactional
 	public Posting getPosting(String email, Date date) {
-		return postingRepository.findPostingById(email.hashCode()*date.hashCode());
+		if(email == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		
+		Posting posting = postingRepository.findPostingById(email.hashCode()*date.hashCode());
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.postingDoesNotExist);
+		}
+		return posting;
 	}
 
 	@Transactional
 	public Application getApplication(String applicant_email, String owner_email, Date posting_date) {
 		Posting posting = getPosting(owner_email, posting_date);
-		return applicationRepository.findApplicationById(applicant_email.hashCode()*posting.hashCode());
+		Application application = applicationRepository.findApplicationById(applicant_email.hashCode()*posting.hashCode()); 
+		if(application == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+		}
+		return application;
 	}
 	
 	@Transactional
