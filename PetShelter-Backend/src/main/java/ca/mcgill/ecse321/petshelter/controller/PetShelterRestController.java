@@ -106,7 +106,7 @@ public class PetShelterRestController {
 	}
 
 	// Logging out
-	@PostMapping(value = { "/logout", "/logout/"})
+	@PostMapping(value = { "/logout", "/logout/" })
 	public ProfileDTO logoutProfile(@RequestParam("email") String email) {
 		if (!service.profileLogout(email).getIsLoggedIn()) {
 			return convertToDTO(email, false); 
@@ -116,7 +116,11 @@ public class PetShelterRestController {
 	}
 
 	// Deleting an account
-	// @PostMapping(value = { "/deleteaccount"})
+	@PostMapping(value = { "/deleteaccount", "/deleteaccount/" })
+	public ProfileDTO deleteAccount(@RequestParam("deleterEmail") String deleterEmail, @RequestParam("deleteeEmail") String deleteeEmail) {
+		Client client = service.deleteClient(deleterEmail, deleteeEmail);
+		return convertToDTO(client.getEmail(), false);
+	}
 
 
 
