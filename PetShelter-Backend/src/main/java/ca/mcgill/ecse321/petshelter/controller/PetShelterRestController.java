@@ -48,7 +48,7 @@ public class PetShelterRestController {
 	// Verifying login
 	@GetMapping(value = { "/login", "/login/" }) 
 	public ProfileDTO verifyCredentials(@RequestParam("email") String email, @RequestParam("password") String password) throws IllegalArgumentException { 
-		if (service.profileLogin(email, password)) {
+		if (service.profileLogin(email, password).getIsLoggedIn()) {
 			ProfileDTO profileDTO = convertToDTO(email, true); 
 			return profileDTO; 
 		} else {
@@ -108,7 +108,7 @@ public class PetShelterRestController {
 	// Logging out
 	@PostMapping(value = { "/logout", "/logout/"})
 	public ProfileDTO logoutProfile(@RequestParam("email") String email) {
-		if (service.profileLogout(email)) {
+		if (!service.profileLogout(email).getIsLoggedIn()) {
 			return convertToDTO(email, false); 
 		} else {
 			throw new IllegalArgumentException("Logout failed."); // Really should never happen, but just incase

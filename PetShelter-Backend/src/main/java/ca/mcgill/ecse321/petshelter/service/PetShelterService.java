@@ -171,7 +171,7 @@ public class PetShelterService {
 
 
 	@Transactional
-	public boolean profileLogin(String email, String password) {
+	public Profile profileLogin(String email, String password) {
 
 		if (email == null || password == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -187,16 +187,19 @@ public class PetShelterService {
 		if (password.equals(profile.getPassword()) && !profile.getIsLoggedIn()) {
 			profile.setIsLoggedIn(true);
 			profileRepository.save(profile);
-			return true;
+			return profile;
 		} else if (profile.getIsLoggedIn()) { 
 			throw new IllegalArgumentException(ErrorMessages.loggedIn); 
-		} else {
-			return false;
+		} else if (!password.equals(profile.getPassword())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
+		}
+		  else {
+			return null;
 		}
 	}
 
 	@Transactional
-	public boolean profileLogout(String email) {
+	public Profile profileLogout(String email) {
 
 		if (email == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -209,7 +212,7 @@ public class PetShelterService {
 		} else {
 			profile.setIsLoggedIn(false); 
 			profileRepository.save(profile);
-			return true; 
+			return profile; 
 		}
 
 	}
