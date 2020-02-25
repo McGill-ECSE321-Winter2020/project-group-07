@@ -18,7 +18,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Kaustav Das Sharma | Software Architecure Engineer | 22 | 7 | &mdash; | &mdash; |
 | Mohamed Bouaouina | Project Manager | 18.5 | 16 | &mdash; | &mdash; |
 | Nicolas Buisson | Product Manager | 20 | 14 | &mdash; | &mdash; |
-| Rahul Behal | Software Consultant | 15 | 20 | &mdash; | &mdash; |
+| Rahul Behal | Software Consultant | 15 | 27 | &mdash; | &mdash; |
 
 ## Sprint 1 
 
