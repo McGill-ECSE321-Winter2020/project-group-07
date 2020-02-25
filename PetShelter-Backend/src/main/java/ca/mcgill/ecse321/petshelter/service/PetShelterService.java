@@ -8,9 +8,6 @@ import java.util.Collection;
 
 import java.util.Iterator;
 
-
-import java.util.Iterator;
-
 import java.util.List;
 import java.util.Set;
 
@@ -241,6 +238,26 @@ public class PetShelterService {
 		}
 
 	}
+
+	 /**
+	  * Everyone should use this function if they need to retrieve the current active logged in Profile.
+	  * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
+	  * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
+	  * Throws an exception if no account is logged in.
+	  * @return Profile
+	  */
+	@Transactional // Everyone should use this 
+	public Profile getLoggedInUser(){
+		// Get all profiles in database and check which one is logged in 
+		List<Profile> allProfiles = toList(profileRepository.findAll());
+		for(Profile profile : allProfiles) {
+			if (profile.getIsLoggedIn()) {
+				return profile; 
+			}
+		}
+		throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+	}
+
 
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {

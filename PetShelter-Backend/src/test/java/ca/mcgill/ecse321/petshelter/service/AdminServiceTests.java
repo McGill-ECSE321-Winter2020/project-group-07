@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -74,6 +75,30 @@ public class AdminServiceTests {
             } else {
 				return null;
 			}
+        });
+        // When calling for all profiles (for getLoggedInUser() method), dummy profiles will be returned
+        // This tests for if there's no logged in users. If logged in user --> Tested in ClientServiceTests
+        lenient().when(service.toList(profileDAO.findAll())).thenAnswer((InvocationOnMock invocation) -> {
+            ArrayList<Profile> allProfiles = new ArrayList<Profile>(); 
+            Admin admin = new Admin();
+            Client client = new Client(); 
+            client.setDateOfBirth(PROFILE_DOB);
+            client.setEmail(PROFILE_EMAIL_LOGGEDOUT);
+            client.setPassword(PROFILE_PASSWORD);
+            client.setPhoneNumber(PROFILE_PHONENUMBER);
+            client.setAddress(PROFILE_ADDRESS);
+            client.setIsLoggedIn(PROFILE_LOGGEDOUT);
+      
+            admin.setDateOfBirth(PROFILE_DOB);
+            admin.setEmail(PROFILE_EMAIL_LOGGEDIN); // Just a different email, still not actually logged in.
+            admin.setPassword(PROFILE_PASSWORD);
+            admin.setPhoneNumber(PROFILE_PHONENUMBER);
+            admin.setAddress(PROFILE_ADDRESS);
+            admin.setIsLoggedIn(PROFILE_LOGGEDOUT); // As shown here.
+            
+            allProfiles.add(client);
+            allProfiles.add(admin); 
+            return allProfiles;  
         });
         
         // Whenever the profile is saved, just return the parameter object
@@ -179,7 +204,18 @@ public class AdminServiceTests {
             assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
 		}
     }
-    
+
+
+
+    // Testing for getLoggedInUser() if there's no logged in users. Test for logged in user is done in ClientServiceTests.
+     @Test
+     public void testGetLoggedInUser() {
+         try {
+             Profile logged_in = service.getLoggedInUser();
+         } catch (Exception e) {
+             assertEquals(ErrorMessages.notLoggedIn, e.getMessage()); 
+         }
+     }
 
 
 }

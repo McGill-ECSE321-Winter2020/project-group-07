@@ -14,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +59,16 @@ public class ClientServiceTests {
     private static final String CLIENT_FNAME = "Muffin"; 
     private static final String CLIENT_LNAME = "Man";
     private static final String UNREGISTERED_CLIENT_EMAIL = "pet_killer@dogfights.com";
+
+    // Dummy illegitimate attributes for creating a new client
+    private static final Date UNDERAGE_DOB = Date.valueOf("2010-01-01");
+    private static final String EMAIL_DOT = "dot_before_atsign.@gmail.com";
+    private static final String EMAIL_NO_AT = "no_at_sign_at_gmail.com";
+    private static final String EMAIL_SYMB_DN = "symbol_in_domain@gmai!.com";
+    private static final String EMAIL_NO_DOT = "no_dot_after@gmailcom";
+
+
+
 
     // Test stubs
     @BeforeEach
@@ -128,7 +141,33 @@ public class ClientServiceTests {
             } else {
 				return null;
 			}
-		});
+        });
+        // When calling for all profiles (for getLoggedInUser() method), dummy profiles will be returned
+        // This tests for if there's a logged in user at all. If no logged in user --> Tested in AdminServiceTests
+        lenient().when(service.toList(profileDAO.findAll())).thenAnswer((InvocationOnMock invocation) -> {
+            ArrayList<Profile> allProfiles = new ArrayList<Profile>(); 
+            Client client1 = new Client();
+            Client client2 = new Client(); 
+            client1.setDateOfBirth(PROFILE_DOB);
+            client1.setEmail(PROFILE_EMAIL_LOGGEDOUT);
+            client1.setPassword(PROFILE_PASSWORD);
+            client1.setPhoneNumber(PROFILE_PHONENUMBER);
+            client1.setAddress(PROFILE_ADDRESS);
+            client1.setIsLoggedIn(PROFILE_LOGGEDOUT);
+            client1.setFirstName(CLIENT_FNAME);
+            client1.setLastName(CLIENT_LNAME);
+            client2.setDateOfBirth(PROFILE_DOB);
+            client2.setEmail(PROFILE_EMAIL_LOGGEDIN);
+            client2.setPassword(PROFILE_PASSWORD);
+            client2.setPhoneNumber(PROFILE_PHONENUMBER);
+            client2.setAddress(PROFILE_ADDRESS);
+            client2.setIsLoggedIn(PROFILE_LOGGEDIN);
+            client2.setFirstName(CLIENT_FNAME);
+            client2.setLastName(CLIENT_LNAME);
+            allProfiles.add(client1);
+            allProfiles.add(client2); 
+            return allProfiles;  
+        });
 
         // Whenever the profile is saved, just return the parameter object
         // Technically doesn't matter since the returned object after saving is never used directly
@@ -295,6 +334,19 @@ public class ClientServiceTests {
 
 
 
+    // Get logged in user test -- Test for if there is one logged in user. If none logged in --> Tested in AdminServiceTests.java
+    @Test
+    public void testGetLoggedInUser() {
+        try {
+            Profile logged_in = service.getLoggedInUser();
+            assertEquals(PROFILE_EMAIL_LOGGEDIN, logged_in.getEmail());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+
+
     // Delete client tests
     @Test
     public void testDeleteClient() { // Testing if a legitimate, logged in client can delete their own account. 
@@ -367,6 +419,96 @@ public class ClientServiceTests {
 
 
     // Create client tests
+    @Test
+    public void testCreateClient() { // Testing if a valid client can be created
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+            assertEquals(UNREGISTERED_CLIENT_EMAIL, client.getEmail()); 
+        } catch (Exception e) {
+            // In case of other errors
+            fail(); 
+        }
+    }
 
+    @Test
+    public void testCreateClientAR() { // Testing if an already registered client can be created
+        try {
+            Client client = service.createClient(PROFILE_DOB, PROFILE_EMAIL_LOGGEDOUT, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.accountExists, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientND() { // Testing if a client with a null DOB can be created
+        try {
+            Client client = service.createClient(null, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidDOB, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientUA() { // Testing if an underage (under 18) client can be created
+        try {
+            Client client = service.createClient(UNDERAGE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.under18, e.getMessage()); 
+        }
+    }
+    // Unit tests for the email Regex
+    @Test
+    public void testCreateClientNE() { // Testing if a null email can be used to create an account
+        try {
+            Client client = service.createClient(PROFILE_DOB, null, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientDOT() { // Testing if an email with a .@ can be used to create an account
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_DOT, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNA() { // Testing if an email with no @ can be used to create an account
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_NO_AT, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientSD() { // Testing if an email with a symbol in the domain name can be used to create an account
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_SYMB_DN, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNoDot() { // Testing if an email with no . after @ can be used to create an account
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_NO_DOT, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
 
 }
