@@ -122,10 +122,10 @@ public class PetShelterRestController {
 
 
 	@PostMapping(value = {"/createapplication", "/createapplication"})
-	public ApplicationDTO createApplication(@RequestParam("client") Client client, @RequestParam("posting") Posting posting, 
+	public ApplicationDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("posting") Posting posting, 
 			@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
 			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
-
+		Client client = service.getClient(client_email);
 		Application application = service.createApplication(client, posting, homeType, incomeRange, numberOfResidents);
 		return convertToDTO(application);
 	}
