@@ -360,7 +360,18 @@ public class PetShelterService {
 	public Posting updatePostingInfo() {
 		return null;
 	}
+	
+	@Transactional
+	public Posting getPosting(String email, Date date) {
+		return postingRepository.findPostingById(email.hashCode()*date.hashCode());
+	}
 
+	@Transactional
+	public Application getApplication(String applicant_email, String owner_email, Date posting_date) {
+		Posting posting = getPosting(owner_email, posting_date);
+		return applicationRepository.findApplicationById(applicant_email.hashCode()*posting.hashCode());
+	}
+	
 	@Transactional
 	public List<Application> getPostingApplications(Posting posting){
 		if(posting == null) {
