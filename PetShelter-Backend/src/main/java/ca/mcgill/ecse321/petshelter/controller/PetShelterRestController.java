@@ -138,13 +138,13 @@ public class PetShelterRestController {
 		Posting posting = service.getPosting(owner_email, posting_date);
 		HomeType ht = null;
 		IncomeRange ir = null;
-		//get enum from passed string
+		//get enum variable from passed string
 		try {
 			ht = HomeType.valueOf(homeType);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
 		}
-		//get enum from passed string
+		//get enum variable from passed string
 		try {
 			ir = IncomeRange.valueOf(incomeRange);
 		} catch (Exception e) {
