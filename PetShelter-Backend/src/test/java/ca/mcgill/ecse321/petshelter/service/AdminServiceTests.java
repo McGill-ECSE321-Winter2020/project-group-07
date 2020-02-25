@@ -48,8 +48,10 @@ public class AdminServiceTests {
     private static final boolean PROFILE_LOGGEDIN = true; // Testing logged in account
     private static final boolean PROFILE_LOGGEDOUT = false; // Testing logged out account
 
+    // Test stubs
     @BeforeEach
-	public void setMockOutput() { // When findProfileByEmail is called in service class, dummy admin object will be returned
+	public void setMockOutput() { 
+        // When findProfileByEmail is called in service class, dummy admin object will be returned
 		lenient().when(profileDAO.findProfileByEmail(anyString())).thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(PROFILE_EMAIL_LOGGEDIN)) {
 				Admin admin = new Admin(); // Dummy logged in object 
@@ -69,18 +71,23 @@ public class AdminServiceTests {
                 admin.setAddress(PROFILE_ADDRESS);
                 admin.setIsLoggedIn(PROFILE_LOGGEDOUT);
 				return admin;
-            }
-              else {
+            } else {
 				return null;
 			}
-		});
-		// Whenever the profile is saved, just return the parameter object
+        });
+        
+        // Whenever the profile is saved, just return the parameter object
+        // Technically doesn't matter since the returned object after saving is never used directly
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
-		};
-		lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
+        };
+        
+        lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
+
+
+    // Loggging in tests
 	@Test
 	public void testAdminLoginLO() { // Testing if an admin account that's currently logged out can login
 		String email = PROFILE_EMAIL_LOGGEDOUT;
@@ -133,6 +140,41 @@ public class AdminServiceTests {
         String password = null;
 		try {
             Admin admin = (Admin) service.profileLogin(email, password);
+		} catch (IllegalArgumentException e) {
+            assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
+		}
+    }
+
+
+
+    // Logging out tests
+    @Test
+	public void testAdminLogoutLI() { // Testing if a logged in admin account can logout.
+		String email = PROFILE_EMAIL_LOGGEDIN;
+		try {
+            Admin admin = (Admin) service.profileLogout(email);
+            assertEquals(false, admin.getIsLoggedIn()); 
+		} catch (IllegalArgumentException e) {
+            // Ensuring no other errors occur
+            fail();
+		}
+    }
+
+    @Test
+	public void testAdminLogoutLO() { // Testing if an already logged out admin account can logout. 
+		String email = PROFILE_EMAIL_LOGGEDOUT;
+		try {
+            Admin admin = (Admin) service.profileLogout(email);
+		} catch (IllegalArgumentException e) {
+            assertEquals(ErrorMessages.notLoggedIn, e.getMessage());
+		}
+    }
+
+    @Test
+	public void testAdminLogoutEN() { // Testing if an admin account with a null email can logout.
+		String email = null;
+		try {
+            Admin admin = (Admin) service.profileLogout(email);
 		} catch (IllegalArgumentException e) {
             assertEquals(ErrorMessages.accountDoesNotExist, e.getMessage());
 		}

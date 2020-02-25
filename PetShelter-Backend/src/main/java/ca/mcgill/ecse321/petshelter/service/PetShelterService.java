@@ -163,8 +163,12 @@ public class PetShelterService {
 	public Client deleteClient(String email) {
 		if (email != null) {
 			Client client = getClient(email);
-			clientRepository.delete(client); 
-			return client;
+			if (client == null) {
+				return null;
+			} else {
+				clientRepository.delete(client); 
+				return client;
+			}
 		}
 		return null; 
 	}
