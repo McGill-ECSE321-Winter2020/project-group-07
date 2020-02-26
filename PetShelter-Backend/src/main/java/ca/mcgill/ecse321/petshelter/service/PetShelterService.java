@@ -258,7 +258,18 @@ public class PetShelterService {
 		throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 	}
 
-
+	/**
+	 * Method to be used when updating a client profile. From the frontend, the current information will be entered
+	 * and the user can modify it and confirm it.
+	 * @param client
+	 * @param password
+	 * @param phoneNumber
+	 * @param address
+	 * @param firstName
+	 * @param lastName
+	 * @param dob
+	 * @return Client
+	 */
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
 
