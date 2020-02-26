@@ -113,6 +113,12 @@ public class PetShelterRestController {
 		List<Donation> donations = service.getClientDonations(client);
 		return convertToDTODonations(donations);
 	}
+	//
+	@GetMapping(value= {"/{message}/messages", "/{message}/messages/"})
+	public List<MessageDTO> getMessages(@PathVariable("message") Posting posting) throws IllegalArgumentException{
+		List<Message> messages = service.
+	}
+
 
 
 
