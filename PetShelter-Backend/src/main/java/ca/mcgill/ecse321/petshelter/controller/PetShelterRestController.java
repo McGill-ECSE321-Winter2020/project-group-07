@@ -247,6 +247,7 @@ public class PetShelterRestController {
 	}
 	//update account
 	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
+	@PostMapping(value = {"/sendmessage", "/sendmessage/"})
 	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
 			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
 			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
