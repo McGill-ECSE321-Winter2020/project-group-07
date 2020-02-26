@@ -80,7 +80,6 @@ public class PetShelterRestController {
 		
 	}
 
-	
 	// Nicolas GET Mappings
 	
 	//Looking at all open Postings
