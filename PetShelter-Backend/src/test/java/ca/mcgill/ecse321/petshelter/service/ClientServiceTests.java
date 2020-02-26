@@ -66,8 +66,11 @@ public class ClientServiceTests {
     private static final String EMAIL_NO_AT = "no_at_sign_at_gmail.com";
     private static final String EMAIL_SYMB_DN = "symbol_in_domain@gmai!.com";
     private static final String EMAIL_NO_DOT = "no_dot_after@gmailcom";
-
-
+    private static final String EMAIL_1LETTER_DOMAIN = "one_letter_tld@gmail.c";
+    private static final String EMAIL_8LETTER_DOMAIN = "eight_letter_tld@gmail.eletters";
+    private static final String FEW_CHAR_PASS = "5char";
+    private static final String LONG_PHONENUMBER = "1234567891011";
+    private static final String NON_NUMERIC_PHONENUMBER = "NotNumbers";
 
 
     // Test stubs
@@ -170,7 +173,6 @@ public class ClientServiceTests {
         });
 
         // Whenever the profile is saved, just return the parameter object
-        // Technically doesn't matter since the returned object after saving is never used directly
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
         };
@@ -420,7 +422,7 @@ public class ClientServiceTests {
 
     // Create client tests
     @Test
-    public void testCreateClient() { // Testing if a valid client can be created
+    public void testCreateClient() { // Testing if a valid client with all valid attributes can be created
         try {
             Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
                                                 PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
@@ -460,7 +462,7 @@ public class ClientServiceTests {
             assertEquals(ErrorMessages.under18, e.getMessage()); 
         }
     }
-    // Unit tests for the email Regex
+    
     @Test
     public void testCreateClientNE() { // Testing if a null email can be used to create an account
         try {
@@ -508,6 +510,126 @@ public class ClientServiceTests {
                                                 PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
         } catch (Exception e) {
             assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClient1TLD() { // Testing if an email with a one letter top-level domain can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_1LETTER_DOMAIN, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClient8TLD() { // Testing if an email with an eight letter top-level domain can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, EMAIL_8LETTER_DOMAIN, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidEmail, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNP() { // Testing if a null password can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, null, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidPassword, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClient6CP() { // Testing if a less than six character password can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, FEW_CHAR_PASS, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidPassword, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientLP() { // Testing if a longer than 10 digit phone number can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                LONG_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidPhoneNumber, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNN() { // Testing if a phone number with non-numeric characters can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                NON_NUMERIC_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidPhoneNumber, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNullAddress() { // Testing if a null address can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, null, CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidAddress, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientBA() { // Testing if a blank address can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, "", CLIENT_FNAME, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidAddress, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNF() { // Testing if a null first name can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, null, CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidFirstName, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientBF() { // Testing if a blank first name can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, "", CLIENT_LNAME);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidFirstName, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientNL() { // Testing if a null last name can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, null);
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidLastName, e.getMessage()); 
+        }
+    }
+
+    @Test
+    public void testCreateClientBL() { // Testing if a blank last name can be used to create an account.
+        try {
+            Client client = service.createClient(PROFILE_DOB, UNREGISTERED_CLIENT_EMAIL, PROFILE_PASSWORD, 
+                                                PROFILE_PHONENUMBER, PROFILE_ADDRESS, CLIENT_FNAME, "");
+        } catch (Exception e) {
+            assertEquals(ErrorMessages.invalidLastName, e.getMessage()); 
         }
     }
 
