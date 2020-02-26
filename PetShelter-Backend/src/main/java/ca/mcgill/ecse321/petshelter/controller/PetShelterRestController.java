@@ -68,7 +68,11 @@ public class PetShelterRestController {
 
 
 	// Alex GET Mappings
-	
+	//
+	@GetMapping(value= {"/{message}/messages", "/{message}/messages/"})
+	public List<MessageDTO> getMessages(@PathVariable("message") Posting posting) throws IllegalArgumentException{
+		List<Message> messages = service.
+	}
 
 
 
