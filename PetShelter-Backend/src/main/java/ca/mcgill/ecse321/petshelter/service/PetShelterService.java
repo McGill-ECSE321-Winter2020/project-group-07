@@ -49,7 +49,7 @@ public class PetShelterService {
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
-			String address, String firstName, String lastName) {
+							   String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		try {
