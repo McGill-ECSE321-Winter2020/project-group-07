@@ -68,7 +68,7 @@ public class PetShelterRestController {
 
 
 	// Alex GET Mappings
-
+	
 
 
 
@@ -140,7 +140,32 @@ public class PetShelterRestController {
 
 
 	// Alex POST Mappings
-
+	
+	//send Donation
+	@PostMapping(value = {"/senddonation", "/senddonation/"})
+	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount, 
+			@RequestParam("date") Date date) throws IllegalArgumentException{
+		
+		Donation donation = service.sendDonation(amount, client, date);
+		return convertToDTO(donation);
+	}
+	
+	//send message
+	@PostMapping(value = { "/sendmessage", "/sendmessage/"})
+	public MessageDTO sendMessage(@RequestParam("client") Client client, @RequestParam("date") Date date,
+			@RequestParam("content") String content, @RequestParam("admin") Admin admin) throws IllegalArgumentException{
+		
+		Message message = service.sendMessage(admin, client, content, date);
+		return convertToDTO(message);
+	}
+	//update account
+	@PostMapping(value = {"/sendmessage", "/sendmessage/"})
+	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
+			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
+			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
+		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName, dob);
+		return convertToDTO(currClient);
+	}
 
 
 
