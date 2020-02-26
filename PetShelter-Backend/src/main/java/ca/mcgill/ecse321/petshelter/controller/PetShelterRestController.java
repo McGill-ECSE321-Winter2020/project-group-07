@@ -118,6 +118,7 @@ public class PetShelterRestController {
 	public List<MessageDTO> getMessages(@PathVariable("message") Posting posting) throws IllegalArgumentException{
 		List<Message> messages = service.
 	}
+	
 
 
 
