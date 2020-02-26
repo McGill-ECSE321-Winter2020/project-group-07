@@ -18,6 +18,7 @@ public class ErrorMessages {
     public static String loginFailed = "Login failed.";
     public static String logoutFailed = "Logout failed.";
     public static String permissionDenied = "You do not have permission to perform this operation.";
+    public static String ClientHasNoMessages = "This client did not send any messages yet.";
 
     
     // Comment

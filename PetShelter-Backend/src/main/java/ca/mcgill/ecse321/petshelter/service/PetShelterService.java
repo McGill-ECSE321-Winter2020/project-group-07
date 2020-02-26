@@ -283,7 +283,13 @@ public class PetShelterService {
 
 	}
 
-
+	/**
+	 * Method to use when a donation is being sent, the amount needs to be an integer.
+	 * @param amount
+	 * @param client
+	 * @param date
+	 * @return Donation
+	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
 
@@ -310,6 +316,16 @@ public class PetShelterService {
 		return donation;
 	}
 
+	/**
+	 * Method used when a message is being sent to admin, the content is checked,
+	 * if the content is repeated too frequently, the message will not be sent.
+	 * To avoid spamming the admin.
+	 * @param admin
+	 * @param client
+	 * @param content
+	 * @param date
+	 * @return Message
+	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
 
@@ -350,6 +366,26 @@ public class PetShelterService {
 		messageRepository.save(message);
 		return message;
 	}
+	
+	/**
+	 * This method returns all the messages a client sent since it created its account.
+	 * @param client
+	 * @return List<Message>, the list of all messages of the client
+	 */
+	@Transactional
+	public List<Message> getMessages(Client client){
+		
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(client.getMessages().size() == 0) {
+			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
+		}
+		return toList(client.getMessages());
+		
+	}
+	
+	
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
