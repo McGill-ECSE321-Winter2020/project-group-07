@@ -4,7 +4,10 @@ import java.sql.Date;
 
 import ca.mcgill.ecse321.petshelter.model.Client;
 
-
+/**
+ * This is the data transfer object class for donations.
+ *
+ */
 public class DonationDTO {
 	private Date date;
 	private Integer amount;
