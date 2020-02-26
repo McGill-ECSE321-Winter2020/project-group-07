@@ -39,10 +39,9 @@ public class PetShelterRestController {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
-		//ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-		//							  client.getLastName(), client.getPostings());
-		//return cDTO;
-		return null;
+		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getIsLoggedIn(), client.getFirstName(), 
+									  client.getLastName(), convertToDTOPostings(service.toList(client.getPostings())));
+		return cDTO;
 	}
 
 	// Verifying login
@@ -89,7 +88,7 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) 
+	@PostMapping(value = { "/create-account", "/create-account/" }) 
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
@@ -101,8 +100,7 @@ public class PetShelterRestController {
 		Client client = service.createClient(dob, email, password, phoneNumber, 
 											 address, firstName, lastName);
 											 
-		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+		return convertToDTO(client.getEmail(), client.getPassword());
 	}
 
 	// Logging out
@@ -116,7 +114,7 @@ public class PetShelterRestController {
 	}
 
 	// Deleting an account
-	@PostMapping(value = { "/deleteaccount", "/deleteaccount/" })
+	@PostMapping(value = { "/delete-account", "/delete-account/" })
 	public ProfileDTO deleteAccount(@RequestParam("deleterEmail") String deleterEmail, @RequestParam("deleteeEmail") String deleteeEmail) {
 		Client client = service.deleteClient(deleterEmail, deleteeEmail);
 		return convertToDTO(client.getEmail(), false);
@@ -185,6 +183,14 @@ public class PetShelterRestController {
 	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, boolean isLoggedIn, String firstName, 
 			String lastName) {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
+		return clientDTO;
+	}
+
+	// For creating an account -- Parameters are used to login
+	private ClientDTO convertToDTO(String email, String password) {
+		ClientDTO clientDTO = new ClientDTO();
+		clientDTO.setEmail(email);
+		clientDTO.setPassword(password);
 		return clientDTO;
 	}
 
