@@ -13,10 +13,10 @@ Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2020/project-g
 Below can be found the time spent in hours by each team member on each sprint. Please refer to the specific sprint for details on the work done. 
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
-| ----- | ----- | ----- | :-----: | :-----: | :-----: |
+| ----- | ----- | :-----: | :-----: | :-----: | :-----: |
 | Alexander Legouverneur  | Software Developer | 17.5 | 14 | &mdash; | &mdash; |
 | Kaustav Das Sharma | Software Architecure Engineer | 22 | 7 | &mdash; | &mdash; |
-| Mohamed Bouaouina | Project Manager | 18.5 | 16 | &mdash; | &mdash; |
+| Mohamed Bouaouina | Project Manager | 18.5 | 20 | &mdash; | &mdash; |
 | Nicolas Buisson | Product Manager | 20 | 14 | &mdash; | &mdash; |
 | Rahul Behal | Software Consultant | 15 | 32.5 | &mdash; | &mdash; |
 
