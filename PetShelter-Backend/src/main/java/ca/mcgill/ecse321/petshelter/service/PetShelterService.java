@@ -434,7 +434,7 @@ public class PetShelterService {
 		Posting posting = getPosting(owner_email, posting_date);
 		Application application = applicationRepository.findApplicationById(applicant_email.hashCode()*posting.hashCode()); 
 		if(application == null) {
-			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
+			throw new IllegalArgumentException(ErrorMessages.applicationDoesNotExist);
 		}
 		return application;
 	}
@@ -495,7 +495,7 @@ public class PetShelterService {
 		if(posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		if(client.equals(posting.getProfile())){
+		if(client.getEmail().equals(posting.getProfile().getEmail())){
 			throw new IllegalArgumentException(ErrorMessages.selfApplication);
 		}
 		if(homeType == null) {
