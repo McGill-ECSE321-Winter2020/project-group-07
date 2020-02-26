@@ -424,6 +424,13 @@ public class PetShelterService {
 
 	@Transactional
 	public Application getApplication(String applicant_email, String owner_email, Date posting_date) {
+		if(applicant_email == null || owner_email == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+		if(posting_date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		
 		Posting posting = getPosting(owner_email, posting_date);
 		Application application = applicationRepository.findApplicationById(applicant_email.hashCode()*posting.hashCode()); 
 		if(application == null) {
