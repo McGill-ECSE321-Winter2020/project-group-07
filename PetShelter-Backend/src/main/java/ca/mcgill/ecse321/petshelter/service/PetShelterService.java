@@ -456,18 +456,18 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
 		}
 		application.setStatus(ApplicationStatus.rejected);
-		applicationRepository.save(application);
+		application = applicationRepository.save(application);
 		return application;
 	}
 
 	@Transactional
 	public Application approveApplication(Application application){
 		/*
-			* Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
-			* Status of this application is changed to "approved".
-			* Change the status of other applications on the same posting to "rejected".
-			* The decision is final.
-			*/
+		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
+		 * Status of this application is changed to "approved".
+		 * Change the status of other applications on the same posting to "rejected".
+		 * The decision is final.
+		 */
 		if(application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
@@ -476,9 +476,10 @@ public class PetShelterService {
 		}
 		application.setStatus(ApplicationStatus.accepted);
 		applicationRepository.save(application);
+		application = applicationRepository.save(application);
 
 		for(Application a : getPostingApplications(application.getPosting())) {
-			if(a != application) {
+			if(!(a.equals(application))) {
 				a.setStatus(ApplicationStatus.rejected);
 				applicationRepository.save(a);
 			}

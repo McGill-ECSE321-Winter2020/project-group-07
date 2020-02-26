@@ -23,6 +23,7 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
 import ca.mcgill.ecse321.petshelter.dao.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
 import ca.mcgill.ecse321.petshelter.model.Posting;
 
 
@@ -45,6 +46,7 @@ public class ApplicationServiceTests {
 	private final static Posting INVALID_POSTING = new Posting();
 
 
+	//TODO: fix any() warnings and Invalid Date errors resulting from the setMockOutput function
 	@BeforeEach
 	public void setMockOutput() {
 		//getPosting is not being tested in this class, always return a valid Posting object
@@ -68,9 +70,9 @@ public class ApplicationServiceTests {
 			}
 		});
 		// Whenever anything is saved, just return the parameter object
-		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-			return invocation.getArgument(0);
-		};
+//		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+//			return invocation.getArgument(0);
+//		};
 
 		//TODO: add mock for applicationDAO.save()   
 	}
@@ -135,8 +137,100 @@ public class ApplicationServiceTests {
 	}
 
 	//Tests for the rejectApplication() service method
+	
+	//Test Main Case scenario
+	@Test
+	public void TestRejectApplication() {
+		Application application = new Application();
+		application.setStatus(ApplicationStatus.pending);
+		try {
+			application = service.rejectApplication(application);
+		} catch (Exception e) {
+			// Check that no error ocurred
+			fail();
+		}
+		assertNotNull(application);
+		assertEquals(ApplicationStatus.rejected, application.getStatus());
+	}
+	
+	@Test
+	public void TestRejectApplicationNullApplication() {
+		String error = null;
+		try {
+			service.rejectApplication(null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertEquals(ErrorMessages.invalidApplication, error);
+	}
+	
+	@Test
+	public void TestRejectApplicationApprovedApplication() {
+		String error = null;
+		Application application = new Application();
+		application.setStatus(ApplicationStatus.accepted);
+		try {
+			service.rejectApplication(application);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertEquals(ErrorMessages.rejectingApprovedApp, error);
+	}
+	
 	//Tests for the approveApplication() service method
+	
+	//Test Main Case scenario
+	@Test
+	public void TestApproveApplication() {
+		Application application = new Application();
+		application.setStatus(ApplicationStatus.pending);
+		try {
+			application = service.approveApplication(application);
+		} catch (Exception e) {
+			// Check that no error ocurred
+			fail();
+		}
+		assertNotNull(application);
+		assertEquals(ApplicationStatus.accepted, application.getStatus());
+		//TODO: check that other applications have been changed to "rejected" status
+	}
+	
+	@Test
+	public void TestApproveApplicationNullApplication() {
+		String error = null;
+		try {
+			service.approveApplication(null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertEquals(ErrorMessages.invalidApplication, error);
+	}
+	
+	@Test
+	public void TestRejectApplicationNotPendingApplication() {
+		String error = null;
+		Application application = new Application();
+		application.setStatus(ApplicationStatus.rejected);
+		try {
+			service.approveApplication(application);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertEquals(ErrorMessages.notPendingApp, error);
+		
+		error = null;
+		application.setStatus(ApplicationStatus.accepted);
+		try {
+			service.approveApplication(application);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertEquals(ErrorMessages.notPendingApp, error);
+		
+	}
+	
 	//Tests for the createApplication() service method
 }
+
 
 
