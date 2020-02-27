@@ -86,7 +86,13 @@ public class PetShelterRestController {
 		return convertToDTOPostings(postings);
 	}
 
-
+	//Looking at all Comments on a Posting
+	@GetMapping(value = {"/{posting}/comments", "/{posting}/comments/"})
+	public List <CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
+		
+		List <Comment> comments = service.getComments(posting);
+		return convertToDTOComments(comments);
+	}
 
 	// Kaustav GET Mappings
 
