@@ -48,8 +48,9 @@ public class DonationServiceClass {
 
 	//fields for creating a donation testing.
 	private static final Date DATE = Date.valueOf("2000-01-01");
+	private static final String CLIENT_EMAIL = "muffin_man@gmail.com"; // Testing logged in account
 	private static final Integer AMOUNT = 3000;
-
+	
 	//test for non existing donation
 	private static final String CLIENT_EMAIL_NOTEXISTING = "No.One@gmail.com";
 	private static final Integer NONEXISTING_ID = 0000000;
@@ -82,6 +83,8 @@ public class DonationServiceClass {
 			
 			return donation;  
 		});
+	@BeforeEach
+	public void setMockOutput() {
 		lenient().when(donationDao.findById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
 			if(invocation.getArgument(0).equals(DONATION_KEY)) {
 				Donation donation = new Donation();
