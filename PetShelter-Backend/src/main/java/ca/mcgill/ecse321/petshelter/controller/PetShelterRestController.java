@@ -68,6 +68,14 @@ public class PetShelterRestController {
 
 
 	// Alex GET Mappings
+	@GetMapping(value = {"/{client}/messages", "{client}/messages/"})
+	public List<MessageDTO> getClientMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
+		
+		List<Message> messages = service.getClientMessages(client);
+		return convertToDTOMessage(messages);
+		
+	}
+	
 	
 
 

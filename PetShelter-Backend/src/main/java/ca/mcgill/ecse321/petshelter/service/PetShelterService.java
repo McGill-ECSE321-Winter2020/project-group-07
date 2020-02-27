@@ -373,7 +373,7 @@ public class PetShelterService {
 	 * @return List<Message>, the list of all messages of the client
 	 */
 	@Transactional
-	public List<Message> getMessages(Client client){
+	public List<Message> getClientMessages(Client client){
 		
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
