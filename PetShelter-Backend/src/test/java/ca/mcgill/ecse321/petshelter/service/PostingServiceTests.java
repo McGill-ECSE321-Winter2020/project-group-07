@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,17 @@ public class PostingServiceTests {
 	@InjectMocks
 	private PetShelterService service;
 	
+	// Dummy Posting attributes
+	private static final Date POSTING_DATE = Date.valueOf("1992-01-01");
+	private static final String picture = "Rotweiler Image";
+	private static final String description = "very nice friendly dog that loves to play";
+	private static final String petName = "Rex";
+	private static final String petBreed = "Rotweiler";
+	private static final Date petDateOfBirth = Date.valueOf("2006-01-01");
+	private static final List <Comment> comments = new ArrayList <Comment>(); 
+	private static final List <Application> applications = new ArrayList <Application>();
+	
+	
 	// Dummy comment attributes
 	private static final Date COMMENT_DATE = Date.valueOf("1999-10-31");
 	private static final Posting COMMENT_POSTING = new Posting();
@@ -54,7 +66,7 @@ public class PostingServiceTests {
 	
 	
 	
-	//Dummy illegitimate attributes for creating a new comment
+	//Dummy illegitimate attributes for creating a new posting
 	
 	// Test stubs
 	@BeforeEach
