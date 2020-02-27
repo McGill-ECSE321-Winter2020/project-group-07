@@ -24,6 +24,7 @@ public class ErrorMessages {
     // Comment
     public static String invalidPosting = "Invalid posting.";
     public static String invalidProfile= "Invalid profile.";
+    public static String invalidProfileNotLoggedIn = "Cannot post a comment if not logged in.";
     public static String invalidContentComment = "Cannot post an empty comment.";
     public static String invalidDateComment = "Cannot post a comment without a date.";
     public static String invalidDateCommentPosting = "Cannot post a comment with a date before the creation date of the posting.";
