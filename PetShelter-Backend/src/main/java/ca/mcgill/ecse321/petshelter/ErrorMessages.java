@@ -25,7 +25,9 @@ public class ErrorMessages {
     public static String invalidPosting = "Invalid posting.";
     public static String invalidProfile= "Invalid profile.";
     public static String invalidContentComment = "Cannot post an empty comment.";
-    public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
+    public static String invalidDateComment = "Cannot post a comment without a date.";
+    public static String invalidDateCommentPosting = "Cannot post a comment with a date before the creation date of the posting.";
+    public static String invalidDateCommentProfile = "Cannot post a comment with a date before the creation date of the profile.";
     
     //Application 
     public static String applicationDoesNotExist = "Requested application does not exist";

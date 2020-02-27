@@ -358,6 +358,12 @@ public class PetShelterService {
 		if(date == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
 		}
+		if(date.before(profile.getDateOfBirth())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+		}
+		if(date.before(posting.getDate())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
+		}
 
 
 		//create comment object and set all its attributes
