@@ -272,7 +272,13 @@ public class PetShelterService {
 
 	}
 
-
+	/**
+	 * Service method to send a donation.
+	 * @param amount
+	 * @param client
+	 * @param date
+	 * @return the donation to be sent
+	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
 
@@ -299,6 +305,14 @@ public class PetShelterService {
 		return donation;
 	}
 
+	/**
+	 * This is the service method to send messages to admin, checks for spamming.
+	 * @param admin
+	 * @param client
+	 * @param content
+	 * @param date
+	 * @return message to be sent
+	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
 
@@ -338,6 +352,34 @@ public class PetShelterService {
 		message.setId(client.getEmail().hashCode()*date.hashCode());
 		messageRepository.save(message);
 		return message;
+	}
+	
+	/**
+	 * Service method to get all messages of a client
+	 * @param client
+	 * @return List of all messages of a client
+	 */
+	@Transactional
+	public List<Message> getClientMessages(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		return toList(client.getMessages());
+		
+		
+	}
+	
+	/**
+	 * Service method to get all the donations of a client.
+	 * @param client
+	 * @return list of donation with all the donations of a client
+	 */
+	@Transactional
+	public List<Donation> getClientDonations(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		return toList(client.getDonations());
 	}
 
 	@Transactional
