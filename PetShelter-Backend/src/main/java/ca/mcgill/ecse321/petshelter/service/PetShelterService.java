@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 // Used for validation
@@ -281,6 +282,25 @@ public class PetShelterService {
 		client.setLastName(lastName);
 		return client;
 
+	}
+	
+	/**
+	 * method to get a donation with the id, returns null if doesnt exist.
+	 * @param Id
+	 * @return donation if exists or null
+	 */
+	@Transactional
+	public Donation getDonationbyId(Integer Id) {
+		
+		Donation donation=new Donation();
+		try {
+			donation = donationRepository.findById(Id).get();
+			return donation;
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
 	}
 
 	/**
