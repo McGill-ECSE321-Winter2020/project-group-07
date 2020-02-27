@@ -77,13 +77,10 @@ public class PetShelterRestController {
 
 
 	// Nicolas GET Mappings
-
-	
-	
 	
 	//Looking at all open Postings
-	@PostMapping(value = {"/view-open-postings", "/view-open-postings/"})
-	public List<PostingDTO> getOpenPostings(){
+	@GetMapping(value = {"/view-open-postings", "/view-open-postings/"})
+	public List<PostingDTO> getOpenPostings() throws IllegalArgumentException{
 		
 		List <Posting> postings = service.getOpenPostings();
 		return convertToDTOPostings(postings);

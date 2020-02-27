@@ -371,6 +371,19 @@ public class PetShelterService {
 		commentRepository.save(comment);
 		return comment;
 	}
+	
+	@Transactional
+	public List<Comment> getComments(Posting posting){
+		List<Comment> allComments = toList(commentRepository.findAll());
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Comment comment: allComments) {
+			if(comment.getPosting().equals(posting)) {
+				//add only comments that are on that posting
+				comments.add(comment);
+			}
+		}
+		return comments;
+	}
 
 	@Transactional
 	public List<Posting> getOpenPostings(){
