@@ -350,6 +350,9 @@ public class PetShelterService {
 		if(profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 		}
+		if(!profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfileNotLoggedIn);
+		}
 		//check content is not just white spaces
 		String contentWhiteSpaceCheck = content.trim();
 		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
