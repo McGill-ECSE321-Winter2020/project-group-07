@@ -71,14 +71,50 @@ public class PetShelterRestController {
 
 
 	// Alex GET Mappings
-
-	@GetMapping(value = {"/{client}/messages", "{client}/messages/"})
-	public List<MessageDTO> getClientMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
-		
+	/**
+	 * Get all the messages of a client
+	 * @param client
+	 * @return list of DTO messages for a client.
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value= {"/{client}/messages", "/{client}/messages/"})
+	public List<MessageDTO> getMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
 		List<Message> messages = service.getClientMessages(client);
 		return convertToDTOMessage(messages);
-		
 	}
+	
+	/**
+	 * get the information for a client that wants to update his profile.
+	 * @param client
+	 * @return clientDTO with the information that can be updated
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value = { "/{client}/updateprofile", "/{client}/updateprofile/" }) 
+	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
+		if (client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
+				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+		return clientDTO;
+	}
+	
+	/**
+	 * get all the donation of a client.
+	 * @param client
+	 * @return list of donationDTO
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
+	public List<DonationDTO> getClientDonations(@RequestParam("client") Client client) throws IllegalArgumentException { 
+		if (client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		List<Donation> donations = service.getClientDonations(client);
+		return convertToDTODonations(donations);
+	}
+
+
 
 	// Nicolas GET Mappings
 	
@@ -210,7 +246,7 @@ public class PetShelterRestController {
 		return convertToDTO(message);
 	}
 	//update account
-	@PostMapping(value = {"/sendmessage", "/sendmessage/"})
+	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
 	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
 			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
 			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
@@ -339,6 +375,19 @@ public class PetShelterRestController {
 			messageDTO.add(convertToDTO(message));
 		}
 		return messageDTO;
+	}
+	
+	/**
+	 * converts a list of messages to a list of messagesDTO
+	 * @param donations
+	 * @return list<DonationDTO>
+	 */
+	private List<DonationDTO> convertToDTODonations(List<Donation> donations){
+		List<DonationDTO> donationsDTO = new ArrayList<>();
+		for(Donation donation : donations) {
+			donationsDTO.add(convertToDTO(donation));
+		}
+		return donationsDTO;
 	}
 	
 	/**

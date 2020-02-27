@@ -284,11 +284,19 @@ public class PetShelterService {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return Donation
+=======
+	 * Service method to send a donation.
+	 * @param amount
+	 * @param client
+	 * @param date
+	 * @return the donation to be sent
+>>>>>>> added controller methods and javadoc
 	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
@@ -317,14 +325,22 @@ public class PetShelterService {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Method used when a message is being sent to admin, the content is checked,
 	 * if the content is repeated too frequently, the message will not be sent.
 	 * To avoid spamming the admin.
+=======
+	 * This is the service method to send messages to admin, checks for spamming.
+>>>>>>> added controller methods and javadoc
 	 * @param admin
 	 * @param client
 	 * @param content
 	 * @param date
+<<<<<<< HEAD
 	 * @return Message
+=======
+	 * @return message to be sent
+>>>>>>> added controller methods and javadoc
 	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
@@ -368,6 +384,7 @@ public class PetShelterService {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * This method returns all the messages a client sent since it created its account.
 	 * @param client
 	 * @return List<Message>, the list of all messages of the client
@@ -386,6 +403,34 @@ public class PetShelterService {
 	}
 	
 	
+=======
+	 * Service method to get all messages of a client
+	 * @param client
+	 * @return List of all messages of a client
+	 */
+	@Transactional
+	public List<Message> getClientMessages(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		return toList(client.getMessages());
+		
+		
+	}
+	
+	/**
+	 * Service method to get all the donations of a client.
+	 * @param client
+	 * @return list of donation with all the donations of a client
+	 */
+	@Transactional
+	public List<Donation> getClientDonations(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		return toList(client.getDonations());
+	}
+>>>>>>> added controller methods and javadoc
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
