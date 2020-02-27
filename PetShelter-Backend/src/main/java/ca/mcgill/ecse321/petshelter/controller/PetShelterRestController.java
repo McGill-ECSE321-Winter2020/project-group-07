@@ -74,17 +74,7 @@ public class PetShelterRestController {
 
 	// Nicolas GET Mappings
 
-	//Commenting on a Posting
-	@PostMapping(value = { "/comment-on-posting", "/comment-on-posting/" })
-	public CommentDTO commentOnPost(@RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
-			                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
-		
-		
-		Date date = Date.valueOf(dateString);
-		
-		Comment comment = service.commentOnPosting(profile, posting, content, date);
-		return convertToDTO(comment);
-	}
+	
 	
 	
 	//Looking at all open Postings
@@ -164,8 +154,17 @@ public class PetShelterRestController {
 
 	// Nicolas POST Mappings
 
-
-
+	//Commenting on a Posting
+		@PostMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
+		public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
+				                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
+			
+			
+			Date date = Date.valueOf(dateString);
+			
+			Comment comment = service.commentOnPosting(profile, posting, content, date);
+			return convertToDTO(comment);
+		}
 
 	// Kaustav POST Mappings
 
