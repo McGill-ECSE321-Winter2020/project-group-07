@@ -86,15 +86,18 @@ public class PetShelterRestController {
 		
 		Date date = Date.valueOf(dateString);
 		
-		
 		Comment comment = service.commentOnPosting(profile, posting, content, date);
 		return convertToDTO(comment);
 	}
 	
 	
-	
-	
 	//Looking at all open Postings
+	@PostMapping(value = {"/view-open-postings", "/view-open-postings/"})
+	public List<PostingDTO> getOpenPostings(){
+		
+		List <Posting> postings = service.getOpenPostings();
+		return convertToDTOPostings(postings);
+	}
 
 
 
