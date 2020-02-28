@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,43 +60,89 @@ public class DonationServiceClass {
 	private static final String CLIENT_EMAIL = "muffin_man@gmail.com";
 	private static final String CLIENT_PHONE = "1234567891";
 	private static final Date DOB = Date.valueOf("1999-10-31");
-	
+
 	//bad arguments for donation
 	private static final Integer BAD_AMOUNT = -3000;
 	private static final Date FAKE_DATE = Date.valueOf("1999-10-29");
 
 	@BeforeEach
 	public void setMockOutput() {
+		lenient().when(service.getDonationbyId(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
+			Donation donation = new Donation();
+			Client client = new Client();
+			client.setDateOfBirth(DOB);
+			client.setEmail(CLIENT_EMAIL);
+			client.setFirstName(FIRST_NAME);
+			client.setLastName(LAST_NAME);
+			donation.setAmount(AMOUNT);
+			donation.setClient(client);
+			donation.setDate(DATE);
+			donation.setId(DONATION_KEY);
+			client.setIsLoggedIn(true);
+			
+			return donation;  
+		});
 		lenient().when(donationDao.findById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
 			if(invocation.getArgument(0).equals(DONATION_KEY)) {
 				Donation donation = new Donation();
 				donation.setId(DONATION_KEY);
+				donation.setDate(DOB);
+				donation.setAmount(AMOUNT);
 				return donation;
 			} 
 			else {
 				return null;
 			}
 		});
+		
+		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+			return invocation.getArgument(0);
+		};
+
+		lenient().when(donationDao.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+
 	}
 
+	/**
+	 * test to retrieve a donation that doesn't exist.
+	 */
 	@Test
 	public void testGetNonExistingDonation() {
 		Integer Id = NONEXISTING_ID;
 		assertNull(service.getDonationbyId(Id));
 	}
 
+
+	/**
+	 * Test to send a donation and get it.
+	 */
 	@Test
 	public void testGetExistingDonation() {
 		Integer Id = DONATION_KEY;
-		assertNotNull(service.getDonationbyId(Id));
+		Integer amount = AMOUNT;
+		String fn = FIRST_NAME;
+		String ln = LAST_NAME;
+		String pn = CLIENT_PHONE;
+		Date dob = DOB;
+		Date date = DATE;
+		String email = CLIENT_EMAIL;
+		Client client = new Client();
+		client.setDateOfBirth(dob);
+		client.setEmail(email);
+		client.setFirstName(fn);
+		client.setLastName(ln);
+		client.setIsLoggedIn(true);
+		assertEquals(amount,service.sendDonation(amount,client, date).getAmount());
 	}
 
+	/**
+	 * test to send a donation with a non-existing client.
+	 */
 	@Test
 	public void testSendDonationWithClientDoesNotExist() {
 		String email = CLIENT_EMAIL_NOTEXISTING;
 		Integer amount = AMOUNT;
 		Date date = DATE;
-		assertEquals(null, service.getClient(email));
 		Client client = new Client();
 		client = null;
 		String error = null;
@@ -110,7 +157,10 @@ public class DonationServiceClass {
 		assertNull(donation);
 		assertEquals("Account does not exist.", error);
 	}
-	
+
+	/**
+	 * test to send a donation with a negative amount.
+	 */
 	@Test
 	public void testSendDonationWithNegativeAmount() {
 		Integer amount = BAD_AMOUNT;
@@ -123,17 +173,21 @@ public class DonationServiceClass {
 			client.setEmail(email);
 			client.setIsLoggedIn(true);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("Amount needs to be whole and positive number!", error);
 	}
-	
+
+	/**
+	 * Test to send a donation with a date that is before the dath of birth
+	 * of the client.
+	 */
 	@Test
 	public void testSendDonationWrongDate() {
 		Integer amount = AMOUNT;
@@ -148,17 +202,20 @@ public class DonationServiceClass {
 			client.setDateOfBirth(dob);
 			client.setIsLoggedIn(true);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("The date specified is before the date of birth of the client.", error);
 	}
-	
+
+	/**
+	 * test for sending a donation if a client is not logged in.
+	 */
 	@Test
 	public void testifClientNotLoggedin() {
 		Integer amount = AMOUNT;
@@ -171,26 +228,14 @@ public class DonationServiceClass {
 			client.setEmail(email);
 			client.setIsLoggedIn(false);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("Account not currently logged in.", error);
 	}
-
-	
-
-
-
-
-
-
-
-
-
-
 }
