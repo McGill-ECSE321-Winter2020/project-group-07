@@ -152,6 +152,7 @@ public class DonationServiceClass {
 		try {
 			Client client = new Client();
 			client.setEmail(email);
+			client.setIsLoggedIn(true);
 			donation = service.sendDonation(amount, client,date);
 			
 		} catch(Exception e){
@@ -162,6 +163,54 @@ public class DonationServiceClass {
 		
 		assertNull(donation);
 		assertEquals("Amount needs to be whole and positive number!", error);
+	}
+	
+	@Test
+	public void testSendDonationWrongDate() {
+		Integer amount = AMOUNT;
+		Date date = FAKE_DATE;
+		Date dob = DOB;
+		String email = CLIENT_EMAIL;
+		Donation donation = null;
+		String error = "";
+		try {
+			Client client = new Client();
+			client.setEmail(email);
+			client.setDateOfBirth(dob);
+			client.setIsLoggedIn(true);
+			donation = service.sendDonation(amount, client,date);
+			
+		} catch(Exception e){
+			error = e.getMessage();
+			
+			
+		}
+		
+		assertNull(donation);
+		assertEquals("The date specified is before the date of birth of the client.", error);
+	}
+	
+	@Test
+	public void testifClientNotLoggedin() {
+		Integer amount = AMOUNT;
+		Date date = FAKE_DATE;
+		String email = CLIENT_EMAIL;
+		Donation donation = null;
+		String error = "";
+		try {
+			Client client = new Client();
+			client.setEmail(email);
+			client.setIsLoggedIn(false);
+			donation = service.sendDonation(amount, client,date);
+			
+		} catch(Exception e){
+			error = e.getMessage();
+			
+			
+		}
+		
+		assertNull(donation);
+		assertEquals("Account not currently logged in.", error);
 	}
 
 	/**
