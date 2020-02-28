@@ -115,18 +115,37 @@ public class DonationServiceClass {
 		assertNull(service.getDonationbyId(Id));
 	}
 
+
+	/**
+	 * Test to send a donation and get it.
+	 */
 	@Test
 	public void testGetExistingDonation() {
 		Integer Id = DONATION_KEY;
-		assertNotNull(service.getDonationbyId(Id));
+		Integer amount = AMOUNT;
+		String fn = FIRST_NAME;
+		String ln = LAST_NAME;
+		String pn = CLIENT_PHONE;
+		Date dob = DOB;
+		Date date = DATE;
+		String email = CLIENT_EMAIL;
+		Client client = new Client();
+		client.setDateOfBirth(dob);
+		client.setEmail(email);
+		client.setFirstName(fn);
+		client.setLastName(ln);
+		client.setIsLoggedIn(true);
+		assertEquals(amount,service.sendDonation(amount,client, date).getAmount());
 	}
 
+	/**
+	 * test to send a donation with a non-existing client.
+	 */
 	@Test
 	public void testSendDonationWithClientDoesNotExist() {
 		String email = CLIENT_EMAIL_NOTEXISTING;
 		Integer amount = AMOUNT;
 		Date date = DATE;
-		assertEquals(null, service.getClient(email));
 		Client client = new Client();
 		client = null;
 		String error = null;
@@ -141,7 +160,10 @@ public class DonationServiceClass {
 		assertNull(donation);
 		assertEquals("Account does not exist.", error);
 	}
-	
+
+	/**
+	 * test to send a donation with a negative amount.
+	 */
 	@Test
 	public void testSendDonationWithNegativeAmount() {
 		Integer amount = BAD_AMOUNT;
@@ -154,17 +176,21 @@ public class DonationServiceClass {
 			client.setEmail(email);
 			client.setIsLoggedIn(true);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("Amount needs to be whole and positive number!", error);
 	}
-	
+
+	/**
+	 * Test to send a donation with a date that is before the dath of birth
+	 * of the client.
+	 */
 	@Test
 	public void testSendDonationWrongDate() {
 		Integer amount = AMOUNT;
@@ -179,17 +205,20 @@ public class DonationServiceClass {
 			client.setDateOfBirth(dob);
 			client.setIsLoggedIn(true);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("The date specified is before the date of birth of the client.", error);
 	}
-	
+
+	/**
+	 * test for sending a donation if a client is not logged in.
+	 */
 	@Test
 	public void testifClientNotLoggedin() {
 		Integer amount = AMOUNT;
@@ -202,13 +231,13 @@ public class DonationServiceClass {
 			client.setEmail(email);
 			client.setIsLoggedIn(false);
 			donation = service.sendDonation(amount, client,date);
-			
+
 		} catch(Exception e){
 			error = e.getMessage();
-			
-			
+
+
 		}
-		
+
 		assertNull(donation);
 		assertEquals("Account not currently logged in.", error);
 	}
