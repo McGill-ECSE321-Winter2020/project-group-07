@@ -383,11 +383,29 @@ public class PetShelterService {
 	
 	@Transactional
 	public List<Comment> getComments(Posting posting){
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
 		List<Comment> allComments = toList(commentRepository.findAll());
 		List<Comment> comments = new ArrayList<Comment>();
 		for(Comment comment: allComments) {
 			if(comment.getPosting().equals(posting)) {
-				//add only comments that are on that posting
+				String contentWhiteSpaceCheck = comment.getContent().trim();
+				if(comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
+				}
+				if(comment.getDate() == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+				}
+				if(comment.getDate().before(comment.getProfile().getDateOfBirth())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+				}
+				if(comment.getDate().before(comment.getPosting().getDate())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
+				}
+				
+				//add only valid comments that are on that posting
+				
 				comments.add(comment);
 			}
 		}

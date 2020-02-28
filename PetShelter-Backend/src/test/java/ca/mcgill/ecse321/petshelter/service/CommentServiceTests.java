@@ -49,6 +49,12 @@ public class CommentServiceTests {
 	private static final Date COMMENT_DATE = Date.valueOf("1999-10-31");
 	private static final String COMMENT_CONTENT = "Wow, your poodle looks so nice";
 	
+	private static final Integer COMMENT_ID2 = (Integer)4;
+	private static final Date COMMENT_DATE2 = Date.valueOf("1999-11-01");
+	private static final String COMMENT_CONTENT2 = "Why thank you Bethany!";
+	
+	
+	
 	//Dummy profile attributes
 	private static final Date PROFILE_DOB = Date.valueOf("1991-01-01");
 	private static final Date UNDERAGE_PROFILE_DOB = Date.valueOf("1992-01-01");
@@ -283,4 +289,115 @@ public class CommentServiceTests {
 	}
 	
 	//GetComments tests
+	
+	//Testing with null Posting
+	@Test
+	public void testNullPostingGetComments() {
+		
+		Posting posting = null;
+		try {
+			List<Comment> comments = service.getComments(posting);
+		} catch (Exception e) {
+			assertEquals(ErrorMessages.invalidPosting, e.getMessage());
+		}
+	}
+	
+	
+	//Testing with a posting with valid comments
+	@Test
+	public void testPostingWithValidCommentsGetComments() {
+		
+		Posting posting = new Posting();
+		Profile profile = new Client();
+		posting.setDate(UNDERAGE_POSTING_DATE);
+		posting.setDescription(POSTING_DESCRIPTION);
+		posting.setPicture(POSTING_PICTURE);
+		posting.setPetBreed(POSTING_PETBREED);
+		posting.setProfile(profile);
+		
+		List <Comment> commentList = new ArrayList<Comment>();
+		
+		Comment comment1 = new Comment();
+		comment1.setContent(COMMENT_CONTENT);
+		comment1.setDate(COMMENT_DATE);
+		comment1.setPosting(posting);
+		comment1.setProfile(profile);
+		comment1.setId(COMMENT_ID);
+		commentList.add(comment1);
+		
+		Comment comment2 = new Comment();
+		comment2.setContent(COMMENT_CONTENT2);
+		comment2.setDate(COMMENT_DATE2);
+		comment2.setPosting(posting);
+		comment2.setProfile(profile);
+		comment2.setId(COMMENT_ID2);
+		commentList.add(comment2);
+		
+		try {
+			List<Comment> comments = service.getComments(posting);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	
+	//Testing with a posting with invalid comments
+	@Test
+	public void testPostingWithInvalidCommentsGetComments() {
+			
+		Posting posting = new Posting();
+		Profile profile = new Client();
+		posting.setDate(UNDERAGE_POSTING_DATE);
+		posting.setDescription(POSTING_DESCRIPTION);
+		posting.setPicture(POSTING_PICTURE);
+		posting.setPetBreed(POSTING_PETBREED);
+		posting.setProfile(profile);
+			
+		List <Comment> commentList = new ArrayList<Comment>();
+			
+		Comment comment1 = new Comment();
+		comment1.setContent(COMMENT_CONTENT);
+		comment1.setDate(UNDERAGE_COMMENT_DATE);
+		comment1.setPosting(posting);
+		comment1.setProfile(profile);
+		comment1.setId(COMMENT_ID);
+		commentList.add(comment1);
+		
+		Comment comment2 = new Comment();
+		comment2.setContent(COMMENT_CONTENT2);
+		comment2.setDate(COMMENT_DATE2);
+		comment2.setPosting(posting);
+		comment2.setProfile(profile);
+		comment2.setId(COMMENT_ID2);
+		commentList.add(comment2);
+			
+		try {
+			List<Comment> comments = service.getComments(posting);
+		} catch (Exception e) {
+			assertEquals(ErrorMessages.invalidDateCommentPosting, e.getMessage());
+		}
+	}
+	
+	
+	//testing with a posting without comments
+	@Test
+	public void testPostingWithoutCommentsGetComments() {
+		
+		Posting posting = new Posting();
+		Profile profile = new Client();
+		posting.setDate(POSTING_DATE);
+		posting.setDescription(POSTING_DESCRIPTION);
+		posting.setPicture(POSTING_PICTURE);
+		posting.setPetBreed(POSTING_PETBREED);
+		posting.setProfile(profile);
+			
+		List <Comment> commentList = new ArrayList<Comment>();
+			
+		try {
+			List<Comment> comments = service.getComments(posting);
+			assertEquals(comments.isEmpty(), true);
+		} catch (Exception e) {
+			fail();
+		}
+	}
 }
