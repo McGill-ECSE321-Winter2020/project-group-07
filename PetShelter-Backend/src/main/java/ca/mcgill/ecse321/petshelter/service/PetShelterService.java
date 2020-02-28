@@ -338,7 +338,6 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
 
-
 		Donation donation = new Donation();
 		donation.setAmount(amount);
 		donation.setClient(client);
