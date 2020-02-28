@@ -305,18 +305,24 @@ public class PetShelterService {
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return Donation
 =======
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * Service method to send a donation.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return the donation to be sent
+<<<<<<< HEAD
 >>>>>>> added controller methods and javadoc
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
@@ -350,21 +356,29 @@ public class PetShelterService {
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Method used when a message is being sent to admin, the content is checked,
 	 * if the content is repeated too frequently, the message will not be sent.
 	 * To avoid spamming the admin.
 =======
 	 * This is the service method to send messages to admin, checks for spamming.
 >>>>>>> added controller methods and javadoc
+=======
+	 * This is the service method to send messages to admin, checks for spamming.
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * @param admin
 	 * @param client
 	 * @param content
 	 * @param date
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * @return Message
 =======
 	 * @return message to be sent
 >>>>>>> added controller methods and javadoc
+=======
+	 * @return message to be sent
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
@@ -409,6 +423,7 @@ public class PetShelterService {
 	
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * This method returns all the messages a client sent since it created its account.
 	 * @param client
 	 * @return List<Message>, the list of all messages of the client
@@ -428,6 +443,8 @@ public class PetShelterService {
 	
 	
 =======
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * Service method to get all messages of a client
 	 * @param client
 	 * @return List of all messages of a client
@@ -454,7 +471,10 @@ public class PetShelterService {
 		}
 		return toList(client.getDonations());
 	}
+<<<<<<< HEAD
 >>>>>>> added controller methods and javadoc
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {

@@ -21,6 +21,7 @@ public class ErrorMessages {
     public static String ClientHasNoMessages = "This client did not send any messages yet.";
 
 
+
     
     // Comment
     public static String invalidPosting = "Invalid posting.";
