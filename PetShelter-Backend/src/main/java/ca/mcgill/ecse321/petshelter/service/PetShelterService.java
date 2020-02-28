@@ -333,6 +333,11 @@ public class PetShelterService {
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
+		if(!client.getIsLoggedIn()) {
+			
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+			
+		}
 		if(date.before(client.dateOfBirth)) {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
