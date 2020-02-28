@@ -73,10 +73,22 @@ public class PetShelterRestController {
 
 
 	// Nicolas GET Mappings
+	
+	//Looking at all open Postings
+	@GetMapping(value = {"/view-open-postings", "/view-open-postings/"})
+	public List<PostingDTO> getOpenPostings() throws IllegalArgumentException{
+		
+		List <Posting> postings = service.getOpenPostings();
+		return convertToDTOPostings(postings);
+	}
 
-
-
-
+	//Looking at all Comments on a Posting
+	@GetMapping(value = {"/{posting}/comments", "/{posting}/comments/"})
+	public List <CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
+		
+		List <Comment> comments = service.getComments(posting);
+		return convertToDTOComments(comments);
+	}
 
 	// Kaustav GET Mappings
 
@@ -145,8 +157,17 @@ public class PetShelterRestController {
 
 	// Nicolas POST Mappings
 
-
-
+	//Commenting on a Posting
+		@PostMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
+		public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
+				                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
+			
+			
+			Date date = Date.valueOf(dateString);
+			
+			Comment comment = service.commentOnPosting(profile, posting, content, date);
+			return convertToDTO(comment);
+		}
 
 	// Kaustav POST Mappings
 
