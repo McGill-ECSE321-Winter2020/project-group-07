@@ -67,8 +67,48 @@ public class PetShelterRestController {
 
 
 	// Alex GET Mappings
-
-
+	/**
+	 * Get all the messages of a client
+	 * @param client
+	 * @return list of DTO messages for a client.
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value= {"/{client}/messages", "/{client}/messages/"})
+	public List<MessageDTO> getMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
+		List<Message> messages = service.getClientMessages(client);
+		return convertToDTOMessage(messages);
+	}
+	
+	/**
+	 * get the information for a client that wants to update his profile.
+	 * @param client
+	 * @return clientDTO with the information that can be updated
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value = { "/{client}/updateprofile", "/{client}/updateprofile/" }) 
+	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
+		if (client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
+				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+		return clientDTO;
+	}
+	
+	/**
+	 * get all the donation of a client.
+	 * @param client
+	 * @return list of donationDTO
+	 * @throws IllegalArgumentException
+	 */
+	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
+	public List<DonationDTO> getClientDonations(@RequestParam("client") Client client) throws IllegalArgumentException { 
+		if (client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		List<Donation> donations = service.getClientDonations(client);
+		return convertToDTODonations(donations);
+	}
 
 
 
@@ -150,7 +190,32 @@ public class PetShelterRestController {
 
 
 	// Alex POST Mappings
-
+	
+	//send Donation
+	@PostMapping(value = {"/senddonation", "/senddonation/"})
+	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount, 
+			@RequestParam("date") Date date) throws IllegalArgumentException{
+		
+		Donation donation = service.sendDonation(amount, client, date);
+		return convertToDTO(donation);
+	}
+	
+	//send message
+	@PostMapping(value = { "/sendmessage", "/sendmessage/"})
+	public MessageDTO sendMessage(@RequestParam("client") Client client, @RequestParam("date") Date date,
+			@RequestParam("content") String content, @RequestParam("admin") Admin admin) throws IllegalArgumentException{
+		
+		Message message = service.sendMessage(admin, client, content, date);
+		return convertToDTO(message);
+	}
+	//update account
+	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
+	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
+			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
+			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
+		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName, dob);
+		return convertToDTO(currClient);
+	}
 
 
 
@@ -241,6 +306,10 @@ public class PetShelterRestController {
 		return applicationsDTO;
 	}
 	
+
+
+	// Alex ConvertToDTOs
+
 	/**
 	 * 
 	 * @param message, that you want to convert to messageDTO
@@ -258,6 +327,7 @@ public class PetShelterRestController {
 		return messageDTO;
 		
 	}
+
 	/**
 	 * 
 	 * @param messages, a list of messages you want to convert to a list of messageDTO
@@ -269,6 +339,19 @@ public class PetShelterRestController {
 			messageDTO.add(convertToDTO(message));
 		}
 		return messageDTO;
+	}
+	
+	/**
+	 * converts a list of messages to a list of messagesDTO
+	 * @param donations
+	 * @return list<DonationDTO>
+	 */
+	private List<DonationDTO> convertToDTODonations(List<Donation> donations){
+		List<DonationDTO> donationsDTO = new ArrayList<>();
+		for(Donation donation : donations) {
+			donationsDTO.add(convertToDTO(donation));
+		}
+		return donationsDTO;
 	}
 	
 	/**
@@ -293,6 +376,7 @@ public class PetShelterRestController {
 				convertToDTO(comment.getPosting()), comment.getContent());
 		return commentDTO;
 	}
+
 
 	private List<CommentDTO> convertToDTOComments(List<Comment> comments){
 		List<CommentDTO> commentsDTO = new ArrayList<CommentDTO>();
