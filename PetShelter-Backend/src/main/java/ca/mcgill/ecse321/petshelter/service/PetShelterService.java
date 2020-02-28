@@ -422,8 +422,6 @@ public class PetShelterService {
 	}
 	
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * This method returns all the messages a client sent since it created its account.
 	 * @param client
 	 * @return List<Message>, the list of all messages of the client
@@ -442,23 +440,6 @@ public class PetShelterService {
 	}
 	
 	
-=======
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
-	 * Service method to get all messages of a client
-	 * @param client
-	 * @return List of all messages of a client
-	 */
-	@Transactional
-	public List<Message> getClientMessages(Client client){
-		if(client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		return toList(client.getMessages());
-		
-		
-	}
-	
 	/**
 	 * Service method to get all the donations of a client.
 	 * @param client
@@ -471,10 +452,6 @@ public class PetShelterService {
 		}
 		return toList(client.getDonations());
 	}
-<<<<<<< HEAD
->>>>>>> added controller methods and javadoc
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
