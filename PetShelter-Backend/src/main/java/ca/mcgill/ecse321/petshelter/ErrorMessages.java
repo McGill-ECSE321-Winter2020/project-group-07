@@ -19,6 +19,7 @@ public class ErrorMessages {
     public static String logoutFailed = "Logout failed.";
     public static String permissionDenied = "You do not have permission to perform this operation.";
 
+
     
     // Comment
     public static String invalidPosting = "Invalid posting.";
@@ -39,6 +40,7 @@ public class ErrorMessages {
     public static String negAmount = "Amount needs to be whole and positive number!";
     public static String incorrectCharacter = "Amount cannot be a letter or a special character!";
     public static String DateDonation = "No date for donation.";
+    public static String DateBefDOB = "The date specified is before the date of birth of the client.";
     
     //Messages
     public static String NoContent = "You need to write a message before sending it.";
