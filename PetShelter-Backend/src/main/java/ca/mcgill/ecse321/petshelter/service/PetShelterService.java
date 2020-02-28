@@ -330,11 +330,13 @@ public class PetShelterService {
 		catch(IllegalArgumentException e) {
 			System.out.println(ErrorMessages.incorrectCharacter);
 		}
-
-
-		if(date == null) {
-			throw new IllegalArgumentException(ErrorMessages.DateDonation);
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
+		if(date.before(client.dateOfBirth)) {
+			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
+		}
+
 
 		Donation donation = new Donation();
 		donation.setAmount(amount);
