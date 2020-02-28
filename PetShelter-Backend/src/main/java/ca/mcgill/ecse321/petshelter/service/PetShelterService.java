@@ -322,14 +322,11 @@ public class PetShelterService {
 	public Donation sendDonation(Integer amount, Client client, Date date) {
 
 
-		try {
+		
 			if(amount<=0) {
 				throw new IllegalArgumentException(ErrorMessages.negAmount);
 			}
-		}
-		catch(IllegalArgumentException e) {
-			System.out.println(ErrorMessages.incorrectCharacter);
-		}
+		
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
