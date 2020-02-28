@@ -49,7 +49,7 @@ public class PetShelterService {
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
-			String address, String firstName, String lastName) {
+							   String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		try {
@@ -397,6 +397,9 @@ public class PetShelterService {
 		if(profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 		}
+		if(!profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfileNotLoggedIn);
+		}
 		//check content is not just white spaces
 		String contentWhiteSpaceCheck = content.trim();
 		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
@@ -404,6 +407,12 @@ public class PetShelterService {
 		}
 		if(date == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+		}
+		if(date.before(profile.getDateOfBirth())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+		}
+		if(date.before(posting.getDate())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 		}
 
 
@@ -417,6 +426,37 @@ public class PetShelterService {
 
 		commentRepository.save(comment);
 		return comment;
+	}
+	
+	@Transactional
+	public List<Comment> getComments(Posting posting){
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		List<Comment> allComments = toList(commentRepository.findAll());
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Comment comment: allComments) {
+			if(comment.getPosting().equals(posting)) {
+				String contentWhiteSpaceCheck = comment.getContent().trim();
+				if(comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
+				}
+				if(comment.getDate() == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+				}
+				if(comment.getDate().before(comment.getProfile().getDateOfBirth())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+				}
+				if(comment.getDate().before(comment.getPosting().getDate())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
+				}
+				
+				//add only valid comments that are on that posting
+				
+				comments.add(comment);
+			}
+		}
+		return comments;
 	}
 
 	@Transactional

@@ -39,10 +39,9 @@ public class PetShelterRestController {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
-		//ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getFirstName(), 
-		//							  client.getLastName(), client.getPostings());
-		//return cDTO;
-		return null;
+		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getIsLoggedIn(), client.getFirstName(), 
+									  client.getLastName(), convertToDTOPostings(service.toList(client.getPostings())));
+		return cDTO;
 	}
 
 	// Verifying login
@@ -82,10 +81,22 @@ public class PetShelterRestController {
 
 
 	// Nicolas GET Mappings
+	
+	//Looking at all open Postings
+	@GetMapping(value = {"/view-open-postings", "/view-open-postings/"})
+	public List<PostingDTO> getOpenPostings() throws IllegalArgumentException{
+		
+		List <Posting> postings = service.getOpenPostings();
+		return convertToDTOPostings(postings);
+	}
 
-
-
-
+	//Looking at all Comments on a Posting
+	@GetMapping(value = {"/{posting}/comments", "/{posting}/comments/"})
+	public List <CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
+		
+		List <Comment> comments = service.getComments(posting);
+		return convertToDTOComments(comments);
+	}
 
 	// Kaustav GET Mappings
 
@@ -97,7 +108,7 @@ public class PetShelterRestController {
 
 	// Rahul POST Mappings
 	// Creating an account 
-	@PostMapping(value = { "/createaccount", "/createaccount/" }) 
+	@PostMapping(value = { "/create-account", "/create-account/" }) 
 	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
 									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
 									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
@@ -109,8 +120,7 @@ public class PetShelterRestController {
 		Client client = service.createClient(dob, email, password, phoneNumber, 
 											 address, firstName, lastName);
 											 
-		return convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), 
-							null, client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+		return convertToDTO(client.getEmail(), client.getPassword());
 	}
 
 	// Logging out
@@ -124,7 +134,7 @@ public class PetShelterRestController {
 	}
 
 	// Deleting an account
-	@PostMapping(value = { "/deleteaccount", "/deleteaccount/" })
+	@PostMapping(value = { "/delete-account", "/delete-account/" })
 	public ProfileDTO deleteAccount(@RequestParam("deleterEmail") String deleterEmail, @RequestParam("deleteeEmail") String deleteeEmail) {
 		Client client = service.deleteClient(deleterEmail, deleteeEmail);
 		return convertToDTO(client.getEmail(), false);
@@ -155,8 +165,17 @@ public class PetShelterRestController {
 
 	// Nicolas POST Mappings
 
-
-
+	//Commenting on a Posting
+		@PostMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
+		public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
+				                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
+			
+			
+			Date date = Date.valueOf(dateString);
+			
+			Comment comment = service.commentOnPosting(profile, posting, content, date);
+			return convertToDTO(comment);
+		}
 
 	// Kaustav POST Mappings
 
@@ -193,6 +212,14 @@ public class PetShelterRestController {
 	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, boolean isLoggedIn, String firstName, 
 			String lastName) {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
+		return clientDTO;
+	}
+
+	// For creating an account -- Parameters are used to login
+	private ClientDTO convertToDTO(String email, String password) {
+		ClientDTO clientDTO = new ClientDTO();
+		clientDTO.setEmail(email);
+		clientDTO.setPassword(password);
 		return clientDTO;
 	}
 
