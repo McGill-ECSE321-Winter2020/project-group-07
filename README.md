@@ -43,6 +43,8 @@ Starts Feb 10, 2020
 * Backend implementation as RESTful services
 * Documentation of RESTful services
 * Suite of unit tests for backend
+* Integration testing
+* Test coverage
 
 ### Tasks completed by each member:
 * Alex:
