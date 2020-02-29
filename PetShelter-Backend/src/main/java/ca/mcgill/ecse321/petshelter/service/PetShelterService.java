@@ -412,11 +412,6 @@ public class PetShelterService {
 		return comments;
 	}
 	
-//	@Transactional
-//	public Comment deleteComment(Comment comment) {
-//		
-//		return null;
-//	}
 
 	@Transactional
 	public List<Posting> getOpenPostings(){
