@@ -518,7 +518,7 @@ public class PetShelterService {
 		application.setNumberOfResidents(numberOfResidents);
 		application.setStatus(ApplicationStatus.pending);
 
-		applicationRepository.save(application);
+		application = applicationRepository.save(application);
 
 		return application;
 	}
