@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter;
 
-public class ErrorMessages { 
+public class ErrorMessages {
+	
+	public static String invalidDate = "Invalid date.";
 
     // Client
     public static String accountExists = "Email has already been taken.";
@@ -22,7 +24,6 @@ public class ErrorMessages {
 
 
 
-    
     // Comment
     public static String invalidPosting = "Invalid posting.";
     public static String invalidProfile= "Invalid profile.";
@@ -33,6 +34,7 @@ public class ErrorMessages {
     public static String invalidDateCommentProfile = "Cannot post a comment with a date before the creation date of the profile.";
     
     //Application 
+    public static String applicationDoesNotExist = "Requested application does not exist";
     public static String selfApplication = "Cannot apply to your own posting.";
     public static String invalidApplication = "Invalid Application.";
     public static String rejectingApprovedApp = "Cannot reject approved application.";
@@ -53,4 +55,7 @@ public class ErrorMessages {
     public static String dateMessage = "No date for message.";
     public static String MessAlreadyExists = "The message you are trying to send is identical to a previous message already sent.";
     public static String IncorrectAdmin = "The admin does not seem to exist.";
+    
+    //Posting 
+    public static String postingDoesNotExist = "Requested posting does not exist";
 }

@@ -14,10 +14,10 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Alexander Legouverneur  | Software Developer | 17.5 | 14 | &mdash; | &mdash; |
+| Alexander Legouverneur  | Software Developer | 17.5 | 29 | &mdash; | &mdash; |
 | Kaustav Das Sharma | Software Architecure Engineer | 22 | 7 | &mdash; | &mdash; |
-| Mohamed Bouaouina | Project Manager | 18.5 | 20 | &mdash; | &mdash; |
-| Nicolas Buisson | Product Manager | 20 | 22 | &mdash; | &mdash; |
+| Mohamed Bouaouina | Project Manager | 18.5 | 28 | &mdash; | &mdash; |
+| Nicolas Buisson | Product Manager | 20 | 29 | &mdash; | &mdash; |
 | Rahul Behal | Software Consultant | 15 | 32.5 | &mdash; | &mdash; |
 
 ## Sprint 1 
@@ -43,12 +43,15 @@ Starts Feb 10, 2020
 * Backend implementation as RESTful services
 * Documentation of RESTful services
 * Suite of unit tests for backend
+* Integration testing
+* Gradle task for integration testing
+* Test coverage
 
 ### Tasks completed by each member:
 * Alex:
 * Kaustav:
 * Mohamed:
-* Nicolas:
+* Nicolas: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
 * Rahul:
 
 ## Sprint 3

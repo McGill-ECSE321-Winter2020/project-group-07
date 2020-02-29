@@ -487,7 +487,7 @@ public class PetShelterService {
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode()*posting.getId()*date.hashCode());
 
-		commentRepository.save(comment);
+		comment = commentRepository.save(comment);
 		return comment;
 	}
 
@@ -521,6 +521,7 @@ public class PetShelterService {
 		}
 		return comments;
 	}
+	
 
 	@Transactional
 	public List<Posting> getOpenPostings(){
@@ -555,7 +556,39 @@ public class PetShelterService {
 	public Posting updatePostingInfo() {
 		return null;
 	}
+	
+	@Transactional
+	public Posting getPosting(String email, Date date) {
+		if(email == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		
+		Posting posting = postingRepository.findPostingById(email.hashCode()*date.hashCode());
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.postingDoesNotExist);
+		}
+		return posting;
+	}
 
+	@Transactional
+	public Application getApplication(String applicant_email, Posting posting) {
+		if(applicant_email == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		
+		Application application = applicationRepository.findApplicationById(applicant_email.hashCode() * posting.hashCode()); 
+		if(application == null) {
+			throw new IllegalArgumentException(ErrorMessages.applicationDoesNotExist);
+		}
+		return application;
+	}
+	
 	@Transactional
 	public List<Application> getPostingApplications(Posting posting){
 		if(posting == null) {
@@ -565,7 +598,7 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public boolean rejectApplication(Application application) {
+	public Application rejectApplication(Application application) {
 		if(application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
@@ -573,12 +606,12 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
 		}
 		application.setStatus(ApplicationStatus.rejected);
-		applicationRepository.save(application);
-		return true;
+		application = applicationRepository.save(application);
+		return application;
 	}
 
 	@Transactional
-	public boolean approveApplication(Application application){
+	public Application approveApplication(Application application){
 		/*
 		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
 		 * Status of this application is changed to "approved".
@@ -593,15 +626,16 @@ public class PetShelterService {
 		}
 		application.setStatus(ApplicationStatus.accepted);
 		applicationRepository.save(application);
+		application = applicationRepository.save(application);
 
 		for(Application a : getPostingApplications(application.getPosting())) {
-			if(a != application) {
+			if(!(a.equals(application))) {
 				a.setStatus(ApplicationStatus.rejected);
 				applicationRepository.save(a);
 			}
 		}
 
-		return true;
+		return application;
 	}
 
 	@Transactional
@@ -612,7 +646,7 @@ public class PetShelterService {
 		if(posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		if(client.equals(posting.getProfile())){
+		if(client.getEmail().equals(posting.getProfile().getEmail())){
 			throw new IllegalArgumentException(ErrorMessages.selfApplication);
 		}
 		if(homeType == null) {
@@ -634,7 +668,7 @@ public class PetShelterService {
 		application.setNumberOfResidents(numberOfResidents);
 		application.setStatus(ApplicationStatus.pending);
 
-		applicationRepository.save(application);
+		application = applicationRepository.save(application);
 
 		return application;
 	}
