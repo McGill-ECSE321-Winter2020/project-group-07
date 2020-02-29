@@ -374,14 +374,17 @@ public class PetShelterService {
 		if(admin == null) {
 			throw new IllegalArgumentException(ErrorMessages.IncorrectAdmin);
 		}
+		if(date.before(client.dateOfBirth)) {
+			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
+		}
 
 		//To avoid spam on admin account, checking if content has already been sent as a message.
 		java.util.Set<Message> allMess;
 		allMess = client.getMessages();
-		Iterator<Message> itr = allMess.iterator();
+		List<Message> messages = toList(client.getMessages());
 
-		while(itr.hasNext()) {
-			Message curr = itr.next();
+		for(int i = 0;i<messages.size();i++) {
+			Message curr = messages.get(i);
 			String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
 			String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
 			String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
