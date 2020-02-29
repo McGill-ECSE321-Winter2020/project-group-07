@@ -87,7 +87,7 @@ public class CommentServiceTests {
 	public void setMockOutput() {
 		// When finding a comment
 		lenient().when(commentDAO.findCommentById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-	        if(invocation.getArgument(0).equals(1)) {
+	        if(invocation.getArgument(0).equals(COMMENT_ID)) {
 	    		Comment comment = new Comment(); // Dummy comment
 	    		Client client = new Client();
 	    		Posting posting = new Posting();
@@ -101,7 +101,7 @@ public class CommentServiceTests {
 	            comment.setPosting(posting);
 	            posting.setDate(POSTING_DATE);
 	            return comment;
-	        } else  if(invocation.getArgument(0).equals(2)){
+	        } else  if(invocation.getArgument(0).equals(BAD_COMMENT_ID1)){
 	        	Comment comment = new Comment(); // Dummy comment
 	    		Client client = new Client();
 	    		Posting posting = new Posting();
@@ -115,7 +115,7 @@ public class CommentServiceTests {
 	            comment.setPosting(posting);
 	            posting.setDate(POSTING_DATE);
 	            return comment;
-	        } else  if(invocation.getArgument(0).equals(3)) {
+	        } else  if(invocation.getArgument(0).equals(BAD_COMMENT_ID2)) {
 	        	Comment comment = new Comment(); // Dummy comment
 	    		Client client = new Client();
 	    		client.setIsLoggedIn(PROFILE_LOGGEDIN);
@@ -327,9 +327,9 @@ public class CommentServiceTests {
 	}
 	
 	
-	//Testing with a posting with invalid comments
+	//Testing with a posting with invalid date comments
 	@Test
-	public void testPostingWithInvalidCommentsGetComments() {
+	public void testPostingWithInvalidDateCommentsGetComments() {
 			
 		Posting posting = new Posting();
 		Profile profile = new Client();
