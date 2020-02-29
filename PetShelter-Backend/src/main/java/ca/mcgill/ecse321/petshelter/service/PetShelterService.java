@@ -273,33 +273,32 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
-			if(client == null) {
-				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-			}
-			System.out.println(client.getIsLoggedIn());
-			if(!(client.getIsLoggedIn())) {
-				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
-			}
-			if(address == null || address.trim().length()==0) {
-				throw new IllegalArgumentException(ErrorMessages.invalidAddress);
-			}
-			if(dob == null) {
-				throw new IllegalArgumentException(ErrorMessages.invalidDOB);
-			}
-			if(password == null ||password.trim().length()<=6) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPassword);
-			}
-			String phoneNumberRegex = "^[0-9]{10}$";
-			Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
-			if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
-				throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
-			}
-			if (firstName == null || firstName.equals("")) {
-				throw new IllegalArgumentException(ErrorMessages.invalidFirstName);
-			}
-			if (lastName == null || lastName.equals("")) {
-				throw new IllegalArgumentException(ErrorMessages.invalidLastName);
-			}
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!(client.getIsLoggedIn())) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		if(address == null || address.trim().length()==0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidAddress);
+		}
+		if(dob == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
+		}
+		if(password == null ||password.trim().length()<=6) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
+		}
+		String phoneNumberRegex = "^[0-9]{10}$";
+		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
+		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
+		}
+		if (firstName == null || firstName.trim().equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidFirstName);
+		}
+		if (lastName == null || lastName.trim().equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLastName);
+		}
 		
 		client.setAddress(address);
 		client.setDateOfBirth(dob);
