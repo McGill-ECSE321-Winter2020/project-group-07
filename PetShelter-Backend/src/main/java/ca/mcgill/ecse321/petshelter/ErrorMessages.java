@@ -52,4 +52,5 @@ public class ErrorMessages {
     public static String tooLong = "Your message is too long.";
     public static String dateMessage = "No date for message.";
     public static String MessAlreadyExists = "The message you are trying to send is identical to a previous message already sent.";
+    public static String IncorrectAdmin = "The admin does not seem to exist.";
 }

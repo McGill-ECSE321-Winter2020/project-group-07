@@ -1,20 +1,11 @@
 package ca.mcgill.ecse321.petshelter.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,32 +58,25 @@ public class DonationServiceClass {
 
 	@BeforeEach
 	public void setMockOutput() {
-		lenient().when(service.getDonationbyId(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-			Donation donation = new Donation();
-			Client client = new Client();
-			client.setDateOfBirth(DOB);
-			client.setEmail(CLIENT_EMAIL);
-			client.setFirstName(FIRST_NAME);
-			client.setLastName(LAST_NAME);
-			donation.setAmount(AMOUNT);
-			donation.setClient(client);
-			donation.setDate(DATE);
-			donation.setId(DONATION_KEY);
-			client.setIsLoggedIn(true);
-			
-			return donation;  
-		});
-		lenient().when(donationDao.findById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
-			if(invocation.getArgument(0).equals(DONATION_KEY)) {
+		lenient().when(donationDao.findDonationById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(DONATION_KEY)) {
 				Donation donation = new Donation();
-				donation.setId(DONATION_KEY);
-				donation.setDate(DOB);
+				Client client = new Client();
+				client.setDateOfBirth(DOB);
+				client.setEmail(CLIENT_EMAIL);
+				client.setFirstName(FIRST_NAME);
+				client.setLastName(LAST_NAME);
 				donation.setAmount(AMOUNT);
-				return donation;
-			} 
+				donation.setClient(client);
+				donation.setDate(DATE);
+				donation.setId(DONATION_KEY);
+				client.setIsLoggedIn(true);
+				return donation;  
+			}
 			else {
 				return null;
 			}
+			
 		});
 		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -102,6 +86,7 @@ public class DonationServiceClass {
 		lenient().when(donationDao.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
 
 	}
+	
 
 	/**
 	 * test to retrieve a donation that doesn't exist.
@@ -132,7 +117,8 @@ public class DonationServiceClass {
 		client.setFirstName(fn);
 		client.setLastName(ln);
 		client.setIsLoggedIn(true);
-		assertEquals(amount,service.sendDonation(amount,client, date).getAmount());
+		client.setPhoneNumber(pn);
+		assertEquals(amount,service.getDonationbyId(Id).getAmount());
 	}
 
 	/**
@@ -140,7 +126,6 @@ public class DonationServiceClass {
 	 */
 	@Test
 	public void testSendDonationWithClientDoesNotExist() {
-		String email = CLIENT_EMAIL_NOTEXISTING;
 		Integer amount = AMOUNT;
 		Date date = DATE;
 		Client client = new Client();

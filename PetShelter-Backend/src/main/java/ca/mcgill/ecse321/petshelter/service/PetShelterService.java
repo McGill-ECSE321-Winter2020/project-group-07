@@ -50,7 +50,7 @@ public class PetShelterService {
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
-							   String address, String firstName, String lastName) {
+			String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		try {
@@ -64,21 +64,21 @@ public class PetShelterService {
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
 		}
-		
+
 		// Getting date object of 18 years ago 
 		long curr_date_ms = System.currentTimeMillis();
-        Date curr_date = new java.sql.Date(curr_date_ms);  
-        String curr_date_str = curr_date.toString();
-        String monthcurr = new String(new char[] {curr_date_str.toString().charAt(5),curr_date_str.toString().charAt(6)});
-        String daycurr = new String(new char[] {curr_date_str.toString().charAt(8),curr_date_str.toString().charAt(9)});
-        String str_18y_ago = "2002-" + monthcurr + "-" + daycurr; // Not ideal, may fix later 
-        Date dt_18y_ago = Date.valueOf(str_18y_ago); 
+		Date curr_date = new java.sql.Date(curr_date_ms);  
+		String curr_date_str = curr_date.toString();
+		String monthcurr = new String(new char[] {curr_date_str.toString().charAt(5),curr_date_str.toString().charAt(6)});
+		String daycurr = new String(new char[] {curr_date_str.toString().charAt(8),curr_date_str.toString().charAt(9)});
+		String str_18y_ago = "2002-" + monthcurr + "-" + daycurr; // Not ideal, may fix later 
+		Date dt_18y_ago = Date.valueOf(str_18y_ago); 
 
 		// Checking if 18 years old or over
-        int of_age = dob.compareTo(dt_18y_ago); 
-        if(of_age > 0) {
-            throw new IllegalArgumentException(ErrorMessages.under18);
-        }
+		int of_age = dob.compareTo(dt_18y_ago); 
+		if(of_age > 0) {
+			throw new IllegalArgumentException(ErrorMessages.under18);
+		}
 
 		// Checking if email is appropriate
 		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -138,12 +138,12 @@ public class PetShelterService {
 		return client;
 	}
 
-	 /**
-	  * Use this function if you need to retrieve a client object.
-	  * May need to use try/catch because it throws an exception if no account exists.
-	  * @param email
-	  * @return Client
-	  */
+	/**
+	 * Use this function if you need to retrieve a client object.
+	 * May need to use try/catch because it throws an exception if no account exists.
+	 * @param email
+	 * @return Client
+	 */
 	@Transactional
 	public Client getClient(String email) { 
 		if (email != null) {
@@ -172,7 +172,7 @@ public class PetShelterService {
 				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 			}
 		}
-	
+
 		// Deleting client 
 		if (deleteeEmail == null) {
 			return null; 
@@ -212,7 +212,7 @@ public class PetShelterService {
 		} else if (!password.equals(profile.getPassword())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
 		}
-		  else {
+		else {
 			return null;
 		}
 	}
@@ -240,13 +240,13 @@ public class PetShelterService {
 
 	}
 
-	 /**
-	  * Everyone should use this function if they need to retrieve the current active logged in Profile.
-	  * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
-	  * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
-	  * Throws an exception if no account is logged in.
-	  * @return Profile
-	  */
+	/**
+	 * Everyone should use this function if they need to retrieve the current active logged in Profile.
+	 * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
+	 * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
+	 * Throws an exception if no account is logged in.
+	 * @return Profile
+	 */
 	@Transactional // Everyone should use this 
 	public Profile getLoggedInUser(){
 		// Get all profiles in database and check which one is logged in 
@@ -283,7 +283,7 @@ public class PetShelterService {
 		return client;
 
 	}
-	
+
 	/**
 	 * method to get a donation with the id, returns null if doesnt exist.
 	 * @param Id
@@ -291,55 +291,46 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public Donation getDonationbyId(Integer Id) {
-		
+
 		Donation donation=new Donation();
 		try {
-			donation = donationRepository.findById(Id).get();
+			donation = donationRepository.findDonationById(Id);
 			return donation;
 		}
 		catch(Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return Donation
-=======
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * Service method to send a donation.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return the donation to be sent
-<<<<<<< HEAD
->>>>>>> added controller methods and javadoc
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
 
 
-		
-			if(amount<=0) {
-				throw new IllegalArgumentException(ErrorMessages.negAmount);
-			}
-		
+
+		if(amount<=0) {
+			throw new IllegalArgumentException(ErrorMessages.negAmount);
+		}
+
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		if(!client.getIsLoggedIn()) {
-			
+
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
-			
+
 		}
 		if(date.before(client.dateOfBirth)) {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
@@ -355,30 +346,15 @@ public class PetShelterService {
 	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * Method used when a message is being sent to admin, the content is checked,
 	 * if the content is repeated too frequently, the message will not be sent.
 	 * To avoid spamming the admin.
-=======
-	 * This is the service method to send messages to admin, checks for spamming.
->>>>>>> added controller methods and javadoc
-=======
-	 * This is the service method to send messages to admin, checks for spamming.
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * @param admin
 	 * @param client
 	 * @param content
 	 * @param date
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * @return Message
-=======
 	 * @return message to be sent
->>>>>>> added controller methods and javadoc
-=======
-	 * @return message to be sent
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
@@ -391,6 +367,12 @@ public class PetShelterService {
 		}
 		if(date == null) {
 			throw new IllegalArgumentException(ErrorMessages.dateMessage);
+		}
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(admin == null) {
+			throw new IllegalArgumentException(ErrorMessages.IncorrectAdmin);
 		}
 
 		//To avoid spam on admin account, checking if content has already been sent as a message.
@@ -408,7 +390,7 @@ public class PetShelterService {
 				if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
 					throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
 				}
-				
+
 			}
 		}
 		Message message = new Message();
@@ -420,7 +402,7 @@ public class PetShelterService {
 		messageRepository.save(message);
 		return message;
 	}
-	
+
 	/**
 	 * This method returns all the messages a client sent since it created its account.
 	 * @param client
@@ -428,7 +410,7 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public List<Message> getClientMessages(Client client){
-		
+
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
@@ -436,10 +418,9 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
 		}
 		return toList(client.getMessages());
-		
+
 	}
-	
-	
+
 	/**
 	 * Service method to get all the donations of a client.
 	 * @param client
@@ -493,7 +474,7 @@ public class PetShelterService {
 		commentRepository.save(comment);
 		return comment;
 	}
-	
+
 	@Transactional
 	public List<Comment> getComments(Posting posting){
 		if(posting == null) {
@@ -516,9 +497,9 @@ public class PetShelterService {
 				if(comment.getDate().before(comment.getPosting().getDate())) {
 					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 				}
-				
+
 				//add only valid comments that are on that posting
-				
+
 				comments.add(comment);
 			}
 		}
@@ -583,11 +564,11 @@ public class PetShelterService {
 	@Transactional
 	public boolean approveApplication(Application application){
 		/*
-			* Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
-			* Status of this application is changed to "approved".
-			* Change the status of other applications on the same posting to "rejected".
-			* The decision is final.
-			*/
+		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
+		 * Status of this application is changed to "approved".
+		 * Change the status of other applications on the same posting to "rejected".
+		 * The decision is final.
+		 */
 		if(application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
