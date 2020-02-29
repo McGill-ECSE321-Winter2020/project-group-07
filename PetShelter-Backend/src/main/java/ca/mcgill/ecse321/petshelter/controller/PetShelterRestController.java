@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,11 +59,14 @@ public class PetShelterRestController {
 
 	// Youssef GET Mappings
 
-	@GetMapping(value = {"/{posting}/applications", "/{posting}/applications/"})
-	public List<ApplicationDTO> getPostingApplications(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
+	@GetMapping(value = {"/posting-applications", "/posting-applications/"})
+	public List<ApplicationDTO> getPostingApplications(@RequestParam("owner_email") String owner_email, @RequestParam("posting_date") Date posting_date) throws IllegalArgumentException{
+		Posting posting = service.getPosting(owner_email, posting_date);
 		List<Application> applications = service.getPostingApplications(posting);
 		return convertToDTOApplications(applications);
 	}
+	
+	//TODO: add REST controller method for the get specific application 
 
 
 
@@ -179,11 +183,44 @@ public class PetShelterRestController {
 
 
 	@PostMapping(value = {"/createapplication", "/createapplication"})
-	public ApplicationDTO createApplication(@RequestParam("client") Client client, @RequestParam("posting") Posting posting, 
-			@RequestParam("homeType") HomeType homeType, @RequestParam("incomeRange") IncomeRange incomeRange,
+	public ApplicationDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
+			@RequestParam Date posting_date, @RequestParam("homeType") String homeType, @RequestParam("incomeRange") String incomeRange,
 			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
-
-		Application application = service.createApplication(client, posting, homeType, incomeRange, numberOfResidents);
+		Client client = service.getClient(client_email);
+		Posting posting = service.getPosting(owner_email, posting_date);
+		HomeType ht = null;
+		IncomeRange ir = null;
+		//get enum variable from passed string
+		try {
+			ht = HomeType.valueOf(homeType);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
+		}
+		//get enum variable from passed string
+		try {
+			ir = IncomeRange.valueOf(incomeRange);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
+		}
+		Application application = service.createApplication(client, posting, ht, ir, numberOfResidents);
+		return convertToDTO(application);
+	}
+	
+	@PutMapping(value = {"/reject-application", "/reject-application/"})
+	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
+			@RequestParam Date posting_date) throws IllegalArgumentException{
+		Posting posting = service.getPosting(owner_email, posting_date);
+		Application application = service.getApplication(client_email, posting);
+		application = service.rejectApplication(application);
+		return convertToDTO(application);
+	}
+	
+	@PutMapping(value = {"/approve-application", "/approve-application/"})
+	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
+			@RequestParam Date posting_date) throws IllegalArgumentException{
+		Posting posting = service.getPosting(owner_email, posting_date);
+		Application application = service.getApplication(client_email, posting);
+		application = service.approveApplication(application);
 		return convertToDTO(application);
 	}
 
