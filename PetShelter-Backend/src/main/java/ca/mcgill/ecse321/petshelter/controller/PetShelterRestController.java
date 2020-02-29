@@ -66,6 +66,8 @@ public class PetShelterRestController {
 		List<Application> applications = service.getPostingApplications(posting);
 		return convertToDTOApplications(applications);
 	}
+	
+	//TODO: add REST controller method for the get specific application 
 
 
 
@@ -157,7 +159,8 @@ public class PetShelterRestController {
 	@PutMapping(value = {"/reject-application", "/reject-application/"})
 	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
 			@RequestParam Date posting_date) throws IllegalArgumentException{
-		Application application = service.getApplication(client_email, owner_email, posting_date);
+		Posting posting = service.getPosting(owner_email, posting_date);
+		Application application = service.getApplication(client_email, posting);
 		application = service.rejectApplication(application);
 		return convertToDTO(application);
 	}
@@ -165,7 +168,8 @@ public class PetShelterRestController {
 	@PutMapping(value = {"/approve-application", "/approve-application/"})
 	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
 			@RequestParam Date posting_date) throws IllegalArgumentException{
-		Application application = service.getApplication(client_email, owner_email, posting_date);
+		Posting posting = service.getPosting(owner_email, posting_date);
+		Application application = service.getApplication(client_email, posting);
 		application = service.approveApplication(application);
 		return convertToDTO(application);
 	}

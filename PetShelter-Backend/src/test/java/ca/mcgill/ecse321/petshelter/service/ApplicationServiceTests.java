@@ -5,11 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +29,6 @@ import ca.mcgill.ecse321.petshelter.model.Client;
 import ca.mcgill.ecse321.petshelter.model.HomeType;
 import ca.mcgill.ecse321.petshelter.model.IncomeRange;
 import ca.mcgill.ecse321.petshelter.model.Posting;
-import ca.mcgill.ecse321.petshelter.model.Profile;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -46,37 +43,22 @@ public class ApplicationServiceTests {
 	//Testing variables
 	private final static String VALID_APPLICANT_EMAIL = "applicant@petshelter.com";
 	private final static String VALID_OWNER_EMAIL = "owner@petshelter.com";
-	private final static Date VALID_DATE = Date.valueOf("2000-01-01");
 	private final static Posting VALID_POSTING = new Posting();
-	
-	
-	private final static String OWNER_NO_POSTINGS = "nopostings@petshelter.com";
 	private final static Posting INVALID_POSTING = new Posting();
 
-
-	//TODO: fix any() warnings and Invalid Date errors resulting from the setMockOutput function
 	@BeforeEach
 	public void setMockOutput() {
-//		//getPosting is not being tested in this class, always return a valid Posting object
-//		lenient().when(service.getPosting(anyString(), any(Date.class))).thenAnswer((InvocationOnMock invocation) -> {
-//			if(invocation.getArgument(0).equals(VALID_OWNER_EMAIL) && invocation.getArgument(1).equals(VALID_DATE)) {
-//				return VALID_POSTING;				
-//			}
-//			else {
-//				return INVALID_POSTING;
-//			}
-//		});
-//		//test stub for findApplicationById() CRUD method
-//		lenient().when(applicationDAO.findApplicationById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-//			if(invocation.getArgument(0).equals(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode())) {
-//				Application application = new Application();
-//				application.setId(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode());
-//				return application;
-//			}
-//			else {
-//				return null;
-//			}
-//		});
+		//test stub for findApplicationById() CRUD method
+		lenient().when(applicationDAO.findApplicationById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
+			if(invocation.getArgument(0).equals(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode())) {
+				Application application = new Application();
+				application.setId(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode());
+				return application;
+			}
+			else {
+				return null;
+			}
+		});
 		// Whenever anything is saved, just return the parameter object
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
@@ -87,67 +69,66 @@ public class ApplicationServiceTests {
 
 
 	//Tests for the getApplication() service method
-
 	//Test Main Case Scenario
-//	@Test
-//	public void TestGetApplication() {
-//		Application application = null;
-//		try {
-//			application = service.getApplication(VALID_APPLICANT_EMAIL, VALID_OWNER_EMAIL, VALID_DATE);
-//		} catch (Exception e) {
-//			// Check that no error occurred
-//			fail();
-//		}
-//		assertNotNull(application);
-//		assertEquals(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode(), application.getId());		
-//	}
-//
-//	@Test
-//	public void TestGetApplicationNullEmails() {
-//		Application application = null;
-//		String error = null;
-//		try {
-//			application = service.getApplication(null, null, VALID_DATE);
-//		} catch (Exception e) {
-//			// Check that no error occurred
-//			error = e.getMessage();
-//		}
-//		assertNull(application);
-//		assertEquals(ErrorMessages.invalidEmail, error);
-//	}
-//
-//	@Test
-//	public void TestGetApplicationNullDate() {
-//		Application application = null;
-//		String error = null;
-//		try {
-//			application = service.getApplication(VALID_APPLICANT_EMAIL, VALID_OWNER_EMAIL, null);
-//		} catch (Exception e) {
-//			// Check that no error occurred
-//			error = e.getMessage();
-//		}
-//		assertNull(application);
-//		assertEquals(ErrorMessages.invalidDate, error);
-//	}
-//
-//	@Test
-//	public void TestGetApplicationNullApplication() {
-//		Application application = null;
-//		String error = null;
-//		try {
-//			application = service.getApplication(VALID_APPLICANT_EMAIL, OWNER_NO_POSTINGS, VALID_DATE);
-//		} catch (Exception e) {
-//			// Check that no error occurred
-//			error = e.getMessage();
-//		}
-//		assertNull(application);
-//		assertEquals(ErrorMessages.applicationDoesNotExist, error);
-//	}
+	@Test
+	public void TestGetApplication() {
+		Application application = null;
+		try {
+			application = service.getApplication(VALID_APPLICANT_EMAIL, VALID_POSTING);
+		} catch (Exception e) {
+			// Check that no error occurred
+			fail();
+		}
+		assertNotNull(application);
+		assertEquals(VALID_APPLICANT_EMAIL.hashCode() * VALID_POSTING.hashCode(), application.getId());		
+	}
+
+	@Test
+	public void TestGetApplicationNullEmail() {
+		Application application = null;
+		String error = null;
+		try {
+			application = service.getApplication(null, VALID_POSTING);
+		} catch (Exception e) {
+			// Check that no error occurred
+			error = e.getMessage();
+		}
+		assertNull(application);
+		assertEquals(ErrorMessages.invalidEmail, error);
+	}
+
+	@Test
+	public void TestGetApplicationNullPosting() {
+		Application application = null;
+		String error = null;
+		try {
+			application = service.getApplication(VALID_APPLICANT_EMAIL, null);
+		} catch (Exception e) {
+			// Check that no error occurred
+			error = e.getMessage();
+		}
+		assertNull(application);
+		assertEquals(ErrorMessages.invalidPosting, error);
+	}
+
+	@Test
+	public void TestGetApplicationNullApplication() {
+		Application application = null;
+		String error = null;
+		try {
+			application = service.getApplication(VALID_APPLICANT_EMAIL, INVALID_POSTING);
+		} catch (Exception e) {
+			// Check that no error occurred
+			error = e.getMessage();
+		}
+		assertNull(application);
+		assertEquals(ErrorMessages.applicationDoesNotExist, error);
+	}
 
 	//Tests for the getPostingApplications() service method
 	//Test Main Case scenario
 	@Test
-	public void getPostingApplications() {
+	public void TestGetPostingApplications() {
 		Posting posting = new Posting();
 		HashSet<Application> applications = new HashSet<>();
 		
@@ -177,7 +158,7 @@ public class ApplicationServiceTests {
 	}
 	
 	@Test
-	public void getPostingApplicationsNullPosting() {
+	public void TestGetPostingApplicationsNullPosting() {
 		String error = null;
 		ArrayList<Application> applications = null;
 		try {
