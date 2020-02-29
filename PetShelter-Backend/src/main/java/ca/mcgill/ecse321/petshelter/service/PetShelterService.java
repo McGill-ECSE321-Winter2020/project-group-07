@@ -273,13 +273,35 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
-
+		
+		if(address == null || address.trim().length()==0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidAddress);
+		}
+		if(dob == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
+		}
+		if(password.trim().length()<=6) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
+		}
+		String phoneNumberRegex = "^[0-9]{10}$";
+		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
+		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
+		}
+		if (firstName == null || firstName.equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidFirstName);
+		}
+		if (lastName == null || lastName.equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLastName);
+		}
+		
 		client.setAddress(address);
 		client.setDateOfBirth(dob);
 		client.setPassword(password);
 		client.setPhoneNumber(phoneNumber);
 		client.setFirstName(firstName);
 		client.setLastName(lastName);
+		client = clientRepository.save(client);
 		return client;
 
 	}
@@ -341,7 +363,7 @@ public class PetShelterService {
 		donation.setAmount(amount);
 		donation.setClient(client);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
-		donationRepository.save(donation);
+		donation = donationRepository.save(donation);
 		return donation;
 	}
 
@@ -358,8 +380,8 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
-
-		if(content.length() == 0 ) {
+		
+		if(content == null || content.trim().length() == 0 ) {
 			throw new IllegalArgumentException(ErrorMessages.NoContent);
 		}
 		if(content.length() >1000) {
@@ -379,36 +401,14 @@ public class PetShelterService {
 		}
 
 		//To avoid spam on admin account, checking if content has already been sent as a message.
-		java.util.Set<Message> allMess;
-		allMess = client.getMessages();
-		List<Message> allMessage = toList(messageRepository.findAll());
-		List<Message> messages =new ArrayList<>();
-		for(int i = 0; i<allMess.size();i++) {
-			if(allMessage.get(i).getClient().equals(client)) {
-				messages.add(allMessage.get(i));
-			}
-		}
-
-		for(int i = 0;i<messages.size();i++) {
-			Message curr = messages.get(i);
-			String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
-			String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
-			String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
-			String monthcurr = new String(new char[] {curr.getDate().toString().charAt(5),curr.getDate().toString().charAt(6)});
-			if(curr.getContent().equalsIgnoreCase(content)) {
-				if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
-					throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
-				}
-
-			}
-		}
+		
 		Message message = new Message();
 		message.setAdmin(admin);
 		message.setClient(client);
 		message.setContent(content);
 		message.setDate(date);
 		message.setId(client.getEmail().hashCode()*date.hashCode());
-		messageRepository.save(message);
+		message = messageRepository.save(message);
 		return message;
 	}
 
@@ -423,16 +423,10 @@ public class PetShelterService {
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		if(client.getMessages().size() == 0) {
+		if(client.getMessages() == null ||client.getMessages().size() == 0) {
 			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
 		}
-		List<Message> allMess = toList(messageRepository.findAll());
-		List<Message> messages =new ArrayList<>();
-		for(int i = 0; i<allMess.size();i++) {
-			if(allMess.get(i).getClient().equals(client)) {
-				messages.add(allMess.get(i));
-			}
-		}
+		
 		return toList(client.getMessages());
 
 	}
