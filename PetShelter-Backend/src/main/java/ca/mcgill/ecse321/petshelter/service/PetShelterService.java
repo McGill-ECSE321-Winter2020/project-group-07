@@ -433,7 +433,15 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Posting createPosting() {
+	public Posting createPosting(Profile profile, Date postDate, String petName, Date dob, String breed, String picture, String reason) {
+		Posting	posting = new Posting();
+		posting.setDate(postDate);
+		posting.setPetName(petName);
+		posting.setPetDateOfBirth(dob);
+		posting.setPetBreed(breed);
+		posting.setPicture(picture);
+		posting.setDescription(reason);
+		postingRepository.save(posting);
 		return null;
 	}
 
