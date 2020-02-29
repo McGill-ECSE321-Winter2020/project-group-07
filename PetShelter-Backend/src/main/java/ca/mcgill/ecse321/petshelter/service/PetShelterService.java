@@ -381,7 +381,13 @@ public class PetShelterService {
 		//To avoid spam on admin account, checking if content has already been sent as a message.
 		java.util.Set<Message> allMess;
 		allMess = client.getMessages();
-		List<Message> messages = toList(client.getMessages());
+		List<Message> allMessage = toList(messageRepository.findAll());
+		List<Message> messages =new ArrayList<>();
+		for(int i = 0; i<allMess.size();i++) {
+			if(allMessage.get(i).getClient().equals(client)) {
+				messages.add(allMessage.get(i));
+			}
+		}
 
 		for(int i = 0;i<messages.size();i++) {
 			Message curr = messages.get(i);
@@ -419,6 +425,13 @@ public class PetShelterService {
 		}
 		if(client.getMessages().size() == 0) {
 			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
+		}
+		List<Message> allMess = toList(messageRepository.findAll());
+		List<Message> messages =new ArrayList<>();
+		for(int i = 0; i<allMess.size();i++) {
+			if(allMess.get(i).getClient().equals(client)) {
+				messages.add(allMess.get(i));
+			}
 		}
 		return toList(client.getMessages());
 

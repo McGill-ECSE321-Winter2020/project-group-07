@@ -29,8 +29,6 @@ import ca.mcgill.ecse321.petshelter.model.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageServiceTests {
-	@Mock
-	private ClientRepository clientDao;
 
 	@Mock
 	private MessageRepository messageDao;
@@ -41,14 +39,14 @@ public class MessageServiceTests {
 	private String EMAIL = "joohn.doe@mail.com";
 	private String ADMIN_EMAIL = "admin.admin@admin.com";
 	private Date DATE = Date.valueOf("2005-05-01");
-	private Date DOB = Date.valueOf("2006-05-01");
+	private Date DOB = Date.valueOf("2004-05-01");
 	private String CONTENT = "jierjrejee";
 	private Date DATE1 = Date.valueOf("2005-05-02");
-	private Date BEF_DOB = Date.valueOf("2004-05-01");
+	private Date BEF_DOB = Date.valueOf("2002-05-01");
 
 	@BeforeEach
 	public void setMockOutput() {
-		lenient().when(service.toList(clientDao.findClientByEmail(anyString()).getMessages())).thenAnswer((InvocationOnMock invocation) -> {
+		lenient().when(service.toList(messageDao.findAll())).thenAnswer((InvocationOnMock invocation) -> {
 
 			ArrayList<Message> messages = new ArrayList<>();
 			Message message1 = new Message();
@@ -162,7 +160,6 @@ public class MessageServiceTests {
 		Date date = DATE;
 		Client client = new Client();
 		client = null;
-		client.setEmail(email);
 		Admin admin = new Admin();
 		admin.setEmail(aemail);
 		String error = "";
@@ -187,7 +184,6 @@ public class MessageServiceTests {
 		client.setEmail(email);
 		Admin admin = new Admin();
 		admin = null;
-		admin.setEmail(aemail);
 		String error = "";
 		try {
 			service.sendMessage(admin,client, content, date);
@@ -209,6 +205,7 @@ public class MessageServiceTests {
 		Date date1 = DATE1;
 		Client client = new Client();
 		client.setEmail(email);
+		client.setDateOfBirth(DOB);
 		Admin admin = new Admin();
 		service.sendMessage(admin,client, content, date);
 		admin.setEmail(aemail);
