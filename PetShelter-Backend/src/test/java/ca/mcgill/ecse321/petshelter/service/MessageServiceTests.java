@@ -81,7 +81,7 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"Your message is too long.");
 	}
-	
+
 	/**
 	 * Tests if the message is created if it has no content.
 	 */
@@ -103,7 +103,7 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"You need to write a message before sending it.");
 	}
-	
+
 	/**
 	 * check if the message is sent even though the date is null.
 	 */
@@ -125,7 +125,7 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"No date for message.");
 	}
-	
+
 	/**
 	 * Checks if message is sent if client is null.
 	 */
@@ -147,7 +147,7 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"Account does not exist.");
 	}
-	
+
 	/**
 	 * Tests if a message can be sent. 
 	 */
@@ -169,7 +169,7 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"The admin does not seem to exist.");
 	}
-		
+
 	/**
 	 * test if the client is trying to send a message with a date before
 	 * its date of birth.
@@ -194,12 +194,12 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"The date specified is before the date of birth of the client.");
 	}
-	
+
 	@Test
 	public void getListOfExistingClient() {
 		Client client = CLIENT;
 		String email = EMAIL;
-		
+
 		client.setEmail(email);
 		Message message = new Message();
 		message.setContent(CONTENT);
@@ -216,7 +216,7 @@ public class MessageServiceTests {
 		}
 		assertEquals("jierjrejee",messages.get(0).getContent());
 	}
-	
+
 	/**
 	 * checks if success sendMessage from service.
 	 */
@@ -240,7 +240,7 @@ public class MessageServiceTests {
 		}
 		assertEquals("a",message.getContent());
 	}
-	
+
 	/**
 	 * checks if can get list of messages with null client.
 	 */
@@ -262,13 +262,13 @@ public class MessageServiceTests {
 		}
 		assertEquals(error,"Account does not exist.");
 	}
-	
+
 	/**
 	 * checks if the can get a list of messages from a client that has no messages.
 	 */
 	@Test
 	public void checkGetMessagesClientHasNoMessages() {
-		
+
 		String cont = "a";
 		String email = EMAIL;
 		String aemail = ADMIN_EMAIL;
