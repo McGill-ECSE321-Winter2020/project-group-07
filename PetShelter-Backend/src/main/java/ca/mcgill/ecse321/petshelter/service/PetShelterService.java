@@ -3,9 +3,6 @@ package ca.mcgill.ecse321.petshelter.service;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
-
 import java.util.Collection;
 
 import java.util.Iterator;
@@ -585,7 +582,7 @@ public class PetShelterService {
 		if (picture == null || picture.equals("")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
 		}
-		if (reason == null || picture.equals("")) {
+		if (reason == null || reason.equals("") || reason.length() >= 1000) {
 			throw new IllegalArgumentException(ErrorMessages.invalidReason);
 		}
 		if (!profile.getIsLoggedIn()) {
@@ -593,12 +590,16 @@ public class PetShelterService {
 		}
 		
 		Posting posting = new Posting();
+		posting.setProfile(profile);
+		posting.setComment(null);
+		posting.setApplication(null);
 		posting.setDate(postDate);
 		posting.setPetName(petName);
 		posting.setPetDateOfBirth(dob);
 		posting.setPetBreed(breed);
 		posting.setPicture(picture);
 		posting.setDescription(reason);
+		posting.setId(profile.getEmail().hashCode()*postDate.hashCode());
 		postingRepository.save(posting);
 		return posting;
 	}
@@ -609,7 +610,9 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Posting updatePostingInfo() {
+	public Posting updatePostingInfo(String petName, Date dob, String breed, String picture,
+			String reason) {
+//		boolean invalid = petName == this.postingRepository.
 		return null;
 	}
 	
