@@ -60,19 +60,9 @@ public class CommentServiceTests {
 	private static final Date UNDERAGE_PROFILE_DOB = Date.valueOf("1992-01-01");
     private static final String PROFILE_EMAIL_LOGGEDIN = "muffin_man@gmail.com"; // Testing logged in account
     private static final String PROFILE_EMAIL_LOGGEDOUT = "muffin_woman@gmail.com"; // Testing logged out account
-    private static final String ADMIN_EMAIL = "pet_shelter@petshelter.com"; // Testing admin account
-    private static final String PROFILE_PASSWORD = "password1337";
-    private static final String PROFILE_PHONENUMBER = "5555555555";
-    private static final String PROFILE_ADDRESS = "1729 Drury Lane";
     private static final boolean PROFILE_LOGGEDIN = true; // Testing logged in account
     private static final boolean PROFILE_LOGGEDOUT = false; // Testing logged out account
     
-	// Dummy client attributes
-    private static final String CLIENT_FNAME = "Muffin"; 
-    private static final String CLIENT_LNAME = "Man";
-	
-	//Dummy admin attributes
-	//same as profile
 	
 	//Dummy posting attributes
 	private static final Date POSTING_DATE = Date.valueOf("1991-01-01");
@@ -82,15 +72,13 @@ public class CommentServiceTests {
 	private static final String POSTING_PETNAME = "Rex";
 	private static final String POSTING_PETBREED = "Rotweiler";
 	private static final Date POSTING_PETDOB = Date.valueOf("2006-01-01");
-	private static final List <Comment> POSTING_COMMENTS = new ArrayList <Comment>(); 
-	private static final List <Application> POSTING_APPLICATIONS = new ArrayList <Application>();
 	
 	//Dummy illegitimate attributes for creating a new comment
 	private static final Integer BAD_COMMENT_ID1= (Integer)2;
 	private static final Date UNDERAGE_COMMENT_DATE = Date.valueOf("1991-10-31");
 	private static final String NULL_COMMENT_CONTENT = "";
 	
-	private static final Integer BAD_COMMENT_ID2= (Integer)3;
+	private static final Integer BAD_COMMENT_ID2 = (Integer)3;
 	private static final Date NULL_COMMENT_DATE = null;
 	
 	
@@ -112,12 +100,6 @@ public class CommentServiceTests {
 	            client.setIsLoggedIn(PROFILE_LOGGEDIN);
 	            comment.setPosting(posting);
 	            posting.setDate(POSTING_DATE);
-//	            client.setPassword(PROFILE_PASSWORD);
-//	            client.setPhoneNumber(PROFILE_PHONENUMBER);
-//	            client.setAddress(PROFILE_ADDRESS);
-//	            client.setIsLoggedIn(PROFILE_LOGGEDIN);
-//	            client.setFirstName(CLIENT_FNAME);
-//	            client.setLastName(CLIENT_LNAME);
 	            return comment;
 	        } else  if(invocation.getArgument(0).equals(2)){
 	        	Comment comment = new Comment(); // Dummy comment
@@ -141,13 +123,14 @@ public class CommentServiceTests {
 	    		comment.setId(BAD_COMMENT_ID2);
 	    		comment.setContent(NULL_COMMENT_CONTENT);
 	    		comment.setDate(NULL_COMMENT_DATE);
+	    		comment.setPosting(posting);
 	            return comment;
 	        }else {
 	        	return null;
 	        }
 	    });
 		
-		// Whenever the profile is saved, just return the parameter object
+		// Whenever the comment is saved, just return the parameter object
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 	    };
@@ -243,6 +226,7 @@ public class CommentServiceTests {
 		Date date = COMMENT_DATE;
 		Client profile = new Client();
 		profile.setIsLoggedIn(PROFILE_LOGGEDOUT);
+		profile.setEmail(PROFILE_EMAIL_LOGGEDOUT);
 		profile.setDateOfBirth(PROFILE_DOB);
 		Posting posting = new Posting();
 		posting.setDate(POSTING_DATE);
@@ -313,6 +297,8 @@ public class CommentServiceTests {
 		posting.setDescription(POSTING_DESCRIPTION);
 		posting.setPicture(POSTING_PICTURE);
 		posting.setPetBreed(POSTING_PETBREED);
+		posting.setPetName(POSTING_PETNAME);
+		posting.setPetDateOfBirth(POSTING_PETDOB);
 		posting.setProfile(profile);
 		
 		List <Comment> commentList = new ArrayList<Comment>();
