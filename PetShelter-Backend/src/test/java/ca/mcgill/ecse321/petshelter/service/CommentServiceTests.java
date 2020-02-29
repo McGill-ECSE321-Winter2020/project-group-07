@@ -86,6 +86,7 @@ public class CommentServiceTests {
 	@BeforeEach
 	public void setMockOutput() {
 		// When finding a comment
+		
 		lenient().when(commentDAO.findCommentById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
 	        if(invocation.getArgument(0).equals(COMMENT_ID)) {
 	    		Comment comment = new Comment(); // Dummy comment

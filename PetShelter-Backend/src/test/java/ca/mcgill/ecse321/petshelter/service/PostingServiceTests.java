@@ -51,8 +51,6 @@ public class PostingServiceTests {
 	private static final String POSTING_PETNAME = "Rex";
 	private static final String POSTING_PETBREED = "Rotweiler";
 	private static final Date POSTING_PET_DOB = Date.valueOf("2006-01-01");
-	private static final List <Comment> POSTING_COMMENTS = new ArrayList <Comment>(); 
-	private static final List <Application> POSTING_APPLICATIONS = new ArrayList <Application>();
 	
 	private static final Integer POSTING_ID2 = (Integer)2;
 	private static final Date POSTING_DATE2 = Date.valueOf("1999-02-01");
@@ -61,8 +59,6 @@ public class PostingServiceTests {
 	private static final String POSTING_PETNAME2 = "Tino";
 	private static final String POSTING_PETBREED2 = "Labrador";
 	private static final Date POSTING_PET_DOB2 = Date.valueOf("2008-02-01");
-	private static final List <Comment> POSTING_COMMENTS2 = new ArrayList <Comment>(); 
-	private static final List <Application> POSTING_APPLICATIONS2 = new ArrayList <Application>();
 	
 	// Dummy client attributes
 	private static final Date CLIENT_DOB = Date.valueOf("1998-01-01");
