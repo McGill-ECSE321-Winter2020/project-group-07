@@ -44,6 +44,7 @@ Starts Feb 10, 2020
 * Documentation of RESTful services
 * Suite of unit tests for backend
 * Integration testing
+* Gradle task for integration testing
 * Test coverage
 
 ### Tasks completed by each member:
