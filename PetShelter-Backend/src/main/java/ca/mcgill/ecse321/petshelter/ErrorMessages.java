@@ -21,6 +21,15 @@ public class ErrorMessages {
     public static String logoutFailed = "Logout failed.";
     public static String permissionDenied = "You do not have permission to perform this operation.";
     public static String ClientHasNoMessages = "This client did not send any messages yet.";
+    
+    // Posting
+    public static String invalidDate = "Invalid date";
+    public static String invalidLoggedIn = "Profile is not logged in!";
+    public static String invalidPetName = "Invalid pet name";
+    public static String invalidBreed = "Invalid breed";
+    public static String invalidPicture = "Invalid picture";
+    public static String invalidReason = "Invalid reason";
+    public static String invalidPetDOB = "Invalid pet date of birth";
 
     // Comment
     public static String invalidPosting = "Invalid posting.";
