@@ -268,7 +268,7 @@ public class PetShelterRestController {
 	// Nicolas POST Mappings
 
 	//Commenting on a Posting
-		@PostMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
+		@PostMapping(value = { "/{posting}/comment", "/{posting}/comment/" })
 		public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
 				                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
 			
