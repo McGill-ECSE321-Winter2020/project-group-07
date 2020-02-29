@@ -7,7 +7,6 @@ import ca.mcgill.ecse321.petshelter.model.Client;
 /**
  * This class is for the data transfer object for donation,
  * implements all the getters and setters to create and use DTOs.
- * @author Alexander
  *
  */
 public class DonationDTO {

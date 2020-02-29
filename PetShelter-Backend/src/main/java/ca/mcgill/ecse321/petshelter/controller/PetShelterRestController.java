@@ -113,15 +113,8 @@ public class PetShelterRestController {
 		List<Donation> donations = service.getClientDonations(client);
 		return convertToDTODonations(donations);
 	}
-	//
-//	@GetMapping(value= {"/{message}/messages", "/{message}/messages/"})
-//	public List<MessageDTO> getMessages(@PathVariable("message") Posting posting) throws IllegalArgumentException{
-//		List<Message> messages = service.
-//	}
-	
 
 
-	
 
 	// Nicolas GET Mappings
 	
@@ -252,8 +245,8 @@ public class PetShelterRestController {
 		Message message = service.sendMessage(admin, client, content, date);
 		return convertToDTO(message);
 	}
-
-	@PostMapping(value = {"/sendmessage", "/sendmessage/"})
+	//update account
+	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
 	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
 			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
 			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
@@ -350,8 +343,9 @@ public class PetShelterRestController {
 		return applicationsDTO;
 	}
 	
+
+
 	// Alex ConvertToDTOs
-	
 
 	/**
 	 * 
