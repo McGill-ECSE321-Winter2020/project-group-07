@@ -20,12 +20,18 @@ public class ErrorMessages {
     public static String loginFailed = "Login failed.";
     public static String logoutFailed = "Logout failed.";
     public static String permissionDenied = "You do not have permission to perform this operation.";
+    public static String ClientHasNoMessages = "This client did not send any messages yet.";
+
+
 
     // Comment
     public static String invalidPosting = "Invalid posting.";
     public static String invalidProfile= "Invalid profile.";
+    public static String invalidProfileNotLoggedIn = "Cannot post a comment if not logged in.";
     public static String invalidContentComment = "Cannot post an empty comment.";
-    public static String invalidDateComment = "Cannot post a comment that defies the almighty law of physiscs that is Time.";
+    public static String invalidDateComment = "Cannot post a comment without a date.";
+    public static String invalidDateCommentPosting = "Cannot post a comment with a date before the creation date of the posting.";
+    public static String invalidDateCommentProfile = "Cannot post a comment with a date before the creation date of the profile.";
     
     //Application 
     public static String applicationDoesNotExist = "Requested application does not exist";
@@ -41,6 +47,7 @@ public class ErrorMessages {
     public static String negAmount = "Amount needs to be whole and positive number!";
     public static String incorrectCharacter = "Amount cannot be a letter or a special character!";
     public static String DateDonation = "No date for donation.";
+    public static String DateBefDOB = "The date specified is before the date of birth of the client.";
     
     //Messages
     public static String NoContent = "You need to write a message before sending it.";

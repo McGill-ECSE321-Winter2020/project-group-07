@@ -102,7 +102,6 @@ public class AdminServiceTests {
         });
         
         // Whenever the profile is saved, just return the parameter object
-        // Technically doesn't matter since the returned object after saving is never used directly
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
         };

@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 // Used for validation
@@ -49,7 +50,7 @@ public class PetShelterService {
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
-			String address, String firstName, String lastName) {
+							   String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		try {
@@ -258,7 +259,18 @@ public class PetShelterService {
 		throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 	}
 
-
+	/**
+	 * Method to be used when updating a client profile. From the frontend, the current information will be entered
+	 * and the user can modify it and confirm it.
+	 * @param client
+	 * @param password
+	 * @param phoneNumber
+	 * @param address
+	 * @param firstName
+	 * @param lastName
+	 * @param dob
+	 * @return Client
+	 */
 	@Transactional
 	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
 
@@ -271,25 +283,68 @@ public class PetShelterService {
 		return client;
 
 	}
+	
+	/**
+	 * method to get a donation with the id, returns null if doesnt exist.
+	 * @param Id
+	 * @return donation if exists or null
+	 */
+	@Transactional
+	public Donation getDonationbyId(Integer Id) {
+		
+		Donation donation=new Donation();
+		try {
+			donation = donationRepository.findById(Id).get();
+			return donation;
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
+	}
 
-
+	/**
+<<<<<<< HEAD
+<<<<<<< HEAD
+	 * Method to use when a donation is being sent, the amount needs to be an integer.
+	 * @param amount
+	 * @param client
+	 * @param date
+	 * @return Donation
+=======
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
+	 * Service method to send a donation.
+	 * @param amount
+	 * @param client
+	 * @param date
+	 * @return the donation to be sent
+<<<<<<< HEAD
+>>>>>>> added controller methods and javadoc
+=======
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
+	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
 
 
-		try {
+		
 			if(amount<=0) {
 				throw new IllegalArgumentException(ErrorMessages.negAmount);
 			}
+		
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		catch(IllegalArgumentException e) {
-			System.out.println(ErrorMessages.incorrectCharacter);
+		if(!client.getIsLoggedIn()) {
+			
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+			
+		}
+		if(date.before(client.dateOfBirth)) {
+			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
 
-
-		if(date == null) {
-			throw new IllegalArgumentException(ErrorMessages.DateDonation);
-		}
 
 		Donation donation = new Donation();
 		donation.setAmount(amount);
@@ -299,6 +354,32 @@ public class PetShelterService {
 		return donation;
 	}
 
+	/**
+<<<<<<< HEAD
+<<<<<<< HEAD
+	 * Method used when a message is being sent to admin, the content is checked,
+	 * if the content is repeated too frequently, the message will not be sent.
+	 * To avoid spamming the admin.
+=======
+	 * This is the service method to send messages to admin, checks for spamming.
+>>>>>>> added controller methods and javadoc
+=======
+	 * This is the service method to send messages to admin, checks for spamming.
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
+	 * @param admin
+	 * @param client
+	 * @param content
+	 * @param date
+<<<<<<< HEAD
+<<<<<<< HEAD
+	 * @return Message
+=======
+	 * @return message to be sent
+>>>>>>> added controller methods and javadoc
+=======
+	 * @return message to be sent
+>>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
+	 */
 	@Transactional
 	public Message sendMessage(Admin admin,Client client,String content,Date date) {
 
@@ -339,6 +420,38 @@ public class PetShelterService {
 		messageRepository.save(message);
 		return message;
 	}
+	
+	/**
+	 * This method returns all the messages a client sent since it created its account.
+	 * @param client
+	 * @return List<Message>, the list of all messages of the client
+	 */
+	@Transactional
+	public List<Message> getClientMessages(Client client){
+		
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(client.getMessages().size() == 0) {
+			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
+		}
+		return toList(client.getMessages());
+		
+	}
+	
+	
+	/**
+	 * Service method to get all the donations of a client.
+	 * @param client
+	 * @return list of donation with all the donations of a client
+	 */
+	@Transactional
+	public List<Donation> getClientDonations(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		return toList(client.getDonations());
+	}
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
@@ -350,6 +463,9 @@ public class PetShelterService {
 		if(profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 		}
+		if(!profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfileNotLoggedIn);
+		}
 		//check content is not just white spaces
 		String contentWhiteSpaceCheck = content.trim();
 		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
@@ -357,6 +473,12 @@ public class PetShelterService {
 		}
 		if(date == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+		}
+		if(date.before(profile.getDateOfBirth())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+		}
+		if(date.before(posting.getDate())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 		}
 
 
@@ -368,9 +490,41 @@ public class PetShelterService {
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode()*posting.getId()*date.hashCode());
 
-		commentRepository.save(comment);
+		comment = commentRepository.save(comment);
 		return comment;
 	}
+	
+	@Transactional
+	public List<Comment> getComments(Posting posting){
+		if(posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		List<Comment> allComments = toList(commentRepository.findAll());
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Comment comment: allComments) {
+			if(comment.getPosting().equals(posting)) {
+				String contentWhiteSpaceCheck = comment.getContent().trim();
+				if(comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
+				}
+				if(comment.getDate() == null) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
+				}
+				if(comment.getDate().before(comment.getProfile().getDateOfBirth())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
+				}
+				if(comment.getDate().before(comment.getPosting().getDate())) {
+					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
+				}
+				
+				//add only valid comments that are on that posting
+				
+				comments.add(comment);
+			}
+		}
+		return comments;
+	}
+	
 
 	@Transactional
 	public List<Posting> getOpenPostings(){
