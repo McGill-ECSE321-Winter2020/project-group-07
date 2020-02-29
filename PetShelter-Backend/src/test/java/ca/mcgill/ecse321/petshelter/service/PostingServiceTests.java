@@ -87,9 +87,7 @@ public class PostingServiceTests {
 		// When finding a posting
 		lenient().when(postingDAO.findPostingById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
 			if(invocation.getArgument(0).equals(1)) {
-				
-				
-				
+
 				return null;
 			}else {
 				return null;
@@ -159,18 +157,22 @@ public class PostingServiceTests {
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
-	
-	
-	// Create Posting tests
-	
-	
-	// Update Posting tests
-	
-
-	// Delete Posting tests
-	
-	
-	// Get Open Posting tests
+	// Test for if the profile is null 
+	@Test
+	public void testCreatePostingProfileNull() {
+		String error = null;
+		Posting posting = null;
+		try {
+			posting = service.createPosting(null, POSTING_DATE, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED, POSTING_PICTURE, POSTING_DESCRIPTION);
+		}
+		
+		catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(posting);
+		assertEquals(ErrorMessages.invalidProfile, error);
+		
+	}
 	
 	// open postings test
 	//check that only postings that don't have an accepted application are returned
