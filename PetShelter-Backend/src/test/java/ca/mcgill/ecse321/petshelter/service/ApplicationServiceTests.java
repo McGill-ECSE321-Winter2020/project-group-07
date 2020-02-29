@@ -10,7 +10,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,10 +144,53 @@ public class ApplicationServiceTests {
 //		assertEquals(ErrorMessages.applicationDoesNotExist, error);
 //	}
 
-	//Tests for the getPostingApplications() service method 
+	//Tests for the getPostingApplications() service method
+	//Test Main Case scenario
+	@Test
+	public void getPostingApplications() {
+		Posting posting = new Posting();
+		HashSet<Application> applications = new HashSet<>();
+		
+		Application app1 = new Application();
+		applications.add(app1);
+		Application app2 = new Application();
+		applications.add(app2);
+		Application app3 = new Application();
+		applications.add(app3);
+		Application app4 = new Application();
+		applications.add(app4);
+	
+		posting.setApplication(applications);
+		List<Application> appsList = service.toList(applications);
+		
+		List<Application> returnedList = null;
+		
+		try {
+			returnedList = service.getPostingApplications(posting);
+		} catch (Exception e) {
+			// Check no errors have occurred
+			fail();
+		}
+		
+		assertNotNull(returnedList);
+		assertEquals(appsList, returnedList);
+	}
+	
+	@Test
+	public void getPostingApplicationsNullPosting() {
+		String error = null;
+		ArrayList<Application> applications = null;
+		try {
+			applications = (ArrayList<Application>) service.getPostingApplications(null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(applications);
+		assertEquals(ErrorMessages.invalidPosting, error);
+	}
 	
 	//Tests for the rejectApplication() service method
-	
 	//Test Main Case scenario
 	@Test
 	public void TestRejectApplication() {
@@ -186,7 +231,6 @@ public class ApplicationServiceTests {
 	}
 	
 	//Tests for the approveApplication() service method
-	
 	//Test Main Case scenario
 	@Test
 	public void TestApproveApplication() {
@@ -257,7 +301,6 @@ public class ApplicationServiceTests {
 	}
 	
 	//Tests for the createApplication() service method
-	
 	//Test Main Case scenario
 	@Test
 	public void TestCreateApplication() {
