@@ -23,7 +23,6 @@ public class ErrorMessages {
     public static String ClientHasNoMessages = "This client did not send any messages yet.";
     
     // Posting
-    public static String invalidDate = "Invalid date";
     public static String invalidLoggedIn = "Profile is not logged in!";
     public static String invalidPetName = "Invalid pet name";
     public static String invalidBreed = "Invalid breed";

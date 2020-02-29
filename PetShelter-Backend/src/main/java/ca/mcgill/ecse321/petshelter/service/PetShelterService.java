@@ -435,21 +435,6 @@ public class PetShelterService {
 
 	}
 	
-	
-	 * Service method to get all messages of a client
-	 * @param client
-	 * @return List of all messages of a client
-	 */
-	@Transactional
-	public List<Message> getClientMessages(Client client){
-		if(client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		return toList(client.getMessages());
-		
-		
-	}
-	
 
 	/**
 	 * Service method to get all the donations of a client.
@@ -610,7 +595,7 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Posting updatePostingInfo(String petName, Date dob, String breed, String picture,
+	public Posting updatePostingInfo(String email, Date postDate, String petName, Date dob, String breed, String picture,
 			String reason) {
 //		boolean invalid = petName == this.postingRepository.
 		return null;
@@ -656,7 +641,7 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public boolean rejectApplication(Application application) {
+	public Application rejectApplication(Application application) {
 		if (application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
@@ -669,7 +654,7 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public boolean approveApplication(Application application) {
+	public Application approveApplication(Application application) {
 		/*
 		 * Called when the Profile that made the posting chooses the application that
 		 * will get the pet advertised in the posting. Status of this application is
