@@ -573,26 +573,25 @@ public class PetShelterService {
 		posting.setPicture(picture);
 		posting.setDescription(reason);
 		posting.setId(profile.getEmail().hashCode()*postDate.hashCode());
-		postingRepository.save(posting);
+		posting = postingRepository.save(posting);
 		return posting;
 	}
 
 	@Transactional
-	public Posting deletePosting(String email, Date postDate) {
-		Posting posting = getPosting(email,postDate);
+	public Posting deletePosting(Posting posting) { 
+		if (posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
 		postingRepository.delete(posting);
 		return posting;
 		
 	}
 
 	@Transactional
-	public Posting updatePostingInfo(String email, Date postDate, String petName, Date dob, String breed, String picture,
+	public Posting updatePostingInfo(Posting posting, String petName, Date dob, String breed, String picture,
 			String reason) {
-		
-		Posting posting = getPosting(email,postDate);
-		
-		if (postDate == null) {
-			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		if (posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
 		if (petName == null || petName.equals("") || !petName.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
@@ -616,11 +615,7 @@ public class PetShelterService {
 		posting.setPetBreed(breed);
 		posting.setPicture(picture);
 		posting.setDescription(reason);
-		Set<Comment> comments = new HashSet<>(getComments(posting));
-		posting.setComment(comments);
-		Set<Application> applications = new HashSet<>(getPostingApplications(posting));
-		posting.setApplication(applications);
-		postingRepository.save(posting);
+		posting = postingRepository.save(posting);
 		return posting;
 	}
 	

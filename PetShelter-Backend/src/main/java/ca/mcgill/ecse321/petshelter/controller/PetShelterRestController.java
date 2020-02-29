@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,86 +26,90 @@ public class PetShelterRestController {
 	@Autowired
 	private PetShelterService service;
 
-
-
-	// GET Mappings // 
+	// GET Mappings //
 
 	// Rahul GET Mappings
 	// Get client -- For someone viewing a profile page
-	@GetMapping(value = { "/profile", "/profile/" }) 
-	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException { 
+	@GetMapping(value = { "/profile", "/profile/" })
+	public ClientDTO getClientByEmail(@RequestParam("email") String email) throws IllegalArgumentException {
 		Client client = service.getClient(email);
 		if (client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		// On a profile page, people are able to view the dob, email, full name, and current postings of the user
-		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getIsLoggedIn(), client.getFirstName(), 
-									  client.getLastName(), convertToDTOPostings(service.toList(client.getPostings())));
+		// On a profile page, people are able to view the dob, email, full name, and
+		// current postings of the user
+		ClientDTO cDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getIsLoggedIn(),
+				client.getFirstName(), client.getLastName(),
+				convertToDTOPostings(service.toList(client.getPostings())));
 		return cDTO;
 	}
 
 	// Verifying login
-	@GetMapping(value = { "/login", "/login/" }) 
-	public ProfileDTO verifyCredentials(@RequestParam("email") String email, @RequestParam("password") String password) throws IllegalArgumentException { 
+	@GetMapping(value = { "/login", "/login/" })
+	public ProfileDTO verifyCredentials(@RequestParam("email") String email, @RequestParam("password") String password)
+			throws IllegalArgumentException {
 		if (service.profileLogin(email, password).getIsLoggedIn()) {
-			ProfileDTO profileDTO = convertToDTO(email, true); 
-			return profileDTO; 
+			ProfileDTO profileDTO = convertToDTO(email, true);
+			return profileDTO;
 		} else {
-			throw new IllegalArgumentException(ErrorMessages.loginFailed); // This really should never happen, but just in case
+			throw new IllegalArgumentException(ErrorMessages.loginFailed); // This really should never happen, but just
+																			// in case
 		}
 	}
 
-
 	// Youssef GET Mappings
 
-	@GetMapping(value = {"/posting-applications", "/posting-applications/"})
-	public List<ApplicationDTO> getPostingApplications(@RequestParam("owner_email") String owner_email, @RequestParam("posting_date") Date posting_date) throws IllegalArgumentException{
+	@GetMapping(value = { "/posting-applications", "/posting-applications/" })
+	public List<ApplicationDTO> getPostingApplications(@RequestParam("owner_email") String owner_email,
+			@RequestParam("posting_date") Date posting_date) throws IllegalArgumentException {
 		Posting posting = service.getPosting(owner_email, posting_date);
 		List<Application> applications = service.getPostingApplications(posting);
 		return convertToDTOApplications(applications);
 	}
-	
-	//TODO: add REST controller method for the get specific application 
 
-
+	// TODO: add REST controller method for the get specific application
 
 	// Alex GET Mappings
 	/**
 	 * Get all the messages of a client
+	 * 
 	 * @param client
 	 * @return list of DTO messages for a client.
 	 * @throws IllegalArgumentException
 	 */
-	@GetMapping(value= {"/{client}/messages", "/{client}/messages/"})
-	public List<MessageDTO> getMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
+	@GetMapping(value = { "/{client}/messages", "/{client}/messages/" })
+	public List<MessageDTO> getMessages(@PathVariable("client") Client client) throws IllegalArgumentException {
 		List<Message> messages = service.getClientMessages(client);
 		return convertToDTOMessage(messages);
 	}
-	
+
 	/**
 	 * get the information for a client that wants to update his profile.
+	 * 
 	 * @param client
 	 * @return clientDTO with the information that can be updated
 	 * @throws IllegalArgumentException
 	 */
-	@GetMapping(value = { "/{client}/updateprofile", "/{client}/updateprofile/" }) 
-	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
+	@GetMapping(value = { "/{client}/updateprofile", "/{client}/updateprofile/" })
+	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException {
 		if (client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
-				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(),
+				client.getLastName());
 		return clientDTO;
 	}
-	
+
 	/**
 	 * get all the donation of a client.
+	 * 
 	 * @param client
 	 * @return list of donationDTO
 	 * @throws IllegalArgumentException
 	 */
-	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
-	public List<DonationDTO> getClientDonations(@RequestParam("client") Client client) throws IllegalArgumentException { 
+	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" })
+	public List<DonationDTO> getClientDonations(@RequestParam("client") Client client) throws IllegalArgumentException {
 		if (client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
@@ -114,48 +117,42 @@ public class PetShelterRestController {
 		return convertToDTODonations(donations);
 	}
 
-
-
 	// Nicolas GET Mappings
-	
-	//Looking at all open Postings
-	@GetMapping(value = {"/view-open-postings", "/view-open-postings/"})
-	public List<PostingDTO> getOpenPostings() throws IllegalArgumentException{
-		
-		List <Posting> postings = service.getOpenPostings();
+
+	// Looking at all open Postings
+	@GetMapping(value = { "/view-open-postings", "/view-open-postings/" })
+	public List<PostingDTO> getOpenPostings() throws IllegalArgumentException {
+
+		List<Posting> postings = service.getOpenPostings();
 		return convertToDTOPostings(postings);
 	}
 
-	//Looking at all Comments on a Posting
-	@GetMapping(value = {"/{posting}/comments", "/{posting}/comments/"})
-	public List <CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException{
-		
-		List <Comment> comments = service.getComments(posting);
+	// Looking at all Comments on a Posting
+	@GetMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
+	public List<CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException {
+
+		List<Comment> comments = service.getComments(posting);
 		return convertToDTOComments(comments);
 	}
 
 	// Kaustav GET Mappings
 
-
-
-
-
-	// POST Mappings // 
+	// POST Mappings //
 
 	// Rahul POST Mappings
-	// Creating an account 
-	@PostMapping(value = { "/create-account", "/create-account/" }) 
-	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName, 
-									@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format "yyyy-mm-dd"
-									@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
-									@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
-		
-		// Changing date to SQL object
-        Date dob = Date.valueOf(dob_string);//converting string into sql date  
+	// Creating an account
+	@PostMapping(value = { "/create-account", "/create-account/" })
+	public ClientDTO registerClient(@RequestParam("email") String email, @RequestParam("firstName") String firstName,
+			@RequestParam("lastName") String lastName, @RequestParam("dob") String dob_string, // Will be in format
+																								// "yyyy-mm-dd"
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address,
+			@RequestParam("password") String password) throws IllegalArgumentException, ParseException {
 
-		Client client = service.createClient(dob, email, password, phoneNumber, 
-											 address, firstName, lastName);
-											 
+		// Changing date to SQL object
+		Date dob = Date.valueOf(dob_string);// converting string into sql date
+
+		Client client = service.createClient(dob, email, password, phoneNumber, address, firstName, lastName);
+
 		return convertToDTO(client.getEmail(), client.getPassword());
 	}
 
@@ -163,7 +160,7 @@ public class PetShelterRestController {
 	@PostMapping(value = { "/logout", "/logout/" })
 	public ProfileDTO logoutProfile(@RequestParam("email") String email) {
 		if (!service.profileLogout(email).getIsLoggedIn()) {
-			return convertToDTO(email, false); 
+			return convertToDTO(email, false);
 		} else {
 			throw new IllegalArgumentException("Logout failed."); // Really should never happen, but just incase
 		}
@@ -171,32 +168,30 @@ public class PetShelterRestController {
 
 	// Deleting an account
 	@PostMapping(value = { "/delete-account", "/delete-account/" })
-	public ProfileDTO deleteAccount(@RequestParam("deleterEmail") String deleterEmail, @RequestParam("deleteeEmail") String deleteeEmail) {
+	public ProfileDTO deleteAccount(@RequestParam("deleterEmail") String deleterEmail,
+			@RequestParam("deleteeEmail") String deleteeEmail) {
 		Client client = service.deleteClient(deleterEmail, deleteeEmail);
 		return convertToDTO(client.getEmail(), false);
 	}
 
-
-
-
 	// Youssef POST Mappings
 
-
-	@PostMapping(value = {"/createapplication", "/createapplication"})
-	public ApplicationDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date, @RequestParam("homeType") String homeType, @RequestParam("incomeRange") String incomeRange,
-			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
+	@PostMapping(value = { "/createapplication", "/createapplication" })
+	public ApplicationDTO createApplication(@RequestParam("client_email") String client_email,
+			@RequestParam("owner_email") String owner_email, @RequestParam Date posting_date,
+			@RequestParam("homeType") String homeType, @RequestParam("incomeRange") String incomeRange,
+			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException {
 		Client client = service.getClient(client_email);
 		Posting posting = service.getPosting(owner_email, posting_date);
 		HomeType ht = null;
 		IncomeRange ir = null;
-		//get enum variable from passed string
+		// get enum variable from passed string
 		try {
 			ht = HomeType.valueOf(homeType);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
 		}
-		//get enum variable from passed string
+		// get enum variable from passed string
 		try {
 			ir = IncomeRange.valueOf(incomeRange);
 		} catch (Exception e) {
@@ -205,106 +200,131 @@ public class PetShelterRestController {
 		Application application = service.createApplication(client, posting, ht, ir, numberOfResidents);
 		return convertToDTO(application);
 	}
-	
-	@PutMapping(value = {"/reject-application", "/reject-application/"})
-	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date) throws IllegalArgumentException{
+
+	@PutMapping(value = { "/reject-application", "/reject-application/" })
+	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email,
+			@RequestParam("owner_email") String owner_email, @RequestParam Date posting_date)
+			throws IllegalArgumentException {
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.rejectApplication(application);
 		return convertToDTO(application);
 	}
-	
-	@PutMapping(value = {"/approve-application", "/approve-application/"})
-	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date) throws IllegalArgumentException{
+
+	@PutMapping(value = { "/approve-application", "/approve-application/" })
+	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email,
+			@RequestParam("owner_email") String owner_email, @RequestParam Date posting_date)
+			throws IllegalArgumentException {
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.approveApplication(application);
 		return convertToDTO(application);
 	}
 
-
-
 	// Alex POST Mappings
-	
-	//send Donation
-	@PostMapping(value = {"/senddonation", "/senddonation/"})
-	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount, 
-			@RequestParam("date") Date date) throws IllegalArgumentException{
-		
+
+	// send Donation
+	@PostMapping(value = { "/senddonation", "/senddonation/" })
+	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount,
+			@RequestParam("date") Date date) throws IllegalArgumentException {
+
 		Donation donation = service.sendDonation(amount, client, date);
 		return convertToDTO(donation);
 	}
-	
-	//send message
-	@PostMapping(value = { "/sendmessage", "/sendmessage/"})
+
+	// send message
+	@PostMapping(value = { "/sendmessage", "/sendmessage/" })
 	public MessageDTO sendMessage(@RequestParam("client") Client client, @RequestParam("date") Date date,
-			@RequestParam("content") String content, @RequestParam("admin") Admin admin) throws IllegalArgumentException{
-		
+			@RequestParam("content") String content, @RequestParam("admin") Admin admin)
+			throws IllegalArgumentException {
+
 		Message message = service.sendMessage(admin, client, content, date);
 		return convertToDTO(message);
 	}
-	//update account
-	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
-	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
-			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
-			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
-		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName, dob);
+
+	// update account
+	@PostMapping(value = { "/updateprofile", "/updateprofile/" })
+	public ProfileDTO updateClientProfile(@RequestParam("client") Client client,
+			@RequestParam("password") String password, @RequestParam("phonenumber") String phoneNumber,
+			@RequestParam("address") String address, @RequestParam("firstname") String firstName,
+			@RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException {
+		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName,
+				dob);
 		return convertToDTO(currClient);
 	}
 
-
-
-
 	// Nicolas POST Mappings
 
-	//Commenting on a Posting
-		@PostMapping(value = { "/{posting}/comment", "/{posting}/comment/" })
-		public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile, @RequestParam("posting") Posting posting,
-				                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
-			
-			
-			Date date = Date.valueOf(dateString);
-			
-			Comment comment = service.commentOnPosting(profile, posting, content, date);
-			return convertToDTO(comment);
-		}
+	// Commenting on a Posting
+	@PostMapping(value = { "/{posting}/comment", "/{posting}/comment/" })
+	public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile,
+			@RequestParam("posting") Posting posting, @RequestParam("content") String content,
+			@RequestParam("date") String dateString) throws IllegalArgumentException {
+
+		Date date = Date.valueOf(dateString);
+
+		Comment comment = service.commentOnPosting(profile, posting, content, date);
+		return convertToDTO(comment);
+	}
 
 	// Kaustav POST Mappings
 
+//		@PostMapping(value = {"/createposting", "/createposting/"})
+//		public PostingDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
+//				@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob, @RequestParam("description") String description,
+//				@RequestParam picture 
+//				@RequestParam("breed") String breed) throws IllegalArgumentException{
+//			Client client = service.getClient(client_email);
+//			Posting posting = service.getPosting(owner_email, posting_date);
+//			HomeType ht = null;
+//			IncomeRange ir = null;
+//			//get enum variable from passed string
+//			try {
+//				ht = HomeType.valueOf(homeType);
+//			} catch (Exception e) {
+//				throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
+//			}
+//			//get enum variable from passed string
+//			try {
+//				ir = IncomeRange.valueOf(incomeRange);
+//			} catch (Exception e) {
+//				throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
+//			}
+//			Application application = service.createApplication(client, posting, ht, ir, numberOfResidents);
+//			return convertToDTO(application);
+//		}
 
+	// Convert to DTO functions //
 
-
-
-	// Convert to DTO functions // 
-	
-	//Client Convert to DTOs
+	// Client Convert to DTOs
 
 	// For viewing your own profile page -- Happens when you go to your page
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, List<PostingDTO> postings, 
-			List<CommentDTO> comments, String firstName, String lastName, List<DonationDTO> donations, 
-			List<MessageDTO> messages, List<ApplicationDTO> applications, boolean isLoggedIn) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, isLoggedIn, firstName, lastName, 
-				donations, messages, applications);
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address,
+			List<PostingDTO> postings, List<CommentDTO> comments, String firstName, String lastName,
+			List<DonationDTO> donations, List<MessageDTO> messages, List<ApplicationDTO> applications,
+			boolean isLoggedIn) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, postings, comments, isLoggedIn, firstName,
+				lastName, donations, messages, applications);
 		return clientDTO;
 	}
 
 	// For viewing people's profile pages
-	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName, List<PostingDTO> postings) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings); 
-		return clientDTO; 
+	private ClientDTO convertToDTO(Date dob, String email, boolean isLoggedIn, String firstName, String lastName,
+			List<PostingDTO> postings) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, isLoggedIn, firstName, lastName, postings);
+		return clientDTO;
 	}
 
 	// For the person who posted your accepted application
-	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, boolean isLoggedIn, String firstName, String lastName) {
-		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, isLoggedIn, firstName, lastName); 
-		return clientDTO; 
+	private ClientDTO convertToDTO(Date dob, String email, String phoneNumber, String address, boolean isLoggedIn,
+			String firstName, String lastName) {
+		ClientDTO clientDTO = new ClientDTO(dob, email, phoneNumber, address, isLoggedIn, firstName, lastName);
+		return clientDTO;
 	}
 
 	// For updating profile information
-	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address, boolean isLoggedIn, String firstName, 
-			String lastName) {
+	private ClientDTO convertToDTO(Date dob, String email, String password, String phoneNumber, String address,
+			boolean isLoggedIn, String firstName, String lastName) {
 		ClientDTO clientDTO = new ClientDTO(dob, password, phoneNumber, address, isLoggedIn, firstName, lastName);
 		return clientDTO;
 	}
@@ -317,10 +337,7 @@ public class PetShelterRestController {
 		return clientDTO;
 	}
 
-
-
-	//Application Convert to DTOs
-
+	// Application Convert to DTOs
 
 	private ApplicationDTO convertToDTO(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
@@ -329,21 +346,20 @@ public class PetShelterRestController {
 		applicationDTO.setStatus(application.getStatus());
 		applicationDTO.setNumberOfResidents(application.getNumberOfResidents());
 		applicationDTO.setPosting(application.getPosting());
-		Client client = application.getClient(); 
-		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
+		Client client = application.getClient();
+		applicationDTO.setClientDTO(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(),
+				client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
 		applicationDTO.setId(application.getId());
 		return applicationDTO;
 	}
 
-	private List<ApplicationDTO> convertToDTOApplications(List<Application> applications){
+	private List<ApplicationDTO> convertToDTOApplications(List<Application> applications) {
 		List<ApplicationDTO> applicationsDTO = new ArrayList<>();
-		for(Application application : applications) {
+		for (Application application : applications) {
 			applicationsDTO.add(convertToDTO(application));
 		}
 		return applicationsDTO;
 	}
-	
-
 
 	// Alex ConvertToDTOs
 
@@ -355,42 +371,45 @@ public class PetShelterRestController {
 	private MessageDTO convertToDTO(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setAdmin(message.getAdmin());
-		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(),message.getClient().getEmail(), message.getClient().getPhoneNumber(), 
-				message.getClient().getAddress(), message.getClient().getIsLoggedIn(),
-				message.getClient().getFirstName(),message.getClient().getLastName()));
+		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(), message.getClient().getEmail(),
+				message.getClient().getPhoneNumber(), message.getClient().getAddress(),
+				message.getClient().getIsLoggedIn(), message.getClient().getFirstName(),
+				message.getClient().getLastName()));
 		messageDTO.setContent(message.getContent());
 		messageDTO.setDate(message.getDate());
 		messageDTO.setId(message.getId());
 		return messageDTO;
-		
+
 	}
 
 	/**
 	 * 
-	 * @param messages, a list of messages you want to convert to a list of messageDTO
+	 * @param messages, a list of messages you want to convert to a list of
+	 *                  messageDTO
 	 * @return list of messageDTO
 	 */
-	private List<MessageDTO> convertToDTOMessage(List<Message> messages){
+	private List<MessageDTO> convertToDTOMessage(List<Message> messages) {
 		List<MessageDTO> messageDTO = new ArrayList<>();
-		for(Message message : messages) {
+		for (Message message : messages) {
 			messageDTO.add(convertToDTO(message));
 		}
 		return messageDTO;
 	}
-	
+
 	/**
 	 * converts a list of messages to a list of messagesDTO
+	 * 
 	 * @param donations
 	 * @return list<DonationDTO>
 	 */
-	private List<DonationDTO> convertToDTODonations(List<Donation> donations){
+	private List<DonationDTO> convertToDTODonations(List<Donation> donations) {
 		List<DonationDTO> donationsDTO = new ArrayList<>();
-		for(Donation donation : donations) {
+		for (Donation donation : donations) {
 			donationsDTO.add(convertToDTO(donation));
 		}
 		return donationsDTO;
 	}
-	
+
 	/**
 	 * 
 	 * @param donation, that you want to convert to donationDTO
@@ -400,13 +419,12 @@ public class PetShelterRestController {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
 		Client client = donation.getClient();
-		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getPhoneNumber(), 
-				client.getAddress(), client.getIsLoggedIn(),
-				client.getFirstName(),client.getLastName()));
+		donDTO.setClient(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(),
+				client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
 		return donDTO;
 	}
-	
-	//Comment Convert to DTOs
+
+	// Comment Convert to DTOs
 
 	private CommentDTO convertToDTO(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getDate(), convertToDTO(comment.getProfile()),
@@ -414,35 +432,35 @@ public class PetShelterRestController {
 		return commentDTO;
 	}
 
-
-	private List<CommentDTO> convertToDTOComments(List<Comment> comments){
+	private List<CommentDTO> convertToDTOComments(List<Comment> comments) {
 		List<CommentDTO> commentsDTO = new ArrayList<CommentDTO>();
-		for(Comment comment : comments) {
+		for (Comment comment : comments) {
 			commentsDTO.add(convertToDTO(comment));
 		}
 		return commentsDTO;
 	}
-	
-	//Posting Convert to DTOs
+
+	// Posting Convert to DTOs
 
 	private PostingDTO convertToDTO(Posting posting) {
 		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
-				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),convertToDTO(posting.getProfile()),
-				convertToDTOApplications(service.toList(posting.getApplication())), convertToDTOComments(service.toList(posting.getComment())));
+				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),
+				convertToDTO(posting.getProfile()), convertToDTOApplications(service.toList(posting.getApplication())),
+				convertToDTOComments(service.toList(posting.getComment())));
 		return postingDTO;
 	}
 
-	private List<PostingDTO> convertToDTOPostings(List<Posting> postings){
+	private List<PostingDTO> convertToDTOPostings(List<Posting> postings) {
 		List<PostingDTO> postingsDTO = new ArrayList<>();
-		for(Posting posting : postings) {
+		for (Posting posting : postings) {
 			postingsDTO.add(convertToDTO(posting));
 		}
 		return postingsDTO;
 	}
-	
-	//Profile Convert to DTOs
-	
-	//needed for messages and comments
+
+	// Profile Convert to DTOs
+
+	// needed for messages and comments
 	private ProfileDTO convertToDTO(Profile profile) {
 		ProfileDTO profileDTO = new ProfileDTO();
 		profileDTO.setEmail(profile.getEmail());
@@ -453,7 +471,7 @@ public class PetShelterRestController {
 		return profileDTO;
 	}
 
-	//For logging in 
+	// For logging in
 	private ProfileDTO convertToDTO(String email, boolean isLoggedIn) {
 		ProfileDTO profileDTO = new ProfileDTO();
 		profileDTO.setEmail(email);
