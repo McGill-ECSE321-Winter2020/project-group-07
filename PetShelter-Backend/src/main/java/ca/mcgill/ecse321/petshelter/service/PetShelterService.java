@@ -504,7 +504,7 @@ public class PetShelterService {
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode() * posting.getId() * date.hashCode());
 
-		commentRepository.save(comment);
+		comment = commentRepository.save(comment);
 		return comment;
 	}
 
