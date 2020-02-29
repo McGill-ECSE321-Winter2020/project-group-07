@@ -309,25 +309,6 @@ public class PetShelterService {
 	}
 
 	/**
-	 * method to get a donation with the id, returns null if doesnt exist.
-	 * 
-	 * @param Id
-	 * @return donation if exists or null
-	 */
-	@Transactional
-	public Donation getDonationbyId(Integer Id) {
-
-		Donation donation = new Donation();
-		try {
-			donation = donationRepository.findById(Id).get();
-			return donation;
-		} catch (Exception e) {
-			return null;
-		}
-
-	}
-
-	/**
 	 * Method to use when a donation is being sent, the amount needs to be an
 	 * integer.
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
@@ -454,41 +435,7 @@ public class PetShelterService {
 		}
 		return toList(client.getDonations());
 	}
-
-	/**
-	 * This method returns all the messages a client sent since it created its
-	 * account.
-	 * 
-	 * @param client
-	 * @return List<Message>, the list of all messages of the client
-	 */
-	@Transactional
-	public List<Message> getClientMessages(Client client) {
-
-		if (client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		if (client.getMessages().size() == 0) {
-			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
-		}
-		return toList(client.getMessages());
-
-	}
 	
-
-	/**
-	 * Service method to get all the donations of a client.
-	 * 
-	 * @param client
-	 * @return list of donation with all the donations of a client
-	 */
-	@Transactional
-	public List<Donation> getClientDonations(Client client) {
-		if (client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		return toList(client.getDonations());
-	}
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
@@ -555,38 +502,6 @@ public class PetShelterService {
 				
 				//add only valid comments that are on that posting
 				
-				comments.add(comment);
-			}
-		}
-		return comments;
-	}
-	
-
-	@Transactional
-	public List<Comment> getComments(Posting posting) {
-		if (posting == null) {
-			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
-		}
-		List<Comment> allComments = toList(commentRepository.findAll());
-		List<Comment> comments = new ArrayList<Comment>();
-		for (Comment comment : allComments) {
-			if (comment.getPosting().equals(posting)) {
-				String contentWhiteSpaceCheck = comment.getContent().trim();
-				if (comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
-					throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
-				}
-				if (comment.getDate() == null) {
-					throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
-				}
-				if (comment.getDate().before(comment.getProfile().getDateOfBirth())) {
-					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
-				}
-				if (comment.getDate().before(comment.getPosting().getDate())) {
-					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
-				}
-
-				// add only valid comments that are on that posting
-
 				comments.add(comment);
 			}
 		}
