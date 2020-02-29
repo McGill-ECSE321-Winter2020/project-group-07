@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import java.util.Collection;
-
+import java.util.HashSet;
 import java.util.Iterator;
 
 import java.util.List;
@@ -278,7 +278,7 @@ public class PetShelterService {
 	@Transactional
 	public Client updateClientProfile(Client client, String password, String phoneNumber, String address,
 			String firstName, String lastName, Date dob) {
-
+		
 		client.setAddress(address);
 		client.setDateOfBirth(dob);
 		client.setPassword(password);
@@ -542,13 +542,14 @@ public class PetShelterService {
 		if (postDate == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
-		if (petName == null || petName.equals("") || petName.matches("^[a-zA-Z]*$")) {
+		if (petName == null || petName.equals("") || !petName.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
 		}
-		if (dob == null) {
+		Date rightNow = new Date(System.currentTimeMillis());
+		if (dob == null || dob.compareTo(rightNow) >= 0) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
 		}
-		if (breed == null || breed.equals("") || breed.matches("^[a-zA-Z]*$")) {
+		if (breed == null || breed.equals("") || !breed.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
 		}
 		if (picture == null || picture.equals("")) {
@@ -577,15 +578,50 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Posting deletePosting() {
-		return null;
+	public Posting deletePosting(String email, Date postDate) {
+		Posting posting = getPosting(email,postDate);
+		postingRepository.delete(posting);
+		return posting;
+		
 	}
 
 	@Transactional
 	public Posting updatePostingInfo(String email, Date postDate, String petName, Date dob, String breed, String picture,
 			String reason) {
-//		boolean invalid = petName == this.postingRepository.
-		return null;
+		
+		Posting posting = getPosting(email,postDate);
+		
+		if (postDate == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		if (petName == null || petName.equals("") || !petName.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
+		}
+		Date rightNow = new Date(System.currentTimeMillis());
+		if (dob == null || dob.compareTo(rightNow) >= 0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
+		}
+		if (breed == null || breed.equals("") || !breed.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
+		}
+		if (picture == null || picture.equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
+		}
+		if (reason == null || reason.equals("") || reason.length() >= 1000) {
+			throw new IllegalArgumentException(ErrorMessages.invalidReason);
+		}
+		
+		posting.setPetName(petName);
+		posting.setPetDateOfBirth(dob);
+		posting.setPetBreed(breed);
+		posting.setPicture(picture);
+		posting.setDescription(reason);
+		Set<Comment> comments = new HashSet<>(getComments(posting));
+		posting.setComment(comments);
+		Set<Application> applications = new HashSet<>(getPostingApplications(posting));
+		posting.setApplication(applications);
+		postingRepository.save(posting);
+		return posting;
 	}
 	
 	@Transactional
