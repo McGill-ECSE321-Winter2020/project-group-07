@@ -59,57 +59,50 @@ public class PetShelterRestController {
 
 	// Youssef GET Mappings
 
+	// to view all the applications on a posting 
 	@GetMapping(value = {"/posting-applications", "/posting-applications/"})
-	public List<ApplicationDTO> getPostingApplications(@RequestParam("owner_email") String owner_email, @RequestParam("posting_date") Date posting_date) throws IllegalArgumentException{
+	public List<ApplicationDTO> getPostingApplications(@RequestParam("owner_email") String owner_email, 
+													   @RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException{
+		Date posting_date = Date.valueOf(posting_date_string);
 		Posting posting = service.getPosting(owner_email, posting_date);
 		List<Application> applications = service.getPostingApplications(posting);
 		return convertToDTOApplications(applications);
 	}
 	
-	//TODO: add REST controller method for the get specific application 
-
-
+	// to view a specific application on a posting 
+	@GetMapping(value = {"/application", "/applications/"})
+	public ApplicationDTO getSpecificApplication(@RequestParam("applicant_email") String applicant_email,
+												 @RequestParam("owner_email") String owner_email, 
+												 @RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException {
+		Date posting_date = Date.valueOf(posting_date_string);
+		Posting posting = service.getPosting(owner_email, posting_date);
+		Application application = service.getApplication(applicant_email, posting);
+		return convertToDTO(application);
+	}
 
 	// Alex GET Mappings
-	/**
-	 * Get all the messages of a client
-	 * @param client
-	 * @return list of DTO messages for a client.
-	 * @throws IllegalArgumentException
-	 */
-	@GetMapping(value= {"/{client}/messages", "/{client}/messages/"})
-	public List<MessageDTO> getMessages(@PathVariable("client") Client client) throws IllegalArgumentException{
+	@GetMapping(value= {"/client-messages", "/client-messages/"})
+	public List<MessageDTO> getMessages(@RequestParam("client_email") String client_email) throws IllegalArgumentException{
+		Client client = service.getClient(client_email);
 		List<Message> messages = service.getClientMessages(client);
 		return convertToDTOMessage(messages);
 	}
 	
-	/**
-	 * get the information for a client that wants to update his profile.
-	 * @param client
-	 * @return clientDTO with the information that can be updated
-	 * @throws IllegalArgumentException
-	 */
-	@GetMapping(value = { "/{client}/updateprofile", "/{client}/updateprofile/" }) 
-	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
-		if (client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
-				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
-		return clientDTO;
-	}
+	//TODO: check if this method is needed, it seems to be already implemented by Rahul's getClientByEmail
+//	@GetMapping(value = { "client-updateprofile", "client-updateprofile/" }) 
+//	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
+//		if (client == null) {
+//			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+//		}
+//		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
+//				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
+//		return clientDTO;
+//	}
 	
-	/**
-	 * get all the donation of a client.
-	 * @param client
-	 * @return list of donationDTO
-	 * @throws IllegalArgumentException
-	 */
+	
 	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
-	public List<DonationDTO> getClientDonations(@RequestParam("client") Client client) throws IllegalArgumentException { 
-		if (client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
+	public List<DonationDTO> getClientDonations(@RequestParam("client_email") String client_email) throws IllegalArgumentException { 
+		Client client = service.getClient(client_email);
 		List<Donation> donations = service.getClientDonations(client);
 		return convertToDTODonations(donations);
 	}
@@ -182,11 +175,12 @@ public class PetShelterRestController {
 	// Youssef POST Mappings
 
 
-	@PostMapping(value = {"/createapplication", "/createapplication"})
+	@PostMapping(value = {"/create-application", "/create-application"})
 	public ApplicationDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date, @RequestParam("homeType") String homeType, @RequestParam("incomeRange") String incomeRange,
-			@RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
+											@RequestParam("posting_date") String posting_date_string, @RequestParam("homeType") String homeType, 
+											@RequestParam("incomeRange") String incomeRange, @RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
+		Date posting_date = Date.valueOf(posting_date_string);
 		Posting posting = service.getPosting(owner_email, posting_date);
 		HomeType ht = null;
 		IncomeRange ir = null;
@@ -207,8 +201,10 @@ public class PetShelterRestController {
 	}
 	
 	@PutMapping(value = {"/reject-application", "/reject-application/"})
-	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date) throws IllegalArgumentException{
+	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, 
+											@RequestParam("owner_email") String owner_email, 
+											@RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException{
+		Date posting_date = Date.valueOf(posting_date_string);
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.rejectApplication(application);
@@ -216,8 +212,10 @@ public class PetShelterRestController {
 	}
 	
 	@PutMapping(value = {"/approve-application", "/approve-application/"})
-	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-			@RequestParam Date posting_date) throws IllegalArgumentException{
+	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, 
+											@RequestParam("owner_email") String owner_email, 
+											@RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException{
+		Date posting_date = Date.valueOf(posting_date_string);
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.approveApplication(application);
@@ -230,26 +228,37 @@ public class PetShelterRestController {
 	
 	//send Donation
 	@PostMapping(value = {"/senddonation", "/senddonation/"})
-	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount, 
-			@RequestParam("date") Date date) throws IllegalArgumentException{
-		
+	public DonationDTO sendDonation(@RequestParam("client_email") String client_email, 
+									@RequestParam("amount") Integer amount, 
+									@RequestParam("date") String date_string) throws IllegalArgumentException{
+		Client client = service.getClient(client_email);
+		Date date = Date.valueOf(date_string);
 		Donation donation = service.sendDonation(amount, client, date);
 		return convertToDTO(donation);
 	}
 	
 	//send message
 	@PostMapping(value = { "/sendmessage", "/sendmessage/"})
-	public MessageDTO sendMessage(@RequestParam("client") Client client, @RequestParam("date") Date date,
-			@RequestParam("content") String content, @RequestParam("admin") Admin admin) throws IllegalArgumentException{
-		
+	public MessageDTO sendMessage(@RequestParam("client_email") String client_email, 
+								  @RequestParam("date") String date_string,
+								  @RequestParam("content") String content, 
+								  @RequestParam("admin") Admin admin) throws IllegalArgumentException{
+		Client client = service.getClient(client_email);
+		Date date = Date.valueOf(date_string);
 		Message message = service.sendMessage(admin, client, content, date);
 		return convertToDTO(message);
 	}
 	//update account
 	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
-	public ProfileDTO updateClientProfile(@RequestParam("client") Client client, @RequestParam("password") String password,
-			@RequestParam("phonenumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("firstname")
-			String firstName, @RequestParam("lastname") String lastName, @RequestParam("dob") Date dob) throws IllegalArgumentException{
+	public ProfileDTO updateClientProfile(@RequestParam("client_email") String client_email,  
+										  @RequestParam("password") String password,
+										  @RequestParam("phonenumber") String phoneNumber, 
+										  @RequestParam("address") String address, 
+										  @RequestParam("firstname") String firstName, 
+										  @RequestParam("lastname") String lastName, 
+										  @RequestParam("dob") String dob_string) throws IllegalArgumentException{
+		Client client = service.getClient(client_email);
+		Date dob = Date.valueOf(dob_string);
 		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName, dob);
 		return convertToDTO(currClient);
 	}
