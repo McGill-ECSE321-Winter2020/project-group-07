@@ -249,7 +249,7 @@ public class PetShelterRestController {
 		return convertToDTO(message);
 	}
 	//update account
-	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
+	@PutMapping(value = {"/updateprofile", "/updateprofile/"})
 	public ProfileDTO updateClientProfile(@RequestParam("client_email") String client_email,  
 										  @RequestParam("password") String password,
 										  @RequestParam("phonenumber") String phoneNumber, 
