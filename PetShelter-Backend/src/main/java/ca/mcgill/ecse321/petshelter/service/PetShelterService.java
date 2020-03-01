@@ -312,25 +312,6 @@ public class PetShelterService {
 	}
 
 	/**
-	 * method to get a donation with the id, returns null if doesnt exist.
-	 * @param Id
-	 * @return donation if exists or null
-	 */
-	@Transactional
-	public Donation getDonationbyId(Integer Id) {
-
-		Donation donation=new Donation();
-		try {
-			donation = donationRepository.findDonationById(Id);
-			return donation;
-		}
-		catch(Exception e) {
-			return null;
-		}
-
-	}
-
-	/**
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
 	 * @param client
@@ -344,32 +325,44 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
-
-
-
 		if(amount<=0) {
 			throw new IllegalArgumentException(ErrorMessages.negAmount);
 		}
-
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		if(!client.getIsLoggedIn()) {
-
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
-
+		}		
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
 		if(date.before(client.dateOfBirth)) {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
-
-
 		Donation donation = new Donation();
 		donation.setAmount(amount);
 		donation.setClient(client);
+		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
 		donation = donationRepository.save(donation);
 		return donation;
+	}
+	
+	/**
+	 * Service method to get all the donations of a client.
+	 * @param client
+	 * @return list of donation with all the donations of a client
+	 */
+	@Transactional
+	public List<Donation> getClientDonations(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		return toList(client.getDonations());
 	}
 
 	/**
@@ -436,18 +429,6 @@ public class PetShelterService {
 
 	}
 
-	/**
-	 * Service method to get all the donations of a client.
-	 * @param client
-	 * @return list of donation with all the donations of a client
-	 */
-	@Transactional
-	public List<Donation> getClientDonations(Client client){
-		if(client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		return toList(client.getDonations());
-	}
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
