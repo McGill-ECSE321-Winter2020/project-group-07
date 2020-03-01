@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.AdminRepository;
+import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
 import ca.mcgill.ecse321.petshelter.dao.MessageRepository;
 import ca.mcgill.ecse321.petshelter.model.Admin;
 import ca.mcgill.ecse321.petshelter.model.Client;
@@ -31,6 +33,14 @@ public class MessageServiceTests {
 
 	@Mock
 	private MessageRepository messageDao;
+	
+	@Mock
+	private ClientRepository clientDao;
+	
+	@Mock
+	private AdminRepository adminDao;
+	
+	
 	@InjectMocks
 	private PetShelterService service;
 	
@@ -49,6 +59,8 @@ public class MessageServiceTests {
 		};
 
 		lenient().when(messageDao.save(any(Message.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(clientDao.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(adminDao.save(any(Admin.class))).thenAnswer(returnParameterAsAnswer);
 
 	}
 

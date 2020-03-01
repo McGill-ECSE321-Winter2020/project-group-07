@@ -100,7 +100,7 @@ public class PetShelterRestController {
 //	}
 	
 	
-	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
+	@GetMapping(value = { "/client-donations", "/client-donations/" }) 
 	public List<DonationDTO> getClientDonations(@RequestParam("client_email") String client_email) throws IllegalArgumentException { 
 		Client client = service.getClient(client_email);
 		List<Donation> donations = service.getClientDonations(client);
@@ -172,7 +172,12 @@ public class PetShelterRestController {
 											@RequestParam("posting_date") String posting_date_string, @RequestParam("homeType") String homeType, 
 											@RequestParam("incomeRange") String incomeRange, @RequestParam("numberOfResidents") Integer numberOfResidents) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
-		Date posting_date = Date.valueOf(posting_date_string);
+		Date posting_date = null;
+		try {			
+			posting_date = Date.valueOf(posting_date_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Posting posting = service.getPosting(owner_email, posting_date);
 		HomeType ht = null;
 		IncomeRange ir = null;
@@ -196,7 +201,12 @@ public class PetShelterRestController {
 	public ApplicationDTO rejectApplication(@RequestParam("client_email") String client_email, 
 											@RequestParam("owner_email") String owner_email, 
 											@RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException{
-		Date posting_date = Date.valueOf(posting_date_string);
+		Date posting_date = null;
+		try {			
+			posting_date = Date.valueOf(posting_date_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.rejectApplication(application);
@@ -207,7 +217,12 @@ public class PetShelterRestController {
 	public ApplicationDTO acceptApplication(@RequestParam("client_email") String client_email, 
 											@RequestParam("owner_email") String owner_email, 
 											@RequestParam("posting_date") String posting_date_string) throws IllegalArgumentException{
-		Date posting_date = Date.valueOf(posting_date_string);
+		Date posting_date = null;
+		try {			
+			posting_date = Date.valueOf(posting_date_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Posting posting = service.getPosting(owner_email, posting_date);
 		Application application = service.getApplication(client_email, posting);
 		application = service.approveApplication(application);
@@ -222,7 +237,12 @@ public class PetShelterRestController {
 									@RequestParam("amount") Integer amount, 
 									@RequestParam("date") String date_string) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
-		Date date = Date.valueOf(date_string);
+		Date date = null;
+		try {			
+			date = Date.valueOf(date_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Donation donation = service.sendDonation(amount, client, date);
 		return convertToDTO(donation);
 	}
@@ -234,12 +254,17 @@ public class PetShelterRestController {
 								  @RequestParam("content") String content, 
 								  @RequestParam("admin") Admin admin) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
-		Date date = Date.valueOf(date_string);
+		Date date = null;
+		try {			
+			date = Date.valueOf(date_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Message message = service.sendMessage(admin, client, content, date);
 		return convertToDTO(message);
 	}
 	//update account
-	@PostMapping(value = {"/updateprofile", "/updateprofile/"})
+	@PutMapping(value = {"/updateprofile", "/updateprofile/"})
 	public ProfileDTO updateClientProfile(@RequestParam("client_email") String client_email,  
 										  @RequestParam("password") String password,
 										  @RequestParam("phonenumber") String phoneNumber, 
@@ -248,7 +273,12 @@ public class PetShelterRestController {
 										  @RequestParam("lastname") String lastName, 
 										  @RequestParam("dob") String dob_string) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
-		Date dob = Date.valueOf(dob_string);
+		Date dob = null;
+		try {			
+			dob = Date.valueOf(dob_string);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
 		Profile currClient = service.updateClientProfile(client, password, phoneNumber, address, firstName, lastName, dob);
 		return convertToDTO(currClient);
 	}
@@ -458,9 +488,17 @@ public class PetShelterRestController {
 	private DonationDTO convertToDTO(Donation donation) {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
+		donDTO.setId(donation.getId());
+		
 		Client client = donation.getClient();
-		donDTO.setClient(convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPhoneNumber(),
-				client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName()));
+		ClientDTO cDTO = new ClientDTO();
+		cDTO.setEmail(client.getEmail());
+		cDTO.setFirstName(client.getFirstName());
+		cDTO.setLastName(client.getLastName());
+		cDTO.setAddress(client.getAddress());
+		
+		donDTO.setClient(cDTO);
+		
 		return donDTO;
 	}
 

@@ -1,22 +1,14 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,12 +19,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.petshelter.dao.*;
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
-import ca.mcgill.ecse321.petshelter.dto.ProfileDTO;
-import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.CommentRepository;
+import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
+import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +34,12 @@ public class CommentServiceTests {
 
 	@Mock
 	private CommentRepository commentDAO;
+	
+	@Mock
+	private PostingRepository postingDAO;
+	
+	@Mock
+	private ProfileRepository profileDAO;
 	
 	@InjectMocks
 	private PetShelterService service;
@@ -137,6 +137,8 @@ public class CommentServiceTests {
 	    };
 		        
 		lenient().when(commentDAO.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
 		
 	}
 	
