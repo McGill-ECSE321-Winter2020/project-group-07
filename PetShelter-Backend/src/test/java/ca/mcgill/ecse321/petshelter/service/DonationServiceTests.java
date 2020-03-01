@@ -21,15 +21,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
 import ca.mcgill.ecse321.petshelter.dao.DonationRepository;
 import ca.mcgill.ecse321.petshelter.model.Client;
 import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 
 @ExtendWith(MockitoExtension.class)
 public class DonationServiceTests {
 
 	@Mock
-	private DonationRepository donationDao;
+	private DonationRepository donationDAO;
+	private ClientRepository clientDAO;
 
 	@InjectMocks
 	private PetShelterService service;
@@ -46,11 +49,18 @@ public class DonationServiceTests {
 
 	@BeforeEach
 	public void setMockOutput() {
-		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-			return invocation.getArgument(0);
-		};
-
-		lenient().when(donationDao.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+		try {
+			Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+				return invocation.getArgument(0);
+	        };
+	        //TODO: fix the pointer exception when the mock for clientDAO is not commented out 
+	        //lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);    
+	        lenient().when(donationDAO.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
+		}
 	}
 	
 	

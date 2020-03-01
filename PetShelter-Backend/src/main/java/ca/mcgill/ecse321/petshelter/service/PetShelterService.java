@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 import java.util.Collection;
-
+import java.util.HashSet;
 import java.util.Iterator;
 
 import java.util.List;
@@ -345,6 +345,10 @@ public class PetShelterService {
 		donation.setClient(client);
 		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
+		
+		client.addDonation(donation);
+		client = clientRepository.save(client);
+		
 		donation = donationRepository.save(donation);
 		return donation;
 	}
