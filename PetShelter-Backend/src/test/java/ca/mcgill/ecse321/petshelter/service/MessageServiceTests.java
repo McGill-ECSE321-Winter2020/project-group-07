@@ -1,31 +1,30 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.ArgumentMatchers.anyString;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.petshelter.dao.*;
-import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.MessageRepository;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Message;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageServiceTests {
@@ -34,16 +33,14 @@ public class MessageServiceTests {
 	private MessageRepository messageDao;
 	@InjectMocks
 	private PetShelterService service;
-	//checking for empty content
-	private String EMPTY_CONTENT="";
-	private String EMAIL = "joohn.doe@mail.com";
-	private String ADMIN_EMAIL = "admin.admin@admin.com";
-	private Date DATE = Date.valueOf("2005-05-01");
-	private Date DOB = Date.valueOf("2004-05-01");
-	private String CONTENT = "jierjrejee";
-	private Date DATE1 = Date.valueOf("2005-05-02");
-	private Date BEF_DOB = Date.valueOf("2002-05-01");
-	private Client CLIENT = new Client();
+	
+	private final static String VALID_EMAIL = "pet.lover@mail.com";
+	private final static String EMPTY_CONTENT = "    ";
+	private final static String VALID_CONTENT = "I would like to adopt a pet";
+	private final static String TOO_LONG_CONTENT = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nu";
+	private final static Date VALID_DATE = Date.valueOf("2005-05-01");
+	private final static Date DOB = Date.valueOf("2004-05-01");
+	private final static Date BEF_DOB = Date.valueOf("2002-05-01");
 
 	@BeforeEach
 	public void setMockOutput() {
@@ -55,236 +52,243 @@ public class MessageServiceTests {
 
 	}
 
-	/**
-	 * Checks if we can send a message with more than 1000 characters.
-	 */
+	
+	//Tests for the sendMessage() method 
+	
+	//Test the main case scenario
 	@Test
-	public void checkforLengthZero() {
-		String cont = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
+	public void testSendMessage() {
 		Client client = new Client();
-		client.setEmail(email);
-		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		int i = 0;
-		String string = "a";
-		for(i =0; i<1010; i++) {
-			cont = cont + string;
-		}
-		String error = "";
-		try {
-			service.sendMessage(admin,client, cont, date);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"Your message is too long.");
-	}
-
-	/**
-	 * Tests if the message is created if it has no content.
-	 */
-	@Test
-	public void checkForLengthGreater() {
-		String noCont = EMPTY_CONTENT;
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
-		Client client = new Client();
-		client.setEmail(email);
-		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		try {
-			service.sendMessage(admin,client, noCont, date);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"You need to write a message before sending it.");
-	}
-
-	/**
-	 * check if the message is sent even though the date is null.
-	 */
-	@Test
-	public void checkForDateNull() {
-		String content = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = null;
-		Client client = new Client();
-		client.setEmail(email);
-		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		try {
-			service.sendMessage(admin,client, content, date);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"No date for message.");
-	}
-
-	/**
-	 * Checks if message is sent if client is null.
-	 */
-	@Test
-	public void checkForClientNull() {
-		String content = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
-		Client client = new Client();
-		client = null;
-		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		try {
-			service.sendMessage(admin,client, content, date);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"Account does not exist.");
-	}
-
-	/**
-	 * Tests if a message can be sent. 
-	 */
-	@Test
-	public void checkForAdminNull() {
-		String content = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
-		Client client = new Client();
-		client.setEmail(email);
-		Admin admin = new Admin();
-		admin = null;
-		String error = "";
-		try {
-			service.sendMessage(admin,client, content, date);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"The admin does not seem to exist.");
-	}
-
-	/**
-	 * test if the client is trying to send a message with a date before
-	 * its date of birth.
-	 */
-	@Test
-	public void checkForIllegalDate() {
-		String content = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date dob = DOB;
-		Date date1 = BEF_DOB;
-		Client client = new Client();
-		client.setEmail(email);
-		client.setDateOfBirth(dob);
-		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		try {
-			service.sendMessage(admin,client, content, date1);
-		}catch(Exception e) {
-			error = e.getMessage();
-		}
-		assertEquals(error,"The date specified is before the date of birth of the client.");
-	}
-
-	@Test
-	public void getListOfExistingClient() {
-		Client client = CLIENT;
-		String email = EMAIL;
-
-		client.setEmail(email);
-		Message message = new Message();
-		message.setContent(CONTENT);
-		Set<Message> init = new HashSet<>();
-		message.setClient(client);
-		message.setDate(DATE);
-		init.add(message);
-		client.setMessages(init);
-		List<Message> messages = null;
-		try {
-			messages = service.getClientMessages(client);
-		}catch(Exception e) {
-			String error = e.getMessage();
-		}
-		assertEquals("jierjrejee",messages.get(0).getContent());
-	}
-
-	/**
-	 * checks if success sendMessage from service.
-	 */
-	@Test
-	public void checkIfSuccessSendMessage() {
-		String cont = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
-		Client client = new Client();
-		client.setEmail(email);
+		client.setEmail(VALID_EMAIL);
 		client.setDateOfBirth(DOB);
+		client.setIsLoggedIn(true);
 		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		Message message = new Message();
+		Message message = null;
 		try {
-			message = service.sendMessage(admin,client, cont, date);
-		}catch(Exception e) {
+			message = service.sendMessage(admin, client, VALID_CONTENT, VALID_DATE);
+			
+			assertNotNull(message);
+			assertEquals(VALID_CONTENT, message.getContent());
+		} catch (Exception e) {
+			//e.printStackTrace();
+			fail();
+		}
+
+	}
+	
+	@Test
+	public void testSendMessageNullContent() {
+		Client client = new Client();
+		client.setIsLoggedIn(true);
+		Admin admin = new Admin();
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(admin, client, null, VALID_DATE);
+		} catch (Exception e) {
 			error = e.getMessage();
 		}
-		assertEquals("a",message.getContent());
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.NoContent, error);
 	}
-
-	/**
-	 * checks if can get list of messages with null client.
-	 */
+	
 	@Test
-	public void checkGetMessagesClientNull() {
-		String content = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
+	public void testSendMessageEmptyContent() {
 		Client client = new Client();
-		client = null;
+		client.setIsLoggedIn(true);
 		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
+		Message message = null;
+		
+		String error = null;
 		try {
-			service.getClientMessages(client);
-		}catch(Exception e) {
+			message = service.sendMessage(admin, client, EMPTY_CONTENT, VALID_DATE);
+		} catch (Exception e) {
 			error = e.getMessage();
 		}
-		assertEquals(error,"Account does not exist.");
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.NoContent, error);
+	}
+	
+	@Test
+	public void testSendMessageTooLong() {
+		Client client = new Client();
+		client.setIsLoggedIn(true);
+		Admin admin = new Admin();
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(admin, client, TOO_LONG_CONTENT, VALID_DATE);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.tooLong, error);
+	}
+	
+	@Test
+	public void testSendMessageNullDate() {
+		Client client = new Client();
+		client.setIsLoggedIn(true);
+		Admin admin = new Admin();
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(admin, client, VALID_CONTENT, null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.invalidDate, error);
+	}
+	
+	@Test
+	public void testSendMessageNullClient() {
+		Admin admin = new Admin();
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(admin, null, VALID_CONTENT, VALID_DATE);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.accountDoesNotExist, error);
+	}
+	
+	@Test
+	public void testSendMessageLoggedOutClient() {
+		Client client = new Client();
+		client.setIsLoggedIn(false);
+		Admin admin = new Admin();
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(admin, client, VALID_CONTENT, VALID_DATE);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.notLoggedIn, error);
 	}
 
-	/**
-	 * checks if the can get a list of messages from a client that has no messages.
-	 */
 	@Test
-	public void checkGetMessagesClientHasNoMessages() {
-
-		String cont = "a";
-		String email = EMAIL;
-		String aemail = ADMIN_EMAIL;
-		Date date = DATE;
+	public void testSendMessageNullAdmin() {
 		Client client = new Client();
-		client.setEmail(email);
+		client.setIsLoggedIn(true);
+		Message message = null;
+		
+		String error = null;
+		try {
+			message = service.sendMessage(null, client, VALID_CONTENT, VALID_DATE);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.IncorrectAdmin, error);
+	}
+	
+	@Test
+	public void testSendMessageDateBeforeDOB() {
+		Client client = new Client();
 		client.setDateOfBirth(DOB);
+		client.setIsLoggedIn(true);
 		Admin admin = new Admin();
-		admin.setEmail(aemail);
-		String error = "";
-		List<Message> message =null;
+		Message message = null;
+		
+		String error = null;
 		try {
-			message = service.getClientMessages(client);
-		}catch(Exception e) {
+			message = service.sendMessage(admin, client, VALID_CONTENT, BEF_DOB);
+		} catch (Exception e) {
 			error = e.getMessage();
 		}
-		assertEquals("This client did not send any messages yet.",error);		
+		
+		assertNull(message);
+		assertEquals(ErrorMessages.DateBefDOB, error);
+	}
+	
+	
+	//Tests for the getClientMessages() method 
+	
+	//Test the main case scenario
+	@Test 
+	public void testGetClientMessages() {
+		Client client = new Client();
+		client.setIsLoggedIn(true);
+		HashSet<Message> messages = new HashSet<Message>();
+		Message m1 = new Message();
+		messages.add(m1);
+		Message m2 = new Message();
+		messages.add(m2);
+		Message m3 = new Message();
+		messages.add(m3);
+		client.setMessages(messages);
+		
+		List<Message> returnedMessages = null;
+		try {
+			returnedMessages = service.getClientMessages(client);
+			assertNotNull(returnedMessages);
+			assertEquals(service.toList(messages), returnedMessages);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testGetClientMessagesNullClient() {
+		List<Message> returnedMessages = null;
+		String error = null;
+		try {
+			returnedMessages = service.getClientMessages(null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(returnedMessages);
+		assertEquals(ErrorMessages.accountDoesNotExist, error);		
+	}
+	
+	@Test 
+	public void testGetClientMessagesLoggedOutClient() {
+		Client client = new Client();
+		client.setIsLoggedIn(false);
+		
+		List<Message> returnedMessages = null;
+		String error = null;
+		try {
+			returnedMessages = service.getClientMessages(client);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(returnedMessages);
+		assertEquals(ErrorMessages.notLoggedIn, error);		
+	}
+	
+	@Test 
+	public void testGetClientMessagesNullMessages() {
+		Client client = new Client();
+		client.setIsLoggedIn(true);
+		HashSet<Message> messages = new HashSet<Message>();
+		client.setMessages(messages);
+		
+		List<Message> returnedMessages = null;
+		String error = null;
+		try {
+			returnedMessages = service.getClientMessages(client);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(returnedMessages);
+		assertEquals(ErrorMessages.ClientHasNoMessages, error);		
 	}
 }

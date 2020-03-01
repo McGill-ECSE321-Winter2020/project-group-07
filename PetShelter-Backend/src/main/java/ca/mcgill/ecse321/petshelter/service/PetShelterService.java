@@ -272,7 +272,7 @@ public class PetShelterService {
 	 * @return Client
 	 */
 	@Transactional
-	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
+	public Client updateClientProfile(Client client, String password, String phoneNumber, String address, String firstName, String lastName, Date dob) {
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
@@ -377,19 +377,21 @@ public class PetShelterService {
 	 * @return message to be sent
 	 */
 	@Transactional
-	public Message sendMessage(Admin admin,Client client,String content,Date date) {
-		
+	public Message sendMessage(Admin admin, Client client, String content, Date date) {
 		if(content == null || content.trim().length() == 0 ) {
 			throw new IllegalArgumentException(ErrorMessages.NoContent);
 		}
-		if(content.length() >1000) {
+		if(content.length() > 1000) {
 			throw new IllegalArgumentException(ErrorMessages.tooLong);
 		}
 		if(date == null) {
-			throw new IllegalArgumentException(ErrorMessages.dateMessage);
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 		}
 		if(admin == null) {
 			throw new IllegalArgumentException(ErrorMessages.IncorrectAdmin);
@@ -398,8 +400,6 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
 
-		//To avoid spam on admin account, checking if content has already been sent as a message.
-		
 		Message message = new Message();
 		message.setAdmin(admin);
 		message.setClient(client);
@@ -417,16 +417,16 @@ public class PetShelterService {
 	 */
 	@Transactional
 	public List<Message> getClientMessages(Client client){
-
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		if(client.getMessages() == null ||client.getMessages().size() == 0) {
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		if(client.getMessages() == null || client.getMessages().size() == 0) {
 			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
 		}
-		
 		return toList(client.getMessages());
-
 	}
 
 
