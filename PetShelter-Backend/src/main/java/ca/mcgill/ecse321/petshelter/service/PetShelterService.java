@@ -50,7 +50,7 @@ public class PetShelterService {
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
-							   String address, String firstName, String lastName) {
+			String address, String firstName, String lastName) {
 
 		// Checking if client exists already
 		try {
@@ -64,21 +64,21 @@ public class PetShelterService {
 		if (dob == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
 		}
-		
+
 		// Getting date object of 18 years ago 
 		long curr_date_ms = System.currentTimeMillis();
-        Date curr_date = new java.sql.Date(curr_date_ms);  
-        String curr_date_str = curr_date.toString();
-        String monthcurr = new String(new char[] {curr_date_str.toString().charAt(5),curr_date_str.toString().charAt(6)});
-        String daycurr = new String(new char[] {curr_date_str.toString().charAt(8),curr_date_str.toString().charAt(9)});
-        String str_18y_ago = "2002-" + monthcurr + "-" + daycurr; // Not ideal, may fix later 
-        Date dt_18y_ago = Date.valueOf(str_18y_ago); 
+		Date curr_date = new java.sql.Date(curr_date_ms);  
+		String curr_date_str = curr_date.toString();
+		String monthcurr = new String(new char[] {curr_date_str.toString().charAt(5),curr_date_str.toString().charAt(6)});
+		String daycurr = new String(new char[] {curr_date_str.toString().charAt(8),curr_date_str.toString().charAt(9)});
+		String str_18y_ago = "2002-" + monthcurr + "-" + daycurr; // Not ideal, may fix later 
+		Date dt_18y_ago = Date.valueOf(str_18y_ago); 
 
 		// Checking if 18 years old or over
-        int of_age = dob.compareTo(dt_18y_ago); 
-        if(of_age > 0) {
-            throw new IllegalArgumentException(ErrorMessages.under18);
-        }
+		int of_age = dob.compareTo(dt_18y_ago); 
+		if(of_age > 0) {
+			throw new IllegalArgumentException(ErrorMessages.under18);
+		}
 
 		// Checking if email is appropriate
 		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -138,12 +138,12 @@ public class PetShelterService {
 		return client;
 	}
 
-	 /**
-	  * Use this function if you need to retrieve a client object.
-	  * May need to use try/catch because it throws an exception if no account exists.
-	  * @param email
-	  * @return Client
-	  */
+	/**
+	 * Use this function if you need to retrieve a client object.
+	 * May need to use try/catch because it throws an exception if no account exists.
+	 * @param email
+	 * @return Client
+	 */
 	@Transactional
 	public Client getClient(String email) { 
 		if (email != null) {
@@ -172,7 +172,7 @@ public class PetShelterService {
 				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 			}
 		}
-	
+
 		// Deleting client 
 		if (deleteeEmail == null) {
 			return null; 
@@ -212,7 +212,7 @@ public class PetShelterService {
 		} else if (!password.equals(profile.getPassword())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
 		}
-		  else {
+		else {
 			return null;
 		}
 	}
@@ -240,13 +240,13 @@ public class PetShelterService {
 
 	}
 
-	 /**
-	  * Everyone should use this function if they need to retrieve the current active logged in Profile.
-	  * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
-	  * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
-	  * Throws an exception if no account is logged in.
-	  * @return Profile
-	  */
+	/**
+	 * Everyone should use this function if they need to retrieve the current active logged in Profile.
+	 * If you need to access client attributes, you need to retrieve client using getClient(profile.getEmail());
+	 * Using this functions ensures that all of the functions being performed are by a legitimately logged in profile.
+	 * Throws an exception if no account is logged in.
+	 * @return Profile
+	 */
 	@Transactional // Everyone should use this 
 	public Profile getLoggedInUser(){
 		// Get all profiles in database and check which one is logged in 
@@ -272,173 +272,82 @@ public class PetShelterService {
 	 * @return Client
 	 */
 	@Transactional
-	public Client updateClientProfile(Client client,String password, String phoneNumber, String address,String firstName, String lastName, Date dob) {
-
+	public Client updateClientProfile(Client client, String password, String phoneNumber, String address, String firstName, String lastName, Date dob) {
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!(client.getIsLoggedIn())) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		if(address == null || address.trim().length()==0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidAddress);
+		}
+		if(dob == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDOB);
+		}
+		if(password == null ||password.trim().length()<=6) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
+		}
+		String phoneNumberRegex = "^[0-9]{10}$";
+		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
+		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
+		}
+		if (firstName == null || firstName.trim().equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidFirstName);
+		}
+		if (lastName == null || lastName.trim().equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLastName);
+		}
+		
 		client.setAddress(address);
 		client.setDateOfBirth(dob);
 		client.setPassword(password);
 		client.setPhoneNumber(phoneNumber);
 		client.setFirstName(firstName);
 		client.setLastName(lastName);
+		client = clientRepository.save(client);
 		return client;
 
 	}
-	
-	/**
-	 * method to get a donation with the id, returns null if doesnt exist.
-	 * @param Id
-	 * @return donation if exists or null
-	 */
-	@Transactional
-	public Donation getDonationbyId(Integer Id) {
-		
-		Donation donation=new Donation();
-		try {
-			donation = donationRepository.findById(Id).get();
-			return donation;
-		}
-		catch(Exception e) {
-			return null;
-		}
-		
-	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return Donation
-=======
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 * Service method to send a donation.
 	 * @param amount
 	 * @param client
 	 * @param date
 	 * @return the donation to be sent
-<<<<<<< HEAD
->>>>>>> added controller methods and javadoc
-=======
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
 	 */
 	@Transactional
 	public Donation sendDonation(Integer amount, Client client, Date date) {
-
-
-		
-			if(amount<=0) {
-				throw new IllegalArgumentException(ErrorMessages.negAmount);
-			}
-		
+		if(amount<=0) {
+			throw new IllegalArgumentException(ErrorMessages.negAmount);
+		}
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 		if(!client.getIsLoggedIn()) {
-			
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
-			
+		}		
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
 		if(date.before(client.dateOfBirth)) {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
-
-
 		Donation donation = new Donation();
 		donation.setAmount(amount);
 		donation.setClient(client);
+		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
-		donationRepository.save(donation);
+		donation = donationRepository.save(donation);
 		return donation;
 	}
-
-	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * Method used when a message is being sent to admin, the content is checked,
-	 * if the content is repeated too frequently, the message will not be sent.
-	 * To avoid spamming the admin.
-=======
-	 * This is the service method to send messages to admin, checks for spamming.
->>>>>>> added controller methods and javadoc
-=======
-	 * This is the service method to send messages to admin, checks for spamming.
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
-	 * @param admin
-	 * @param client
-	 * @param content
-	 * @param date
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * @return Message
-=======
-	 * @return message to be sent
->>>>>>> added controller methods and javadoc
-=======
-	 * @return message to be sent
->>>>>>> 143bd9a9d800659db944e1aa9b6eff92038b64dd
-	 */
-	@Transactional
-	public Message sendMessage(Admin admin,Client client,String content,Date date) {
-
-		if(content.length() == 0 ) {
-			throw new IllegalArgumentException(ErrorMessages.NoContent);
-		}
-		if(content.length() >1000) {
-			throw new IllegalArgumentException(ErrorMessages.tooLong);
-		}
-		if(date == null) {
-			throw new IllegalArgumentException(ErrorMessages.dateMessage);
-		}
-
-		//To avoid spam on admin account, checking if content has already been sent as a message.
-		java.util.Set<Message> allMess;
-		allMess = client.getMessages();
-		Iterator<Message> itr = allMess.iterator();
-
-		while(itr.hasNext()) {
-			Message curr = itr.next();
-			String year = new String(new char[] {date.toString().charAt(0),date.toString().charAt(1), date.toString().charAt(2),date.toString().charAt(3)});
-			String yearcurr = new String(new char[] {curr.getDate().toString().charAt(0),curr.getDate().toString().charAt(1), curr.getDate().toString().charAt(2),curr.getDate().toString().charAt(3)});
-			String month = new String(new char[] {date.toString().charAt(5),date.toString().charAt(6)});
-			String monthcurr = new String(new char[] {curr.getDate().toString().charAt(5),curr.getDate().toString().charAt(6)});
-			if(curr.getContent().equalsIgnoreCase(content)) {
-				if(Math.abs(Integer.parseInt(month)-Integer.parseInt(monthcurr)) <=1 || Math.abs(Integer.parseInt(year)-Integer.parseInt(yearcurr))>=1) {
-					throw new IllegalArgumentException(ErrorMessages.MessAlreadyExists);
-				}
-				
-			}
-		}
-		Message message = new Message();
-		message.setAdmin(admin);
-		message.setClient(client);
-		message.setContent(content);
-		message.setDate(date);
-		message.setId(client.getEmail().hashCode()*date.hashCode());
-		messageRepository.save(message);
-		return message;
-	}
-	
-	/**
-	 * This method returns all the messages a client sent since it created its account.
-	 * @param client
-	 * @return List<Message>, the list of all messages of the client
-	 */
-	@Transactional
-	public List<Message> getClientMessages(Client client){
-		
-		if(client == null) {
-			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-		}
-		if(client.getMessages().size() == 0) {
-			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
-		}
-		return toList(client.getMessages());
-		
-	}
-	
 	
 	/**
 	 * Service method to get all the donations of a client.
@@ -450,8 +359,76 @@ public class PetShelterService {
 		if(client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
 		return toList(client.getDonations());
 	}
+
+	/**
+	 * Method used when a message is being sent to admin, the content is checked,
+	 * if the content is repeated too frequently, the message will not be sent.
+	 * To avoid spamming the admin.
+	 * @param admin
+	 * @param client
+	 * @param content
+	 * @param date
+	 * @return Message
+	 * @return message to be sent
+	 */
+	@Transactional
+	public Message sendMessage(Admin admin, Client client, String content, Date date) {
+		if(content == null || content.trim().length() == 0 ) {
+			throw new IllegalArgumentException(ErrorMessages.NoContent);
+		}
+		if(content.length() > 1000) {
+			throw new IllegalArgumentException(ErrorMessages.tooLong);
+		}
+		if(date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		if(admin == null) {
+			throw new IllegalArgumentException(ErrorMessages.IncorrectAdmin);
+		}
+		if(date.before(client.dateOfBirth)) {
+			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
+		}
+
+		Message message = new Message();
+		message.setAdmin(admin);
+		message.setClient(client);
+		message.setContent(content);
+		message.setDate(date);
+		message.setId(client.getEmail().hashCode()*date.hashCode());
+		message = messageRepository.save(message);
+		return message;
+	}
+
+	/**
+	 * This method returns all the messages a client sent since it created its account.
+	 * @param client
+	 * @return List<Message>, the list of all messages of the client
+	 */
+	@Transactional
+	public List<Message> getClientMessages(Client client){
+		if(client == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!client.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		if(client.getMessages() == null || client.getMessages().size() == 0) {
+			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
+		}
+		return toList(client.getMessages());
+	}
+
 
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
@@ -493,7 +470,7 @@ public class PetShelterService {
 		comment = commentRepository.save(comment);
 		return comment;
 	}
-	
+
 	@Transactional
 	public List<Comment> getComments(Posting posting){
 		if(posting == null) {
@@ -516,9 +493,9 @@ public class PetShelterService {
 				if(comment.getDate().before(comment.getPosting().getDate())) {
 					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 				}
-				
+
 				//add only valid comments that are on that posting
-				
+
 				comments.add(comment);
 			}
 		}
