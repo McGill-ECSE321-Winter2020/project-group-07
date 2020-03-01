@@ -308,7 +308,7 @@ public class PetShelterRestController {
 	// Kaustav POST Mappings
 
 	@PostMapping(value = { "/create-posting", "/create-posting/" })
-	public PostingDTO createApplication(@RequestParam("client_email") String owner_email,
+	public PostingDTO createPosting(@RequestParam("email") String owner_email,
 			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
@@ -327,7 +327,7 @@ public class PetShelterRestController {
 	}
 
 	@PostMapping(value = { "/update-posting", "/update-posting/" })
-	public PostingDTO updateApplication(@RequestParam("owner_email") String owner_email,
+	public PostingDTO updatePosting(@RequestParam("owner_email") String owner_email,
 			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
@@ -348,7 +348,7 @@ public class PetShelterRestController {
 	}
 
 	// Deleting an account
-	@PostMapping(value = { "/delete-posting", "/delete-account/" })
+	@PostMapping(value = { "/delete-posting", "/delete-posting/" })
 	public PostingDTO deletePosting(@RequestParam("owner_email") String owner_email,
 			@RequestParam("posting_date") String posting_date) {
 		
