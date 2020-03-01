@@ -286,13 +286,21 @@ public class PetShelterRestController {
 	// Nicolas POST Mappings
 
 	// Commenting on a Posting
-	@PostMapping(value = { "/{posting}/comment", "/{posting}/comment/" })
-	public CommentDTO commentOnPost(@PathVariable("posting") @RequestParam("profile") Profile profile,
-			@RequestParam("posting") Posting posting, @RequestParam("content") String content,
-			@RequestParam("date") String dateString) throws IllegalArgumentException {
-
-		Date date = Date.valueOf(dateString);
-
+	@PostMapping(value = { "/comment-post", "/comment-post/" })
+	public CommentDTO commentOnPost(@RequestParam("email") String email, @RequestParam("datePost") String datePost,
+			                        @RequestParam("content") String content, @RequestParam("date") String dateString) throws IllegalArgumentException {
+		
+		Date date = null;
+		Date postedDate = null;
+		try {
+			date = Date.valueOf(dateString);
+			postedDate = Date.valueOf(datePost);
+		}
+		catch(Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		Profile profile = service.getClient(email);
+		Posting posting = service.getPosting(email, postedDate);
 		Comment comment = service.commentOnPosting(profile, posting, content, date);
 		return convertToDTO(comment);
 	}
@@ -301,29 +309,57 @@ public class PetShelterRestController {
 
 	@PostMapping(value = { "/create-posting", "/create-posting/" })
 	public PostingDTO createApplication(@RequestParam("client_email") String owner_email,
-			@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob,
+			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
 		Profile owner = service.getClient(owner_email);
-		Posting posting = service.createPosting(owner, posting_date, petName, dob, breed, picture, description);
+		Date postDate = null;
+		Date doBirth = null;
+		try {
+			postDate = Date.valueOf(posting_date);
+			doBirth= Date.valueOf(dob);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		Posting posting = service.createPosting(owner, postDate, petName, doBirth, breed, picture, description);
 		return convertToDTO(posting);
 	}
 
 	@PostMapping(value = { "/update-posting", "/update-posting/" })
 	public PostingDTO updateApplication(@RequestParam("owner_email") String owner_email,
-			@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob,
+			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
-		Posting posting = service.getPosting(owner_email, posting_date);
-		posting = service.updatePostingInfo(posting, petName, dob, breed, picture, description);
+		
+		Date postDate = null;
+		Date doBirth = null;
+		try {
+			postDate = Date.valueOf(posting_date);
+			doBirth= Date.valueOf(dob);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		
+		Posting posting = service.getPosting(owner_email, postDate);
+		posting = service.updatePostingInfo(posting, petName, doBirth, breed, picture, description);
 		return convertToDTO(posting);
 	}
 
 	// Deleting an account
 	@PostMapping(value = { "/delete-posting", "/delete-account/" })
 	public PostingDTO deletePosting(@RequestParam("owner_email") String owner_email,
-			@RequestParam Date posting_date) {
-		Posting posting = service.getPosting(owner_email, posting_date);
+			@RequestParam("posting_date") String posting_date) {
+		
+		Date postDate = null;
+		try {
+			postDate = Date.valueOf(posting_date);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		Posting posting = service.getPosting(owner_email, postDate);
 		posting = service.deletePosting(posting);
 		return convertToDTO(posting);
 	}
