@@ -441,6 +441,269 @@ public class PostingServiceTests {
 			fail();
 		}
 	}
+	
+	@Test
+	public void testUpdatePostingInfoPostingNull() {
+		String error = null;
+		Posting posting = null;
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		}
+
+		catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPosting, error);
+	}
+	
+	@Test
+	public void testUpdatePostingInfoPetNameNull() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+
+		try {
+			copyPosting = service.updatePostingInfo(posting, null, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPetName, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetNameEmpty() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+
+		try {
+			copyPosting = service.updatePostingInfo(posting, "", POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPetName, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetNameWrong() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+
+		try {
+			copyPosting = service.updatePostingInfo(posting, invalidPetName, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPetName, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetDOBNull() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, null, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPetDOB, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetDOBLater() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		Date later = new Date(timeFourMonthsFromNow);
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, later, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPetDOB, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetBreedNull() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, null,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidBreed, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetBreedEmpty() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, "",
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidBreed, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPetBreedInvalid() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, invalidBreed,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidBreed, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPictureNull() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					null, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPicture, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoPictureEmpty() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					" ", POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPicture, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoDescriptionNull() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidReason, error);
+	}
+
+	@Test
+	public void testUpdatePostingInfoDescriptionEmpty() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, "     ");
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidReason, error);
+	}
+	
+	@Test
+	public void testUpdatePostingInfoDescriptionLong() {
+		String error = null;
+		Posting posting = new Posting();
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, tooLongDescription);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidReason, error);
+	}
+	
+	@Test
+	public void testUpdatePostingInfoNotLoggedIn() {
+		String error = null;
+		Profile someone = new Client();
+		someone.setIsLoggedIn(false);
+		Posting posting = new Posting();
+		posting.setProfile(someone);
+		Posting copyPosting = null;
+		
+		try {
+			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidLoggedIn, error);
+	}
+	
+	@Test
+	public void testUpdatePostingInfoSuccess() {
+		Profile someone = new Client();
+		someone.setIsLoggedIn(true);
+		someone.setEmail("muffin_man2@gmail.com");
+		Posting posting = new Posting();
+		posting.setProfile(someone);
+		
+		try {
+			Posting copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
+					POSTING_PICTURE, POSTING_DESCRIPTION);
+			assertEquals(copyPosting.getProfile().getEmail(),posting.getProfile().getEmail());
+			assertEquals(POSTING_DATE,copyPosting.getDate());
+			assertEquals(POSTING_PETNAME,copyPosting.getPetName());
+			assertEquals(POSTING_PET_DOB,copyPosting.getPetDateOfBirth());
+			assertEquals(POSTING_PETBREED,copyPosting.getPetBreed());
+			assertEquals(POSTING_PICTURE,copyPosting.getPicture());
+			assertEquals(POSTING_DESCRIPTION,copyPosting.getDescription());
+			assertNull(copyPosting.getApplication());
+			assertNull(copyPosting.getComment());	
+		} catch (Exception e) {
+			fail();
+		}
+	}
+
+	
 
 	// open postings test
 	// check that only postings that don't have an accepted application are returned
