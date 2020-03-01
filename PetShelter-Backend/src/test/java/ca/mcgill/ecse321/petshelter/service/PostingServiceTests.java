@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -155,6 +156,7 @@ public class PostingServiceTests {
 	    };
 		        
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
+		doNothing().when(postingDAO).delete(any(Posting.class));
 	}
 	
 	// Test for if the profile is null 
