@@ -88,18 +88,6 @@ public class PetShelterRestController {
 		return convertToDTOMessage(messages);
 	}
 	
-	//TODO: check if this method is needed, it seems to be already implemented by Rahul's getClientByEmail
-//	@GetMapping(value = { "client-updateprofile", "client-updateprofile/" }) 
-//	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
-//		if (client == null) {
-//			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-//		}
-//		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
-//				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
-//		return clientDTO;
-//	}
-	
-	
 	@GetMapping(value = { "/client-donations", "/client-donations/" }) 
 	public List<DonationDTO> getClientDonations(@RequestParam("client_email") String client_email) throws IllegalArgumentException { 
 		Client client = service.getClient(client_email);
@@ -488,6 +476,7 @@ public class PetShelterRestController {
 	private DonationDTO convertToDTO(Donation donation) {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
+		donDTO.setDate(donation.getDate());
 		donDTO.setId(donation.getId());
 		
 		Client client = donation.getClient();
