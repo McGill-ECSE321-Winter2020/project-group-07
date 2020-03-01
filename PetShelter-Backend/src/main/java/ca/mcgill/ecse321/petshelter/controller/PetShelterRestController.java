@@ -269,30 +269,34 @@ public class PetShelterRestController {
 
 	// Kaustav POST Mappings
 
-//		@PostMapping(value = {"/createposting", "/createposting/"})
-//		public PostingDTO createApplication(@RequestParam("client_email") String client_email, @RequestParam("owner_email") String owner_email, 
-//				@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob, @RequestParam("description") String description,
-//				@RequestParam picture 
-//				@RequestParam("breed") String breed) throws IllegalArgumentException{
-//			Client client = service.getClient(client_email);
-//			Posting posting = service.getPosting(owner_email, posting_date);
-//			HomeType ht = null;
-//			IncomeRange ir = null;
-//			//get enum variable from passed string
-//			try {
-//				ht = HomeType.valueOf(homeType);
-//			} catch (Exception e) {
-//				throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
-//			}
-//			//get enum variable from passed string
-//			try {
-//				ir = IncomeRange.valueOf(incomeRange);
-//			} catch (Exception e) {
-//				throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
-//			}
-//			Application application = service.createApplication(client, posting, ht, ir, numberOfResidents);
-//			return convertToDTO(application);
-//		}
+	@PostMapping(value = { "/create-posting", "/create-posting/" })
+	public PostingDTO createApplication(@RequestParam("client_email") String owner_email,
+			@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob,
+			@RequestParam("description") String description, @RequestParam("picture") String picture,
+			@RequestParam("breed") String breed) throws IllegalArgumentException {
+		Profile owner = service.getClient(owner_email);
+		Posting posting = service.createPosting(owner, posting_date, petName, dob, breed, picture, description);
+		return convertToDTO(posting);
+	}
+
+	@PostMapping(value = { "/update-posting", "/update-posting/" })
+	public PostingDTO updateApplication(@RequestParam("client_email") String owner_email,
+			@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob,
+			@RequestParam("description") String description, @RequestParam("picture") String picture,
+			@RequestParam("breed") String breed) throws IllegalArgumentException {
+		Posting posting = service.getPosting(owner_email, posting_date);
+		posting = service.updatePostingInfo(posting, petName, dob, breed, picture, description);
+		return convertToDTO(posting);
+	}
+
+	// Deleting an account
+	@PostMapping(value = { "/delete-posting", "/delete-account/" })
+	public PostingDTO deletePosting(@RequestParam("owner_email") String owner_email,
+			@RequestParam Date posting_date) {
+		Posting posting = service.getPosting(owner_email, posting_date);
+		posting = service.deletePosting(posting);
+		return convertToDTO(posting);
+	}
 
 	// Convert to DTO functions //
 

@@ -174,6 +174,40 @@ public class PostingServiceTests {
 		
 	}
 	
+	@Test
+	public void testCreatePostingDateNull() {
+		String error = null;
+		Posting posting = null;
+		Client account = new Client();
+		
+		try {
+			posting = service.createPosting(account, null, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,POSTING_PICTURE, POSTING_DESCRIPTION);
+		}
+		catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(posting);
+		assertEquals(ErrorMessages.invalidDate,error);
+	}
+	
+	@Test
+	public void testCreatePostingPetNameNull() {
+		String error = null;
+		Posting posting = null;
+		Client account = new Client();
+		
+		try {
+			posting = service.createPosting(account, POSTING_DATE, null, POSTING_PET_DOB, POSTING_PETBREED,POSTING_PICTURE, POSTING_DESCRIPTION);
+		}
+		catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(posting);
+		assertEquals(ErrorMessages.invalidPetName,error);
+	}
+	
+	
+	
 	// open postings test
 	//check that only postings that don't have an accepted application are returned
 	@Test
