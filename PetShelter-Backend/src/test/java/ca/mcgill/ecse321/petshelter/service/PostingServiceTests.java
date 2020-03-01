@@ -1,18 +1,13 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -29,9 +24,15 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.petshelter.dao.*;
-import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
+import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 
 @ExtendWith(MockitoExtension.class)
 public class PostingServiceTests {
@@ -39,6 +40,10 @@ public class PostingServiceTests {
 	@Mock
 	private PostingRepository postingDAO;
 
+	@Mock
+	private ProfileRepository profileDAO;
+
+	
 	@InjectMocks
 	private PetShelterService service;
 
@@ -169,6 +174,7 @@ public class PostingServiceTests {
 
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().doNothing().when(postingDAO).delete(any(Posting.class));
+		lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
 	// Test for if the profile is null

@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
@@ -72,6 +74,15 @@ public class Posting{
 	public void setComment(Set<Comment> commentss) {
 		this.comment = commentss;
 	}
+	
+	public Set<Comment> addComment(Comment comment){
+		// Instantiate if the Set is not initialized
+		if (this.comment == null) {
+			this.comment = new HashSet<>();
+		}
+		this.comment.add(comment);
+		return this.comment;
+	}
 
 	private Set<Application> application;
 
@@ -82,6 +93,15 @@ public class Posting{
 
 	public void setApplication(Set<Application> applicationss) {
 		this.application = applicationss;
+	}
+	
+	public Set<Application> addApplication(Application application){
+		// Instantiate if the Set is not initialized
+		if (this.application == null) {
+			this.application = new HashSet<>();
+		}
+		this.application.add(application);
+		return this.application;
 	}
 
 	private String petName;

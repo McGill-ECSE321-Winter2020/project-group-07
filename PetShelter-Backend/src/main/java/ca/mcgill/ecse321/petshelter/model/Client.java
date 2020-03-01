@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.OneToMany;
 
@@ -35,6 +37,15 @@ public class Client extends Profile{
 	public void setDonations(Set<Donation> donations) {
 		this.donations = donations;
 	}
+	
+	public Set<Donation> addDonation(Donation donation){
+		// Instantiate if the Set is not initialized
+		if (this.donations == null) {
+			this.donations = new HashSet<>();
+		}
+		this.donations.add(donation);
+		return this.donations;
+	}
 
 	@ElementCollection(targetClass=Message.class)
 	private Set<Message> messages;
@@ -47,6 +58,15 @@ public class Client extends Profile{
 	public void setMessages(Set<Message> messages) {
 		this.messages = messages;
 	}
+	
+	public Set<Message> addMessage(Message message){
+		// Instantiate if the Set is not initialized
+		if (this.messages == null) {
+			this.messages = new HashSet<>();
+		}
+		this.messages.add(message);
+		return this.messages;
+	}
 
 	@ElementCollection(targetClass=Application.class)
 	private Set<Application> applications;
@@ -58,6 +78,15 @@ public class Client extends Profile{
 
 	public void setApplications(Set<Application> applications) {
 		this.applications = applications;
+	}
+	
+	public Set<Application> addApplication(Application application){
+		// Instantiate if the Set is not initialized
+		if (this.applications == null) {
+			this.applications = new HashSet<>();
+		}
+		this.applications.add(application);
+		return this.applications;
 	}
 
 }

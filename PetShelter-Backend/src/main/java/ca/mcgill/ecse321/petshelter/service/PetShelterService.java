@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -355,6 +354,11 @@ public class PetShelterService {
 		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
 		donation = donationRepository.save(donation);
+		
+		//make sure that referential integrity by also adding the donation to the client 
+		client.addDonation(donation);
+		client = clientRepository.save(client);			
+		
 		return donation;
 	}
 	
@@ -411,11 +415,16 @@ public class PetShelterService {
 
 		Message message = new Message();
 		message.setAdmin(admin);
+		admin.addMessage(message);
 		message.setClient(client);
+		client.addMessage(message);
 		message.setContent(content);
 		message.setDate(date);
-		message.setId(client.getEmail().hashCode()*date.hashCode());
+		message.setId(client.getEmail().hashCode() * date.hashCode());
+		
 		message = messageRepository.save(message);
+		admin = adminRepository.save(admin);
+		client = clientRepository.save(client);
 		return message;
 	}
 
@@ -472,12 +481,17 @@ public class PetShelterService {
 		// create comment object and set all its attributes
 		Comment comment = new Comment();
 		comment.setPosting(posting);
+		posting.addComment(comment);
 		comment.setProfile(profile);
+		profile.addComment(comment);
 		comment.setContent(content);
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode() * posting.getId() * date.hashCode());
-
+		
 		comment = commentRepository.save(comment);
+		posting = postingRepository.save(posting);
+		profile = profileRepository.save(profile);
+		
 		return comment;
 	}
 
@@ -567,6 +581,7 @@ public class PetShelterService {
 
 		Posting posting = new Posting();
 		posting.setProfile(profile);
+		profile.addPosting(posting);
 		posting.setComment(null);
 		posting.setApplication(null);
 		posting.setDate(postDate);
@@ -576,7 +591,10 @@ public class PetShelterService {
 		posting.setPicture(picture);
 		posting.setDescription(reason);
 		posting.setId(profile.getEmail().hashCode() * postDate.hashCode());
+		
 		posting = postingRepository.save(posting);
+		profile = profileRepository.save(profile);
+		
 		return posting;
 	}
 
@@ -736,14 +754,18 @@ public class PetShelterService {
 		Application application = new Application();
 		application.setId(client.getEmail().hashCode() * posting.getId());
 		application.setClient(client);
+		client.addApplication(application);
 		application.setPosting(posting);
+		posting.addApplication(application);
 		application.setHomeType(homeType);
 		application.setIncomeRange(incomeRange);
 		application.setNumberOfResidents(numberOfResidents);
 		application.setStatus(ApplicationStatus.pending);
-
+		
 		application = applicationRepository.save(application);
-
+		posting = postingRepository.save(posting);
+		client = clientRepository.save(client);
+		
 		return application;
 	}
 
