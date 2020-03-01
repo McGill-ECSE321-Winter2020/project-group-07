@@ -354,6 +354,7 @@ public class PetShelterService {
 		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
 		
+		//make sure that referential integrity by also adding the donation to the client 
 		client.addDonation(donation);
 		client = clientRepository.save(client);			
 		
@@ -414,10 +415,15 @@ public class PetShelterService {
 
 		Message message = new Message();
 		message.setAdmin(admin);
+		admin.addMessage(message);
 		message.setClient(client);
+		client.addMessage(message);
 		message.setContent(content);
 		message.setDate(date);
-		message.setId(client.getEmail().hashCode()*date.hashCode());
+		message.setId(client.getEmail().hashCode() * date.hashCode());
+		
+		admin = adminRepository.save(admin);
+		client = clientRepository.save(client);
 		message = messageRepository.save(message);
 		return message;
 	}
@@ -475,11 +481,15 @@ public class PetShelterService {
 		// create comment object and set all its attributes
 		Comment comment = new Comment();
 		comment.setPosting(posting);
+		posting.addComment(comment);
 		comment.setProfile(profile);
+		profile.addComment(comment);
 		comment.setContent(content);
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode() * posting.getId() * date.hashCode());
 
+		posting = postingRepository.save(posting);
+		profile = profileRepository.save(profile);
 		comment = commentRepository.save(comment);
 		return comment;
 	}
@@ -570,6 +580,7 @@ public class PetShelterService {
 
 		Posting posting = new Posting();
 		posting.setProfile(profile);
+		profile.addPosting(posting);
 		posting.setComment(null);
 		posting.setApplication(null);
 		posting.setDate(postDate);
@@ -579,6 +590,8 @@ public class PetShelterService {
 		posting.setPicture(picture);
 		posting.setDescription(reason);
 		posting.setId(profile.getEmail().hashCode() * postDate.hashCode());
+		
+		profile = profileRepository.save(profile);
 		posting = postingRepository.save(posting);
 		return posting;
 	}
@@ -739,12 +752,16 @@ public class PetShelterService {
 		Application application = new Application();
 		application.setId(client.getEmail().hashCode() * posting.getId());
 		application.setClient(client);
+		client.addApplication(application);
 		application.setPosting(posting);
+		posting.addApplication(application);
 		application.setHomeType(homeType);
 		application.setIncomeRange(incomeRange);
 		application.setNumberOfResidents(numberOfResidents);
 		application.setStatus(ApplicationStatus.pending);
 
+		client = clientRepository.save(client);
+		posting = postingRepository.save(posting);
 		application = applicationRepository.save(application);
 
 		return application;

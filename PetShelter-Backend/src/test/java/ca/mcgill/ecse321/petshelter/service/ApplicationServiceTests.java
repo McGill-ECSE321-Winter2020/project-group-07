@@ -23,6 +23,8 @@ import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
 import ca.mcgill.ecse321.petshelter.dao.ApplicationRepository;
+import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
+import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
 import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
 import ca.mcgill.ecse321.petshelter.model.Client;
@@ -36,6 +38,12 @@ public class ApplicationServiceTests {
 
 	@Mock
 	private ApplicationRepository applicationDAO;
+
+	@Mock
+	private ClientRepository clientDAO;
+	
+	@Mock
+	private PostingRepository postingDAO;
 
 	@InjectMocks
 	private PetShelterService service;
@@ -65,6 +73,8 @@ public class ApplicationServiceTests {
 		};
 
 		lenient().when(applicationDAO.save(any(Application.class))).thenAnswer(returnParameterAsAnswer);   
+		lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);   
+		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);   
 	}
 
 
