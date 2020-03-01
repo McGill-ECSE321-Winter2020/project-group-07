@@ -353,12 +353,12 @@ public class PetShelterService {
 		donation.setClient(client);
 		donation.setDate(date);
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
+		donation = donationRepository.save(donation);
 		
 		//make sure that referential integrity by also adding the donation to the client 
 		client.addDonation(donation);
 		client = clientRepository.save(client);			
 		
-		donation = donationRepository.save(donation);
 		return donation;
 	}
 	
@@ -422,9 +422,9 @@ public class PetShelterService {
 		message.setDate(date);
 		message.setId(client.getEmail().hashCode() * date.hashCode());
 		
+		message = messageRepository.save(message);
 		admin = adminRepository.save(admin);
 		client = clientRepository.save(client);
-		message = messageRepository.save(message);
 		return message;
 	}
 
@@ -487,10 +487,11 @@ public class PetShelterService {
 		comment.setContent(content);
 		comment.setDate(date);
 		comment.setId(profile.getEmail().hashCode() * posting.getId() * date.hashCode());
-
+		
+		comment = commentRepository.save(comment);
 		posting = postingRepository.save(posting);
 		profile = profileRepository.save(profile);
-		comment = commentRepository.save(comment);
+		
 		return comment;
 	}
 
@@ -591,8 +592,9 @@ public class PetShelterService {
 		posting.setDescription(reason);
 		posting.setId(profile.getEmail().hashCode() * postDate.hashCode());
 		
-		profile = profileRepository.save(profile);
 		posting = postingRepository.save(posting);
+		profile = profileRepository.save(profile);
+		
 		return posting;
 	}
 
@@ -759,11 +761,11 @@ public class PetShelterService {
 		application.setIncomeRange(incomeRange);
 		application.setNumberOfResidents(numberOfResidents);
 		application.setStatus(ApplicationStatus.pending);
-
-		client = clientRepository.save(client);
-		posting = postingRepository.save(posting);
+		
 		application = applicationRepository.save(application);
-
+		posting = postingRepository.save(posting);
+		client = clientRepository.save(client);
+		
 		return application;
 	}
 
