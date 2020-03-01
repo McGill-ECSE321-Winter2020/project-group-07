@@ -52,7 +52,7 @@ Starts Feb 10, 2020
 * Kaustav:
 * Mohamed:
 * Nicolas: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
-* Rahul:
+* Rahul: Implemented service methods, unit tests for service methods, and RESTful services for the create account, delete account, and login/logout account use cases and requirements. Wrote documentation for unit tests of requirements and RESTful service endpoint documentations for the aforementioned RESTful services.
 
 ## Sprint 3
 
