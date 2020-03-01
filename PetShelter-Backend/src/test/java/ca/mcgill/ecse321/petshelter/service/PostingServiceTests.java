@@ -93,15 +93,16 @@ public class PostingServiceTests {
 			+ "So you have to wonder why I'm a Heartstrings dog since I'm smart, cute, healthy, house trained and a loyal companion. "
 			+ "I've got one teensy tiny flaw. I'm not fond of strangers whether they're people (big and small) or dogs on walks. "
 			+ "Actually I'm more scared than anything else so I'm not like those other silly types of dogs that slobber all over you at the first minute they meet you.";
-
+			
 	// Test stubs
 	@BeforeEach
 	public void setMockOutput() {
 		// When finding a posting
 		lenient().when(postingDAO.findPostingById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(1)) {
-
-				return null;
+			if (invocation.getArgument(0).equals(CLIENT_EMAIL_LOGGEDIN.hashCode() * POSTING_DATE.hashCode())) {
+				Posting posting = new Posting();
+				posting.setId(CLIENT_EMAIL_LOGGEDIN.hashCode() * POSTING_DATE.hashCode());
+				return posting;
 			} else {
 				return null;
 			}
@@ -687,7 +688,7 @@ public class PostingServiceTests {
 	public void testUpdatePostingInfoSuccess() {
 		Profile someone = new Client();
 		someone.setIsLoggedIn(true);
-		someone.setEmail("muffin_man2@gmail.com");
+		someone.setEmail(CLIENT_EMAIL_LOGGEDIN);
 		Posting posting = new Posting();
 		posting.setProfile(someone);
 		try {
@@ -745,7 +746,7 @@ public class PostingServiceTests {
 	public void testDeletePostingSuccess() {
 		Profile someone = new Client();
 		someone.setIsLoggedIn(true);
-		someone.setEmail("muffin_man2@gmail.com");
+		someone.setEmail(CLIENT_EMAIL_LOGGEDIN);
 		Posting posting = new Posting();
 		posting.setProfile(someone);
 		posting.setApplication(null);
@@ -768,6 +769,19 @@ public class PostingServiceTests {
 		} catch (Exception e) {
 			fail();
 		}
+	}
+	
+	@Test
+	public void testGetPosting() {
+		Posting posting = null;
+		try {
+			posting = service.getPosting(CLIENT_EMAIL_LOGGEDIN, POSTING_DATE);
+		} catch (Exception e) {
+			// Check that no error occurred
+			fail();
+		}
+		assertNotNull(posting);
+		assertEquals(CLIENT_EMAIL_LOGGEDIN.hashCode() * POSTING_DATE.hashCode(), posting.getId());
 	}
 	
 	// check that only postings that don't have an accepted application are returned
