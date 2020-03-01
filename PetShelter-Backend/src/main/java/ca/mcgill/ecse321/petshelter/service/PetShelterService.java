@@ -550,20 +550,20 @@ public class PetShelterService {
 		if (postDate == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
-		if (petName == null || petName.equals("") || !petName.matches("^[a-zA-Z]*$")) {
+		if (petName == null || petName.replaceAll("\\s+","").equals("") || !petName.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
 		}
 		Date rightNow = new Date(System.currentTimeMillis());
 		if (dob == null || dob.compareTo(rightNow) >= 0) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
 		}
-		if (breed == null || breed.equals("") || !breed.matches("^[a-zA-Z]*$")) {
+		if (breed == null || breed.replaceAll("\\s+","").equals("") || !breed.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
 		}
-		if (picture == null || picture.equals("")) {
+		if (picture == null || picture.replaceAll("\\s+","").equals("")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
 		}
-		if (reason == null || reason.equals("") || reason.length() >= 1000) {
+		if (reason == null || reason.replaceAll("\\s+","").equals("") || reason.length() >= 1000) {
 			throw new IllegalArgumentException(ErrorMessages.invalidReason);
 		}
 		if (!profile.getIsLoggedIn()) {
@@ -605,25 +605,26 @@ public class PetShelterService {
 		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		if (petName == null || petName.equals("") || !petName.matches("^[a-zA-Z]*$")) {
+		if (petName == null || petName.replaceAll("\\s+","").equals("") || !petName.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
 		}
 		Date rightNow = new Date(System.currentTimeMillis());
 		if (dob == null || dob.compareTo(rightNow) >= 0) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
 		}
-		if (breed == null || breed.equals("") || !breed.matches("^[a-zA-Z]*$")) {
+		if (breed == null || breed.replaceAll("\\s+","").equals("") || !breed.matches("^[a-zA-Z]*$")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
 		}
-		if (picture == null || picture.equals("")) {
+		if (picture == null || picture.replaceAll("\\s+","").equals("")) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
 		}
-		if (reason == null || reason.equals("") || reason.length() >= 1000) {
+		if (reason == null || reason.replaceAll("\\s+","").equals("") || reason.length() >= 1000) {
 			throw new IllegalArgumentException(ErrorMessages.invalidReason);
 		}
 		if (!posting.getProfile().getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
 		}
+		
 
 		posting.setPetName(petName);
 		posting.setPetDateOfBirth(dob);
