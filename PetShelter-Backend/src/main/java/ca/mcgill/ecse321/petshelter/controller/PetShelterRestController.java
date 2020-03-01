@@ -438,10 +438,17 @@ public class PetShelterRestController {
 	private DonationDTO convertToDTO(Donation donation) {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
+		donDTO.setId(donation.getId());
+		
 		Client client = donation.getClient();
-		donDTO.setClient(convertToDTO(client.getDateOfBirth(),client.getEmail(), client.getPhoneNumber(), 
-				client.getAddress(), client.getIsLoggedIn(),
-				client.getFirstName(),client.getLastName()));
+		ClientDTO cDTO = new ClientDTO();
+		cDTO.setEmail(client.getEmail());
+		cDTO.setFirstName(client.getFirstName());
+		cDTO.setLastName(client.getLastName());
+		cDTO.setAddress(client.getAddress());
+		
+		donDTO.setClient(cDTO);
+		
 		return donDTO;
 	}
 	
