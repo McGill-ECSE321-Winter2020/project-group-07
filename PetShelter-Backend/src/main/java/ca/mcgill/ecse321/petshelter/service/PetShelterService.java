@@ -2,29 +2,33 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-// Used for validation
-import java.util.regex.Matcher; 
-import java.util.regex.Pattern; 
-import java.util.concurrent.TimeUnit;
-
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.petshelter.model.*;
-import ca.mcgill.ecse321.petshelter.dao.*;
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.AdminRepository;
+import ca.mcgill.ecse321.petshelter.dao.ApplicationRepository;
+import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
+import ca.mcgill.ecse321.petshelter.dao.CommentRepository;
+import ca.mcgill.ecse321.petshelter.dao.DonationRepository;
+import ca.mcgill.ecse321.petshelter.dao.MessageRepository;
+import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
+import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.HomeType;
+import ca.mcgill.ecse321.petshelter.model.IncomeRange;
+import ca.mcgill.ecse321.petshelter.model.Message;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 
 @Service
 public class PetShelterService {
@@ -347,7 +351,7 @@ public class PetShelterService {
 		donation.setId(client.getEmail().hashCode()*date.hashCode());
 		
 		client.addDonation(donation);
-		client = clientRepository.save(client);
+		client = clientRepository.save(client);			
 		
 		donation = donationRepository.save(donation);
 		return donation;
