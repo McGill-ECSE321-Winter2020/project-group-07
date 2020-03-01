@@ -178,7 +178,9 @@ public class ClientServiceTests {
         };
         
         lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
-        lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);           
+        lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);
+        lenient().doNothing().when(clientDAO).delete(any(Client.class));
+    
 	}
 
 
