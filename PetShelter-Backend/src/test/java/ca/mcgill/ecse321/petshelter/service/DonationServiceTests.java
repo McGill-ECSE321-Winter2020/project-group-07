@@ -21,15 +21,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
 import ca.mcgill.ecse321.petshelter.dao.DonationRepository;
 import ca.mcgill.ecse321.petshelter.model.Client;
 import ca.mcgill.ecse321.petshelter.model.Donation;
+
 
 @ExtendWith(MockitoExtension.class)
 public class DonationServiceTests {
 
 	@Mock
-	private DonationRepository donationDao;
+	private DonationRepository donationDAO;
+	@Mock
+	private ClientRepository clientDAO;
 
 	@InjectMocks
 	private PetShelterService service;
@@ -49,8 +53,8 @@ public class DonationServiceTests {
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
-
-		lenient().when(donationDao.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);    
+		lenient().when(donationDAO.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	
