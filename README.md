@@ -18,7 +18,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Kaustav Das Sharma | Software Architecure Engineer | 22 | 7 | &mdash; | &mdash; |
 | Mohamed Bouaouina | Project Manager | 18.5 | 35 | &mdash; | &mdash; |
 | Nicolas Buisson | Product Manager | 20 | 29 | &mdash; | &mdash; |
-| Rahul Behal | Software Consultant | 15 | 32.5 | &mdash; | &mdash; |
+| Rahul Behal | Software Consultant | 15 | 37 | &mdash; | &mdash; |
 
 ## Sprint 1 
 
@@ -52,7 +52,7 @@ Starts Feb 10, 2020
 * Kaustav:
 * Mohamed:
 * Nicolas: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
-* Rahul:
+* Rahul: Implemented service methods, unit tests for service methods, and RESTful services for the create account, delete account, and login/logout account use cases and requirements. Wrote documentation for unit tests of requirements and RESTful service endpoint documentations for the aforementioned RESTful services.
 
 ## Sprint 3
 

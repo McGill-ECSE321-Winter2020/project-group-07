@@ -40,17 +40,15 @@ public class PetShelterService {
 	@Autowired
 	private ClientRepository clientRepository;
 	@Autowired
-	private CommentRepository commentRepository;	
+	private CommentRepository commentRepository;
 	@Autowired
-	private DonationRepository donationRepository;	
+	private DonationRepository donationRepository;
 	@Autowired
-	private MessageRepository messageRepository;	
+	private MessageRepository messageRepository;
 	@Autowired
 	private PostingRepository postingRepository;
 	@Autowired
 	private ProfileRepository profileRepository;
-
-
 
 	@Transactional
 	public Client createClient(Date dob, String email, String password, String phoneNumber, 
@@ -59,7 +57,8 @@ public class PetShelterService {
 		// Checking if client exists already
 		try {
 			if (getClient(email) != null) { // This throws doesn't exist exception if client doesn't exist
-				throw new IllegalStateException(ErrorMessages.accountExists); // Had to make it a state exception to differ from doesn't exist  
+				throw new IllegalStateException(ErrorMessages.accountExists); // Had to make it a state exception to
+																				// differ from doesn't exist
 			}
 		} catch (IllegalArgumentException e) {
 		}
@@ -85,11 +84,9 @@ public class PetShelterService {
 		}
 
 		// Checking if email is appropriate
-		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
-				"[a-zA-Z0-9_+&*-]+)*@" + 
-				"(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
-				"A-Z]{2,7}$"; 
-		Pattern patEmail = Pattern.compile(emailRegex); 
+		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
+				+ "A-Z]{2,7}$";
+		Pattern patEmail = Pattern.compile(emailRegex);
 		if (email == null || !(patEmail.matcher(email).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
 		}
@@ -101,7 +98,7 @@ public class PetShelterService {
 
 		// Checking if phone number is appropriate
 		String phoneNumberRegex = "^[0-9]{10}$";
-		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex); 
+		Pattern patPhoneNumber = Pattern.compile(phoneNumberRegex);
 		if (phoneNumber == null || !(patPhoneNumber.matcher(phoneNumber).matches())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPhoneNumber);
 		}
@@ -149,7 +146,7 @@ public class PetShelterService {
 	 * @return Client
 	 */
 	@Transactional
-	public Client getClient(String email) { 
+	public Client getClient(String email) {
 		if (email != null) {
 			Client client = clientRepository.findClientByEmail(email);
 			if (client == null) {
@@ -157,20 +154,19 @@ public class PetShelterService {
 			}
 			return client;
 		} else {
-			return null; 
+			return null;
 		}
 	}
 
-
 	@Transactional
 	public Client deleteClient(String deleterEmail, String deleteeEmail) {
-		// Checking if person trying to delete is logged in 
+		// Checking if person trying to delete is logged in
 		if (deleterEmail == null) {
 			return null;
 		} else {
 			Profile profile = profileRepository.findProfileByEmail(deleterEmail);
 			if (profile == null) {
-				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 			}
 			if (!profile.getIsLoggedIn()) {
 				throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
@@ -179,19 +175,25 @@ public class PetShelterService {
 
 		// Deleting client 
 		if (deleteeEmail == null) {
-			return null; 
-		} else if (deleterEmail.equals(deleteeEmail) || deleterEmail.equals("pet_shelter@petshelter.com")) { // Checking if it's admin or they're deleting themselves
-			Client client_to_delete = getClient(deleteeEmail); 
+			return null;
+		} else if (deleterEmail.equals(deleteeEmail) || deleterEmail.equals("pet_shelter@petshelter.com")) { // Checking
+																												// if
+																												// it's
+																												// admin
+																												// or
+																												// they're
+																												// deleting
+																												// themselves
+			Client client_to_delete = getClient(deleteeEmail);
 			if (client_to_delete == null) {
-				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist); 
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 			}
 			clientRepository.delete(client_to_delete); // Deleting client
 			return client_to_delete;
 		} else {
 			throw new IllegalArgumentException(ErrorMessages.permissionDenied);
-		}		
+		}
 	}
-
 
 	@Transactional
 	public Profile profileLogin(String email, String password) {
@@ -211,8 +213,8 @@ public class PetShelterService {
 			profile.setIsLoggedIn(true);
 			profileRepository.save(profile);
 			return profile;
-		} else if (profile.getIsLoggedIn()) { 
-			throw new IllegalArgumentException(ErrorMessages.loggedIn); 
+		} else if (profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.loggedIn);
 		} else if (!password.equals(profile.getPassword())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPassword);
 		}
@@ -228,7 +230,7 @@ public class PetShelterService {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
 
-		Profile profile = profileRepository.findProfileByEmail(email); 
+		Profile profile = profileRepository.findProfileByEmail(email);
 
 		if (profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
@@ -237,9 +239,9 @@ public class PetShelterService {
 		if (!profile.getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 		} else {
-			profile.setIsLoggedIn(false); 
+			profile.setIsLoggedIn(false);
 			profileRepository.save(profile);
-			return profile; 
+			return profile;
 		}
 
 	}
@@ -255,17 +257,19 @@ public class PetShelterService {
 	public Profile getLoggedInUser(){
 		// Get all profiles in database and check which one is logged in 
 		List<Profile> allProfiles = toList(profileRepository.findAll());
-		for(Profile profile : allProfiles) {
+		for (Profile profile : allProfiles) {
 			if (profile.getIsLoggedIn()) {
-				return profile; 
+				return profile;
 			}
 		}
 		throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 	}
 
 	/**
-	 * Method to be used when updating a client profile. From the frontend, the current information will be entered
-	 * and the user can modify it and confirm it.
+	 * Method to be used when updating a client profile. From the frontend, the
+	 * current information will be entered and the user can modify it and confirm
+	 * it.
+	 * 
 	 * @param client
 	 * @param password
 	 * @param phoneNumber
@@ -341,7 +345,7 @@ public class PetShelterService {
 		if(date == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
-		if(date.before(client.dateOfBirth)) {
+		if (date.before(client.dateOfBirth)) {
 			throw new IllegalArgumentException(ErrorMessages.DateBefDOB);
 		}
 		Donation donation = new Donation();
@@ -419,7 +423,9 @@ public class PetShelterService {
 	}
 
 	/**
-	 * This method returns all the messages a client sent since it created its account.
+	 * This method returns all the messages a client sent since it created its
+	 * account.
+	 * 
 	 * @param client
 	 * @return List<Message>, the list of all messages of the client
 	 */
@@ -441,64 +447,63 @@ public class PetShelterService {
 	@Transactional
 	public Comment commentOnPosting(Profile profile, Posting posting, String content, Date date) {
 
-		//check inputs are valid
-		if(posting == null) {
+		// check inputs are valid
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		if(profile == null) {
+		if (profile == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 		}
-		if(!profile.getIsLoggedIn()) {
+		if (!profile.getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.invalidProfileNotLoggedIn);
 		}
-		//check content is not just white spaces
+		// check content is not just white spaces
 		String contentWhiteSpaceCheck = content.trim();
-		if(content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+		if (content == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
 		}
-		if(date == null) {
+		if (date == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
 		}
-		if(date.before(profile.getDateOfBirth())) {
+		if (date.before(profile.getDateOfBirth())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
 		}
-		if(date.before(posting.getDate())) {
+		if (date.before(posting.getDate())) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 		}
 
-
-		//create comment object and set all its attributes
+		// create comment object and set all its attributes
 		Comment comment = new Comment();
 		comment.setPosting(posting);
 		comment.setProfile(profile);
 		comment.setContent(content);
 		comment.setDate(date);
-		comment.setId(profile.getEmail().hashCode()*posting.getId()*date.hashCode());
+		comment.setId(profile.getEmail().hashCode() * posting.getId() * date.hashCode());
 
 		comment = commentRepository.save(comment);
 		return comment;
 	}
 
 	@Transactional
-	public List<Comment> getComments(Posting posting){
-		if(posting == null) {
+	public List<Comment> getComments(Posting posting) {
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
 		List<Comment> allComments = toList(commentRepository.findAll());
 		List<Comment> comments = new ArrayList<Comment>();
-		for(Comment comment: allComments) {
-			if(comment.getPosting().equals(posting)) {
+		for (Comment comment : allComments) {
+			if (comment.getPosting().equals(posting)) {
 				String contentWhiteSpaceCheck = comment.getContent().trim();
-				if(comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
+				if (comment.getContent() == null || contentWhiteSpaceCheck == "" || contentWhiteSpaceCheck == null) {
 					throw new IllegalArgumentException(ErrorMessages.invalidContentComment);
 				}
-				if(comment.getDate() == null) {
+				if (comment.getDate() == null) {
 					throw new IllegalArgumentException(ErrorMessages.invalidDateComment);
 				}
-				if(comment.getDate().before(comment.getProfile().getDateOfBirth())) {
+				if (comment.getDate().before(comment.getProfile().getDateOfBirth())) {
 					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentProfile);
 				}
-				if(comment.getDate().before(comment.getPosting().getDate())) {
+				if (comment.getDate().before(comment.getPosting().getDate())) {
 					throw new IllegalArgumentException(ErrorMessages.invalidDateCommentPosting);
 				}
 
@@ -509,53 +514,136 @@ public class PetShelterService {
 		}
 		return comments;
 	}
-	
 
 	@Transactional
-	public List<Posting> getOpenPostings(){
-		//get all postings in database and check which ones are still "open" i.e. do not have approved applications 
+	public List<Posting> getOpenPostings() {
+		// get all postings in database and check which ones are still "open" i.e. do
+		// not have approved applications
 		List<Posting> allPostings = toList(postingRepository.findAll());
 		List<Posting> openPostings = new ArrayList<Posting>();
-		for(Posting posting : allPostings) {
+		for (Posting posting : allPostings) {
 			boolean closedPosting = false;
-			for(Application application : posting.getApplication()) {
-				if(application.getStatus() == ApplicationStatus.accepted) {
+			for (Application application : posting.getApplication()) {
+				if (application.getStatus() == ApplicationStatus.accepted) {
 					closedPosting = true;
 				}
 			}
-			if(!closedPosting) {
+			if (!closedPosting) {
 				openPostings.add(posting);
 			}
 		}
 		return openPostings;
 	}
 
-	@Transactional
-	public Posting createPosting() {
-		return null;
-	}
+	/*
+	 * post update delete a listing for adoption which includes
+	 */
 
 	@Transactional
-	public Posting deletePosting() {
-		return null;
-	}
-
-	@Transactional
-	public Posting updatePostingInfo() {
-		return null;
-	}
-	
-	@Transactional
-	public Posting getPosting(String email, Date date) {
-		if(email == null) {
-			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+	public Posting createPosting(Profile profile, Date postDate, String petName, Date dob, String breed, String picture,
+			String reason) {
+		if (profile == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidProfile);
 		}
-		if(date == null) {
+		if (postDate == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidDate);
 		}
+		if (petName == null || petName.replaceAll("\\s+","").equals("") || !petName.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
+		}
+		Date rightNow = new Date(System.currentTimeMillis());
+		if (dob == null || dob.compareTo(rightNow) >= 0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
+		}
+		if (breed == null || breed.replaceAll("\\s+","").equals("") || !breed.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
+		}
+		if (picture == null || picture.replaceAll("\\s+","").equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
+		}
+		if (reason == null || reason.replaceAll("\\s+","").equals("") || reason.length() >= 1000) {
+			throw new IllegalArgumentException(ErrorMessages.invalidReason);
+		}
+		if (!profile.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
+		}
+
+		Posting posting = new Posting();
+		posting.setProfile(profile);
+		posting.setComment(null);
+		posting.setApplication(null);
+		posting.setDate(postDate);
+		posting.setPetName(petName);
+		posting.setPetDateOfBirth(dob);
+		posting.setPetBreed(breed);
+		posting.setPicture(picture);
+		posting.setDescription(reason);
+		posting.setId(profile.getEmail().hashCode() * postDate.hashCode());
+		posting = postingRepository.save(posting);
+		return posting;
+	}
+
+	@Transactional
+	public Posting deletePosting(Posting posting) {
+		if (posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		if (!posting.getProfile().getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
+		}
 		
-		Posting posting = postingRepository.findPostingById(email.hashCode()*date.hashCode());
-		if(posting == null) {
+		postingRepository.delete(posting);
+		return posting;
+
+	}
+
+	@Transactional
+	public Posting updatePostingInfo(Posting posting, String petName, Date dob, String breed, String picture,
+			String reason) {
+		if (posting == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
+		}
+		if (petName == null || petName.replaceAll("\\s+","").equals("") || !petName.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetName);
+		}
+		Date rightNow = new Date(System.currentTimeMillis());
+		if (dob == null || dob.compareTo(rightNow) >= 0) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPetDOB);
+		}
+		if (breed == null || breed.replaceAll("\\s+","").equals("") || !breed.matches("^[a-zA-Z]*$")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidBreed);
+		}
+		if (picture == null || picture.replaceAll("\\s+","").equals("")) {
+			throw new IllegalArgumentException(ErrorMessages.invalidPicture);
+		}
+		if (reason == null || reason.replaceAll("\\s+","").equals("") || reason.length() >= 1000) {
+			throw new IllegalArgumentException(ErrorMessages.invalidReason);
+		}
+		if (!posting.getProfile().getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
+		}
+		
+
+		posting.setPetName(petName);
+		posting.setPetDateOfBirth(dob);
+		posting.setPetBreed(breed);
+		posting.setPicture(picture);
+		posting.setDescription(reason);
+		posting = postingRepository.save(posting);
+		return posting;
+	}
+
+	@Transactional
+	public Posting getPosting(String email, Date date) {
+		if (email == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+		if (date == null) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+
+		Posting posting = postingRepository.findPostingById(email.hashCode() * date.hashCode());
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.postingDoesNotExist);
 		}
 		return posting;
@@ -563,34 +651,34 @@ public class PetShelterService {
 
 	@Transactional
 	public Application getApplication(String applicant_email, Posting posting) {
-		if(applicant_email == null) {
+		if (applicant_email == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
 		}
-		if(posting == null) {
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		
-		Application application = applicationRepository.findApplicationById(applicant_email.hashCode() * posting.hashCode()); 
-		if(application == null) {
+
+		Application application = applicationRepository
+				.findApplicationById(applicant_email.hashCode() * posting.hashCode());
+		if (application == null) {
 			throw new IllegalArgumentException(ErrorMessages.applicationDoesNotExist);
 		}
 		return application;
 	}
-	
-	@Transactional
-	public List<Application> getPostingApplications(Posting posting){
-		if(posting == null) {
+
+	public List<Application> getPostingApplications(Posting posting) {
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		return toList(posting.getApplication()); //returns ArrayList of applications associated with the posting 
+		return toList(posting.getApplication()); // returns ArrayList of applications associated with the posting
 	}
 
 	@Transactional
 	public Application rejectApplication(Application application) {
-		if(application == null) {
+		if (application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
-		if(application.getStatus() == ApplicationStatus.accepted) {
+		if (application.getStatus() == ApplicationStatus.accepted) {
 			throw new IllegalArgumentException(ErrorMessages.rejectingApprovedApp);
 		}
 		application.setStatus(ApplicationStatus.rejected);
@@ -599,25 +687,25 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Application approveApplication(Application application){
+	public Application approveApplication(Application application) {
 		/*
-		 * Called when the Profile that made the posting chooses the application that will get the pet advertised in the posting.
-		 * Status of this application is changed to "approved".
-		 * Change the status of other applications on the same posting to "rejected".
-		 * The decision is final.
+		 * Called when the Profile that made the posting chooses the application that
+		 * will get the pet advertised in the posting. Status of this application is
+		 * changed to "approved". Change the status of other applications on the same
+		 * posting to "rejected". The decision is final.
 		 */
-		if(application == null) {
+		if (application == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidApplication);
 		}
-		if(application.getStatus() != ApplicationStatus.pending) {
+		if (application.getStatus() != ApplicationStatus.pending) {
 			throw new IllegalArgumentException(ErrorMessages.notPendingApp);
 		}
 		application.setStatus(ApplicationStatus.accepted);
 		applicationRepository.save(application);
 		application = applicationRepository.save(application);
 
-		for(Application a : getPostingApplications(application.getPosting())) {
-			if(!(a.equals(application))) {
+		for (Application a : getPostingApplications(application.getPosting())) {
+			if (!(a.equals(application))) {
 				a.setStatus(ApplicationStatus.rejected);
 				applicationRepository.save(a);
 			}
@@ -627,23 +715,24 @@ public class PetShelterService {
 	}
 
 	@Transactional
-	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,Integer numberOfResidents){
+	public Application createApplication(Client client, Posting posting, HomeType homeType, IncomeRange incomeRange,
+			Integer numberOfResidents) {
 		if (client == null) {
 			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 		}
-		if(posting == null) {
+		if (posting == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidPosting);
 		}
-		if(client.getEmail().equals(posting.getProfile().getEmail())){
+		if (client.getEmail().equals(posting.getProfile().getEmail())) {
 			throw new IllegalArgumentException(ErrorMessages.selfApplication);
 		}
-		if(homeType == null) {
+		if (homeType == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidHomeType);
 		}
-		if(incomeRange == null) {
+		if (incomeRange == null) {
 			throw new IllegalArgumentException(ErrorMessages.invalidIncomeRange);
 		}
-		if(numberOfResidents <= 0) {
+		if (numberOfResidents <= 0) {
 			throw new IllegalArgumentException(ErrorMessages.invalidNOR);
 		}
 
@@ -661,7 +750,7 @@ public class PetShelterService {
 		return application;
 	}
 
-	public <T> List<T> toList(Iterable<T> iterable){
+	public <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
 		for (T t : iterable) {
 			resultList.add(t);
