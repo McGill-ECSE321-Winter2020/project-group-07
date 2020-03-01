@@ -167,7 +167,12 @@ public class PostingServiceTests {
 		};
 
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
-//		doNothing().when(postingDAO).delete(any(Posting.class));
+//		try {
+//			doNothing().when(postingDAO).delete(any(Posting.class));
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	// Test for if the profile is null
@@ -685,12 +690,10 @@ public class PostingServiceTests {
 		someone.setEmail("muffin_man2@gmail.com");
 		Posting posting = new Posting();
 		posting.setProfile(someone);
-		
 		try {
 			Posting copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
 					POSTING_PICTURE, POSTING_DESCRIPTION);
 			assertEquals(copyPosting.getProfile().getEmail(),posting.getProfile().getEmail());
-			assertEquals(POSTING_DATE,copyPosting.getDate());
 			assertEquals(POSTING_PETNAME,copyPosting.getPetName());
 			assertEquals(POSTING_PET_DOB,copyPosting.getPetDateOfBirth());
 			assertEquals(POSTING_PETBREED,copyPosting.getPetBreed());
@@ -702,10 +705,71 @@ public class PostingServiceTests {
 			fail();
 		}
 	}
-
 	
+	
+	@Test
+	public void testDeletePostingPostingNull() {
+		String error = null;
+		Posting posting = null;
+		Posting copyPosting = null;
+		try {
+			copyPosting = service.deletePosting(posting);
+		}
 
-	// open postings test
+		catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidPosting, error);
+	}
+	
+	@Test
+	public void testDeletePostingNotLoggedIn() {
+		String error = null;
+		Profile someone = new Client();
+		someone.setIsLoggedIn(false);
+		Posting posting = new Posting();
+		posting.setProfile(someone);
+		Posting copyPosting = null;
+		
+		try {
+			copyPosting = service.deletePosting(posting);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		assertNull(copyPosting);
+		assertEquals(ErrorMessages.invalidLoggedIn, error);
+	}
+	
+	@Test
+	public void testDeletePostingSuccess() {
+		Profile someone = new Client();
+		someone.setIsLoggedIn(true);
+		someone.setEmail("muffin_man2@gmail.com");
+		Posting posting = new Posting();
+		posting.setProfile(someone);
+		posting.setApplication(null);
+		posting.setComment(null);
+		posting.setPetDateOfBirth(POSTING_PET_DOB);
+		posting.setDescription(POSTING_DESCRIPTION);
+		posting.setPetBreed(POSTING_PETBREED);
+		posting.setPetName(POSTING_PETNAME);
+		posting.setPicture(POSTING_PICTURE);
+		try {
+			Posting copyPosting = service.deletePosting(posting);
+			assertEquals(copyPosting.getProfile().getEmail(),posting.getProfile().getEmail());
+			assertEquals(POSTING_PETNAME,copyPosting.getPetName());
+			assertEquals(POSTING_PET_DOB,copyPosting.getPetDateOfBirth());
+			assertEquals(POSTING_PETBREED,copyPosting.getPetBreed());
+			assertEquals(POSTING_PICTURE,copyPosting.getPicture());
+			assertEquals(POSTING_DESCRIPTION,copyPosting.getDescription());
+			assertNull(copyPosting.getApplication());
+			assertNull(copyPosting.getComment());	
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
 	// check that only postings that don't have an accepted application are returned
 	@Test
 	public void testGetOpenPostings() {

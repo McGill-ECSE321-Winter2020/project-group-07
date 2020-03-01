@@ -215,13 +215,6 @@ public class PetShelterRestController {
 	}
 
 	// Alex POST Mappings
-
-	// send Donation
-	@PostMapping(value = { "/senddonation", "/senddonation/" })
-	public DonationDTO sendDonation(@RequestParam("client") Client client, @RequestParam("amount") Integer amount,
-			@RequestParam("date") Date date) throws IllegalArgumentException {
-
-	// Alex POST Mappings
 	
 	//send Donation
 	@PostMapping(value = {"/senddonation", "/senddonation/"})
@@ -287,7 +280,7 @@ public class PetShelterRestController {
 	}
 
 	@PostMapping(value = { "/update-posting", "/update-posting/" })
-	public PostingDTO updateApplication(@RequestParam("client_email") String owner_email,
+	public PostingDTO updateApplication(@RequestParam("owner_email") String owner_email,
 			@RequestParam Date posting_date, @RequestParam("petName") String petName, @RequestParam Date dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
