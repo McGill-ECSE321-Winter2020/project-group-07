@@ -100,7 +100,7 @@ public class PetShelterRestController {
 //	}
 	
 	
-	@GetMapping(value = { "/{client}/donations", "/{client}/donations/" }) 
+	@GetMapping(value = { "/client-donations", "/client-donations/" }) 
 	public List<DonationDTO> getClientDonations(@RequestParam("client_email") String client_email) throws IllegalArgumentException { 
 		Client client = service.getClient(client_email);
 		List<Donation> donations = service.getClientDonations(client);
