@@ -115,7 +115,7 @@ public class Posting{
 		if (this.application == null) {
 			return null;
 		}
-		this.application.add(application);
+		this.application.remove(application);
 		return this.application;
 	}
 
