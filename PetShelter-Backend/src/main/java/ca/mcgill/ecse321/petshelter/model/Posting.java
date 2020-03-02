@@ -83,6 +83,15 @@ public class Posting{
 		this.comment.add(comment);
 		return this.comment;
 	}
+	
+	public Set<Comment> removeComment(Comment comment){
+		// Instantiate if the Set is not initialized
+		if (this.comment == null) {
+			return null;
+		}
+		this.comment.remove(comment);
+		return this.comment;
+	}
 
 	private Set<Application> application;
 
@@ -99,6 +108,15 @@ public class Posting{
 		// Instantiate if the Set is not initialized
 		if (this.application == null) {
 			this.application = new HashSet<>();
+		}
+		this.application.add(application);
+		return this.application;
+	}
+	
+	public Set<Application> removeApplication(Application application){
+		// Instantiate if the Set is not initialized
+		if (this.application == null) {
+			return null;
 		}
 		this.application.add(application);
 		return this.application;

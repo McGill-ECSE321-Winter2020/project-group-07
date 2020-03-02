@@ -8,12 +8,12 @@ import java.util.Set;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Admin extends Profile{
-	
-	@ElementCollection(targetClass=Message.class)
+public class Admin extends Profile {
+
+	@ElementCollection(targetClass = Message.class)
 	private Set<Message> messages;
 
-	@OneToMany(mappedBy="admin" )
+	@OneToMany(mappedBy = "admin")
 	public Set<Message> getMessages() {
 		return this.messages;
 	}
@@ -21,13 +21,22 @@ public class Admin extends Profile{
 	public void setMessages(Set<Message> messages) {
 		this.messages = messages;
 	}
-	
-	public Set<Message> addMessage(Message message){
+
+	public Set<Message> addMessage(Message message) {
 		// Instantiate if the Set is not initialized
 		if (this.messages == null) {
 			this.messages = new HashSet<>();
 		}
 		this.messages.add(message);
+		return this.messages;
+	}
+
+	public Set<Message> removeMessage(Message message) {
+		// Instantiate if the Set is not initialized
+		if (this.messages == null) {
+			return null;
+		}
+		this.messages.remove(message);
 		return this.messages;
 	}
 

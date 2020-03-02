@@ -3,8 +3,6 @@ package ca.mcgill.ecse321.petshelter.dto;
 import java.sql.Date;
 import java.util.List;
 
-import ca.mcgill.ecse321.petshelter.model.*;
-
 public class ProfileDTO {
 
     // Profile attributes

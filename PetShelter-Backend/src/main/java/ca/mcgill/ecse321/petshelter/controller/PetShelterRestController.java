@@ -8,15 +8,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
-import ca.mcgill.ecse321.petshelter.dto.*;
-import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.dto.ClientDTO;
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
+import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
+import ca.mcgill.ecse321.petshelter.dto.MessageDTO;
+import ca.mcgill.ecse321.petshelter.dto.PostingDTO;
+import ca.mcgill.ecse321.petshelter.dto.ProfileDTO;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.HomeType;
+import ca.mcgill.ecse321.petshelter.model.IncomeRange;
+import ca.mcgill.ecse321.petshelter.model.Message;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 import ca.mcgill.ecse321.petshelter.service.PetShelterService;
 
 @CrossOrigin(origins = "*")
@@ -118,9 +132,16 @@ public class PetShelterRestController {
 	}
 
 	// Looking at all Comments on a Posting
-	@GetMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
-	public List<CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException {
-
+	@GetMapping(value = { "/get-comments", "/get-comments/" })
+	public List<CommentDTO> getComments(@RequestParam("email") String email, @RequestParam("postDate") String postDate) throws IllegalArgumentException {
+		Date postingDate = null;
+		try {
+			postingDate = Date.valueOf(postDate);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		Posting posting = service.getPosting(email, postingDate);
 		List<Comment> comments = service.getComments(posting);
 		return convertToDTOComments(comments);
 	}
@@ -308,7 +329,7 @@ public class PetShelterRestController {
 	// Kaustav POST Mappings
 
 	@PostMapping(value = { "/create-posting", "/create-posting/" })
-	public PostingDTO createApplication(@RequestParam("client_email") String owner_email,
+	public PostingDTO createPosting(@RequestParam("email") String owner_email,
 			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
@@ -327,7 +348,7 @@ public class PetShelterRestController {
 	}
 
 	@PostMapping(value = { "/update-posting", "/update-posting/" })
-	public PostingDTO updateApplication(@RequestParam("owner_email") String owner_email,
+	public PostingDTO updatePosting(@RequestParam("owner_email") String owner_email,
 			@RequestParam("posting_date") String posting_date, @RequestParam("petName") String petName, @RequestParam("dob") String dob,
 			@RequestParam("description") String description, @RequestParam("picture") String picture,
 			@RequestParam("breed") String breed) throws IllegalArgumentException {
@@ -348,7 +369,7 @@ public class PetShelterRestController {
 	}
 
 	// Deleting an account
-	@PostMapping(value = { "/delete-posting", "/delete-account/" })
+	@PostMapping(value = { "/delete-posting", "/delete-posting/" })
 	public PostingDTO deletePosting(@RequestParam("owner_email") String owner_email,
 			@RequestParam("posting_date") String posting_date) {
 		
@@ -521,10 +542,14 @@ public class PetShelterRestController {
 	// Posting Convert to DTOs
 
 	private PostingDTO convertToDTO(Posting posting) {
-		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
-				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),
-				convertToDTO(posting.getProfile()), convertToDTOApplications(service.toList(posting.getApplication())),
-				convertToDTOComments(service.toList(posting.getComment())));
+		PostingDTO postingDTO = new PostingDTO();
+		postingDTO.setDate(posting.getDate());
+		postingDTO.setDescription(posting.getDescription());
+		postingDTO.setId(posting.getId());
+		postingDTO.setPetBreed(posting.getPetBreed());
+		postingDTO.setPetDateOfBirth(posting.getPetDateOfBirth());
+		postingDTO.setPetName(posting.getPetName());
+		postingDTO.setPicture(posting.getPicture());
 		return postingDTO;
 	}
 
