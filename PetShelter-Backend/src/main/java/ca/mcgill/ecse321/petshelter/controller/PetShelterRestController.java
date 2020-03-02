@@ -96,23 +96,18 @@ public class PetShelterRestController {
 
 	// Alex GET Mappings
 	@GetMapping(value= {"/client-messages", "/client-messages/"})
-	public List<MessageDTO> getMessages(@RequestParam("client_email") String client_email) throws IllegalArgumentException{
+	public List<MessageDTO> getClientMessages(@RequestParam("client_email") String client_email) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
 		List<Message> messages = service.getClientMessages(client);
 		return convertToDTOMessage(messages);
 	}
 	
-	//TODO: check if this method is needed, it seems to be already implemented by Rahul's getClientByEmail
-//	@GetMapping(value = { "client-updateprofile", "client-updateprofile/" }) 
-//	public ClientDTO getClientInfoUpdate(@RequestParam("client") Client client) throws IllegalArgumentException { 
-//		if (client == null) {
-//			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
-//		}
-//		ClientDTO clientDTO = convertToDTO(client.getDateOfBirth(), client.getEmail(), client.getPassword(),
-//				client.getPhoneNumber(), client.getAddress(), client.getIsLoggedIn(), client.getFirstName(), client.getLastName());
-//		return clientDTO;
-//	}
-	
+	@GetMapping(value= {"/admin-messages", "/admin-messages/"})
+	public List<MessageDTO> getAdminMessages(@RequestParam("admin_email") String admin_email) throws IllegalArgumentException{
+		Admin admin = service.getAdmin(admin_email);
+		List<Message> messages = service.getAdminMessages(admin);
+		return convertToDTOMessage(messages);
+	}
 	
 	@GetMapping(value = { "/client-donations", "/client-donations/" }) 
 	public List<DonationDTO> getClientDonations(@RequestParam("client_email") String client_email) throws IllegalArgumentException { 
@@ -120,6 +115,7 @@ public class PetShelterRestController {
 		List<Donation> donations = service.getClientDonations(client);
 		return convertToDTODonations(donations);
 	}
+	
 
 	// Nicolas GET Mappings
 
@@ -273,8 +269,9 @@ public class PetShelterRestController {
 	public MessageDTO sendMessage(@RequestParam("client_email") String client_email, 
 								  @RequestParam("date") String date_string,
 								  @RequestParam("content") String content, 
-								  @RequestParam("admin") Admin admin) throws IllegalArgumentException{
+								  @RequestParam("admin_email") String admin_email) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
+		Admin admin = service.getAdmin(admin_email);
 		Date date = null;
 		try {			
 			date = Date.valueOf(date_string);
@@ -461,7 +458,7 @@ public class PetShelterRestController {
 	 */
 	private MessageDTO convertToDTO(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
-		messageDTO.setAdmin(message.getAdmin());
+		messageDTO.setAdmin(convertToDTO(message.getAdmin()));
 		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(), message.getClient().getEmail(),
 				message.getClient().getPhoneNumber(), message.getClient().getAddress(),
 				message.getClient().getIsLoggedIn(), message.getClient().getFirstName(),
@@ -509,6 +506,7 @@ public class PetShelterRestController {
 	private DonationDTO convertToDTO(Donation donation) {
 		DonationDTO donDTO = new DonationDTO();
 		donDTO.setAmount(donation.getAmount());
+		donDTO.setDate(donation.getDate());
 		donDTO.setId(donation.getId());
 		
 		Client client = donation.getClient();

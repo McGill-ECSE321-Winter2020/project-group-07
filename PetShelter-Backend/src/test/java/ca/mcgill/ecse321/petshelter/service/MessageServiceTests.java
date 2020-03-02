@@ -286,21 +286,58 @@ public class MessageServiceTests {
 		assertEquals(ErrorMessages.notLoggedIn, error);		
 	}
 	
-	@Test 
-	public void testGetClientMessagesNullMessages() {
-		Client client = new Client();
-		client.setIsLoggedIn(true);
-		HashSet<Message> messages = new HashSet<Message>();
-		client.setMessages(messages);
-		
-		List<Message> returnedMessages = null;
-		String error = null;
-		try {
-			returnedMessages = service.getClientMessages(client);
-		} catch (Exception e) {
-			error = e.getMessage();
+	//Tests for the getAdminMessages() method 
+	
+		//Test the main case scenario
+		@Test 
+		public void testGetAdminMessages() {
+			Admin admin = new Admin();
+			admin.setIsLoggedIn(true);
+			HashSet<Message> messages = new HashSet<Message>();
+			Message m1 = new Message();
+			messages.add(m1);
+			Message m2 = new Message();
+			messages.add(m2);
+			Message m3 = new Message();
+			messages.add(m3);
+			admin.setMessages(messages);
+			
+			List<Message> returnedMessages = null;
+			try {
+				returnedMessages = service.getAdminMessages(admin);
+				assertNotNull(returnedMessages);
+				assertEquals(service.toList(messages), returnedMessages);
+			} catch (Exception e) {
+				fail();
+			}
 		}
-		assertNull(returnedMessages);
-		assertEquals(ErrorMessages.ClientHasNoMessages, error);		
-	}
+		
+		@Test 
+		public void testGetClientMessagesNullAdmin() {
+			List<Message> returnedMessages = null;
+			String error = null;
+			try {
+				returnedMessages = service.getAdminMessages(null);
+			} catch (Exception e) {
+				error = e.getMessage();
+			}
+			assertNull(returnedMessages);
+			assertEquals(ErrorMessages.accountDoesNotExist, error);		
+		}
+		
+		@Test 
+		public void testGetClientMessagesLoggedOutAdmin() {
+			Admin admin = new Admin();
+			admin.setIsLoggedIn(false);
+			
+			List<Message> returnedMessages = null;
+			String error = null;
+			try {
+				returnedMessages = service.getAdminMessages(admin);
+			} catch (Exception e) {
+				error = e.getMessage();
+			}
+			assertNull(returnedMessages);
+			assertEquals(ErrorMessages.notLoggedIn, error);		
+		}
 }
