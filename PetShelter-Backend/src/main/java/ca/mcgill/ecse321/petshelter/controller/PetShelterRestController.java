@@ -118,9 +118,16 @@ public class PetShelterRestController {
 	}
 
 	// Looking at all Comments on a Posting
-	@GetMapping(value = { "/{posting}/comments", "/{posting}/comments/" })
-	public List<CommentDTO> getComments(@PathVariable("posting") Posting posting) throws IllegalArgumentException {
-
+	@GetMapping(value = { "/get-comments", "/get-comments/" })
+	public List<CommentDTO> getComments(@RequestParam("email") String email, @RequestParam("postDate") String postDate) throws IllegalArgumentException {
+		Date postingDate = null;
+		try {
+			postingDate = Date.valueOf(postDate);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException(ErrorMessages.invalidDate);
+		}
+		Posting posting = service.getPosting(email, postingDate);
 		List<Comment> comments = service.getComments(posting);
 		return convertToDTOComments(comments);
 	}
@@ -521,10 +528,14 @@ public class PetShelterRestController {
 	// Posting Convert to DTOs
 
 	private PostingDTO convertToDTO(Posting posting) {
-		PostingDTO postingDTO = new PostingDTO(posting.getId(), posting.getDate(), posting.getPicture(),
-				posting.getDescription(), posting.getPetName(), posting.getPetBreed(), posting.getPetDateOfBirth(),
-				convertToDTO(posting.getProfile()), convertToDTOApplications(service.toList(posting.getApplication())),
-				convertToDTOComments(service.toList(posting.getComment())));
+		PostingDTO postingDTO = new PostingDTO();
+		postingDTO.setDate(posting.getDate());
+		postingDTO.setDescription(posting.getDescription());
+		postingDTO.setId(posting.getId());
+		postingDTO.setPetBreed(posting.getPetBreed());
+		postingDTO.setPetDateOfBirth(posting.getPetDateOfBirth());
+		postingDTO.setPetName(posting.getPetName());
+		postingDTO.setPicture(posting.getPicture());
 		return postingDTO;
 	}
 
