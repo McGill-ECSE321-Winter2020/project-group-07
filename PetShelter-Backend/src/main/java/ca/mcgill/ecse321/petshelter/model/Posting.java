@@ -76,7 +76,6 @@ public class Posting{
 	}
 	
 	public Set<Comment> addComment(Comment comment){
-		// Instantiate if the Set is not initialized
 		if (this.comment == null) {
 			this.comment = new HashSet<>();
 		}
@@ -85,7 +84,6 @@ public class Posting{
 	}
 	
 	public Set<Comment> removeComment(Comment comment){
-		// Instantiate if the Set is not initialized
 		if (this.comment == null) {
 			return null;
 		}
@@ -105,7 +103,6 @@ public class Posting{
 	}
 	
 	public Set<Application> addApplication(Application application){
-		// Instantiate if the Set is not initialized
 		if (this.application == null) {
 			this.application = new HashSet<>();
 		}
@@ -114,11 +111,11 @@ public class Posting{
 	}
 	
 	public Set<Application> removeApplication(Application application){
-		// Instantiate if the Set is not initialized
+
 		if (this.application == null) {
 			return null;
 		}
-		this.application.add(application);
+		this.application.remove(application);
 		return this.application;
 	}
 

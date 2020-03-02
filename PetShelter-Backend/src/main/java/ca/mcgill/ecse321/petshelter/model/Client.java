@@ -39,7 +39,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Donation> addDonation(Donation donation){
-		// Instantiate if the Set is not initialized
 		if (this.donations == null) {
 			this.donations = new HashSet<>();
 		}
@@ -48,7 +47,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Donation> removeDonation(Donation donation){
-		// Instantiate if the Set is not initialized
 		if (this.donations == null) {
 			return null;
 		}
@@ -69,7 +67,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Message> addMessage(Message message){
-		// Instantiate if the Set is not initialized
 		if (this.messages == null) {
 			this.messages = new HashSet<>();
 		}
@@ -78,7 +75,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Message> removeMessage(Message message){
-		// Instantiate if the Set is not initialized
 		if (this.messages == null) {
 			return null;
 		}
@@ -99,7 +95,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Application> addApplication(Application application){
-		// Instantiate if the Set is not initialized
 		if (this.applications == null) {
 			this.applications = new HashSet<>();
 		}
@@ -108,7 +103,6 @@ public class Client extends Profile{
 	}
 	
 	public Set<Application> removeApplication(Application application){
-		// Instantiate if the Set is not initialized
 		if (this.applications == null) {
 			return null;
 		}

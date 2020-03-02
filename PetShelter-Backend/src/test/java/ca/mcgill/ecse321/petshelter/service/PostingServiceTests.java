@@ -25,12 +25,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.ApplicationRepository;
+import ca.mcgill.ecse321.petshelter.dao.CommentRepository;
+import ca.mcgill.ecse321.petshelter.dao.MessageRepository;
 import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
 import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
 import ca.mcgill.ecse321.petshelter.model.Admin;
 import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
 import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Message;
 import ca.mcgill.ecse321.petshelter.model.Posting;
 import ca.mcgill.ecse321.petshelter.model.Profile;
 
@@ -43,7 +48,12 @@ public class PostingServiceTests {
 	@Mock
 	private ProfileRepository profileDAO;
 
-	
+	@Mock
+	private ApplicationRepository applicationDAO;
+
+	@Mock
+	private CommentRepository commentDAO;
+
 	@InjectMocks
 	private PetShelterService service;
 
@@ -98,7 +108,7 @@ public class PostingServiceTests {
 			+ "So you have to wonder why I'm a Heartstrings dog since I'm smart, cute, healthy, house trained and a loyal companion. "
 			+ "I've got one teensy tiny flaw. I'm not fond of strangers whether they're people (big and small) or dogs on walks. "
 			+ "Actually I'm more scared than anything else so I'm not like those other silly types of dogs that slobber all over you at the first minute they meet you.";
-			
+
 	// Test stubs
 	@BeforeEach
 	public void setMockOutput() {
@@ -175,6 +185,8 @@ public class PostingServiceTests {
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().doNothing().when(postingDAO).delete(any(Posting.class));
 		lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().doNothing().when(commentDAO).delete(any(Comment.class));
+		lenient().doNothing().when(postingDAO).delete(any(Posting.class));
 	}
 
 	// Test for if the profile is null
@@ -395,7 +407,7 @@ public class PostingServiceTests {
 		assertNull(posting);
 		assertEquals(ErrorMessages.invalidReason, error);
 	}
-	
+
 	@Test
 	public void testCreatePostingDescriptionLong() {
 		String error = null;
@@ -410,7 +422,7 @@ public class PostingServiceTests {
 		assertNull(posting);
 		assertEquals(ErrorMessages.invalidReason, error);
 	}
-	
+
 	@Test
 	public void testCreatePostingNotLoggedIn() {
 		String error = null;
@@ -426,7 +438,7 @@ public class PostingServiceTests {
 		assertNull(posting);
 		assertEquals(ErrorMessages.invalidLoggedIn, error);
 	}
-	
+
 	@Test
 	public void testCreatePostingSuccess() {
 		Client account = new Client();
@@ -448,7 +460,7 @@ public class PostingServiceTests {
 			fail();
 		}
 	}
-	
+
 	@Test
 	public void testUpdatePostingInfoPostingNull() {
 		String error = null;
@@ -465,7 +477,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidPosting, error);
 	}
-	
+
 	@Test
 	public void testUpdatePostingInfoPetNameNull() {
 		String error = null;
@@ -650,7 +662,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidReason, error);
 	}
-	
+
 	@Test
 	public void testUpdatePostingInfoDescriptionLong() {
 		String error = null;
@@ -665,7 +677,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidReason, error);
 	}
-	
+
 	@Test
 	public void testUpdatePostingInfoNotLoggedIn() {
 		String error = null;
@@ -674,7 +686,7 @@ public class PostingServiceTests {
 		Posting posting = new Posting();
 		posting.setProfile(someone);
 		Posting copyPosting = null;
-		
+
 		try {
 			copyPosting = service.updatePostingInfo(posting, POSTING_PETNAME, POSTING_PET_DOB, POSTING_PETBREED,
 					POSTING_PICTURE, POSTING_DESCRIPTION);
@@ -684,7 +696,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidLoggedIn, error);
 	}
-	
+
 	@Test
 	public void testUpdatePostingInfoSuccess() {
 		Profile someone = new Client();
@@ -707,8 +719,8 @@ public class PostingServiceTests {
 			fail();
 		}
 	}
-	
-	
+
+
 	@Test
 	public void testDeletePostingPostingNull() {
 		String error = null;
@@ -724,7 +736,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidPosting, error);
 	}
-	
+
 	@Test
 	public void testDeletePostingNotLoggedIn() {
 		String error = null;
@@ -733,7 +745,7 @@ public class PostingServiceTests {
 		Posting posting = new Posting();
 		posting.setProfile(someone);
 		Posting copyPosting = null;
-		
+
 		try {
 			copyPosting = service.deletePosting(posting);
 		} catch (Exception e) {
@@ -742,7 +754,7 @@ public class PostingServiceTests {
 		assertNull(copyPosting);
 		assertEquals(ErrorMessages.invalidLoggedIn, error);
 	}
-	
+
 	@Test
 	public void testDeletePostingSuccess() {
 		Profile someone = new Client();
@@ -771,7 +783,7 @@ public class PostingServiceTests {
 			fail();
 		}
 	}
-	
+
 	@Test
 	public void testGetPosting() {
 		Posting posting = null;
@@ -784,7 +796,7 @@ public class PostingServiceTests {
 		assertNotNull(posting);
 		assertEquals(CLIENT_EMAIL_LOGGEDIN.hashCode() * POSTING_DATE.hashCode(), posting.getId());
 	}
-	
+
 	// check that only postings that don't have an accepted application are returned
 	@Test
 	public void testGetOpenPostings() {

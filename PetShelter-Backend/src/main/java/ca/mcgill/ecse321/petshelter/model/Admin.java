@@ -23,7 +23,7 @@ public class Admin extends Profile {
 	}
 
 	public Set<Message> addMessage(Message message) {
-		// Instantiate if the Set is not initialized
+
 		if (this.messages == null) {
 			this.messages = new HashSet<>();
 		}
@@ -32,7 +32,7 @@ public class Admin extends Profile {
 	}
 
 	public Set<Message> removeMessage(Message message) {
-		// Instantiate if the Set is not initialized
+
 		if (this.messages == null) {
 			return null;
 		}
