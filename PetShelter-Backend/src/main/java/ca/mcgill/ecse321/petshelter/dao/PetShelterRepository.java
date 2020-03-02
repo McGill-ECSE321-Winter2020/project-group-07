@@ -1,17 +1,25 @@
 package ca.mcgill.ecse321.petshelter.dao;
 
 import java.sql.Date;
-
-import java.util.*;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.ApplicationStatus;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.HomeType;
+import ca.mcgill.ecse321.petshelter.model.IncomeRange;
+import ca.mcgill.ecse321.petshelter.model.Message;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 
 
 @Repository

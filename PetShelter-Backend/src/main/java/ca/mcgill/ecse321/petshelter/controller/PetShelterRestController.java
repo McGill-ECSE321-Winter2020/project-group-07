@@ -8,15 +8,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
-import ca.mcgill.ecse321.petshelter.dto.*;
-import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.dto.ClientDTO;
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
+import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
+import ca.mcgill.ecse321.petshelter.dto.MessageDTO;
+import ca.mcgill.ecse321.petshelter.dto.PostingDTO;
+import ca.mcgill.ecse321.petshelter.dto.ProfileDTO;
+import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.HomeType;
+import ca.mcgill.ecse321.petshelter.model.IncomeRange;
+import ca.mcgill.ecse321.petshelter.model.Message;
+import ca.mcgill.ecse321.petshelter.model.Posting;
+import ca.mcgill.ecse321.petshelter.model.Profile;
 import ca.mcgill.ecse321.petshelter.service.PetShelterService;
 
 @CrossOrigin(origins = "*")
