@@ -83,7 +83,7 @@ public abstract class Profile{
 	}
 	
 	public Set<Posting> removePosting(Posting posting){
-		// Instantiate if the Set is not initialized
+
 		if (this.postings == null) {
 			return null;
 		}
@@ -104,7 +104,6 @@ public abstract class Profile{
 	}
 	
 	public Set<Comment> addComment(Comment comment){
-		// Instantiate if the Set is not initialized
 		if (this.comments == null) {
 			this.comments = new HashSet<>();
 		}
@@ -113,7 +112,6 @@ public abstract class Profile{
 	}
 	
 	public Set<Comment> removeComment(Comment comment){
-		// Instantiate if the Set is not initialized
 		if (this.comments == null) {
 			return null;
 		}
