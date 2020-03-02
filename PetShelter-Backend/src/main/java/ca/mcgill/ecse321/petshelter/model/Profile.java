@@ -82,6 +82,15 @@ public abstract class Profile{
 		return this.postings;
 	}
 	
+	public Set<Posting> removePosting(Posting posting){
+		// Instantiate if the Set is not initialized
+		if (this.postings == null) {
+			return null;
+		}
+		this.postings.remove(posting);
+		return this.postings;
+	}
+	
 	@ElementCollection(targetClass=Comment.class)
 	private Set<Comment> comments;
 
@@ -100,6 +109,15 @@ public abstract class Profile{
 			this.comments = new HashSet<>();
 		}
 		this.comments.add(comment);
+		return this.comments;
+	}
+	
+	public Set<Comment> removeComment(Comment comment){
+		// Instantiate if the Set is not initialized
+		if (this.comments == null) {
+			return null;
+		}
+		this.comments.remove(comment);
 		return this.comments;
 	}
 
