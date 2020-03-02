@@ -640,6 +640,7 @@ public class PetShelterService {
 		if (!posting.getProfile().getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
 		}
+
 		//delete associated applications and comments first
 		Set<Application> applications_to_del = posting.getApplication();
 		if(applications_to_del != null) {
@@ -656,6 +657,7 @@ public class PetShelterService {
 				commentRepository.delete(comment);
 			}				
 		}
+
 		
 		postingRepository.delete(posting);
 		return posting;
