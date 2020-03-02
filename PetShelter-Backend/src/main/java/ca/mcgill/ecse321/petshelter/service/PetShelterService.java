@@ -319,6 +319,20 @@ public class PetShelterService {
 
 	}
 
+	@Transactional
+	public Admin getAdmin(String email) {
+		if (email != null) {
+			Admin admin = adminRepository.findAdminByEmail(email);
+			if (admin == null) {
+				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+			}
+			return admin;
+		} else {
+			throw new IllegalArgumentException(ErrorMessages.invalidEmail);
+		}
+	}
+	
+	
 	/**
 	 * Method to use when a donation is being sent, the amount needs to be an integer.
 	 * @param amount
@@ -443,10 +457,18 @@ public class PetShelterService {
 		if(!client.getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
 		}
-		if(client.getMessages() == null || client.getMessages().size() == 0) {
-			throw new IllegalArgumentException(ErrorMessages.ClientHasNoMessages);
-		}
 		return toList(client.getMessages());
+	}
+	
+	@Transactional
+	public List<Message> getAdminMessages(Admin admin){
+		if(admin == null) {
+			throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
+		}
+		if(!admin.getIsLoggedIn()) {
+			throw new IllegalArgumentException(ErrorMessages.notLoggedIn);
+		}
+		return toList(admin.getMessages());
 	}
 
 

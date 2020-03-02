@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.AdminRepository;
 import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
 import ca.mcgill.ecse321.petshelter.model.Admin;
 import ca.mcgill.ecse321.petshelter.model.Client;
@@ -30,6 +33,9 @@ public class AdminServiceTests {
 
     @Mock
     private ProfileRepository profileDAO;
+    
+    @Mock
+    private AdminRepository adminDAO;
     
     @InjectMocks
     private PetShelterService service;
@@ -66,6 +72,21 @@ public class AdminServiceTests {
                 admin.setPhoneNumber(PROFILE_PHONENUMBER);
                 admin.setAddress(PROFILE_ADDRESS);
                 admin.setIsLoggedIn(PROFILE_LOGGEDOUT);
+				return admin;
+            } else {
+				return null;
+			}
+        });
+		
+		lenient().when(adminDAO.findAdminByEmail(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(PROFILE_EMAIL_LOGGEDIN)) {
+				Admin admin = new Admin(); // Dummy logged in object 
+                admin.setDateOfBirth(PROFILE_DOB);
+                admin.setEmail(PROFILE_EMAIL_LOGGEDIN);
+                admin.setPassword(PROFILE_PASSWORD);
+                admin.setPhoneNumber(PROFILE_PHONENUMBER);
+                admin.setAddress(PROFILE_ADDRESS);
+                admin.setIsLoggedIn(PROFILE_LOGGEDIN);
 				return admin;
             } else {
 				return null;
@@ -211,5 +232,45 @@ public class AdminServiceTests {
          }
      }
 
+     
+     // Test the getAdmin() service method
+     
+     //Test main case scenario
+     @Test
+     public void testGetAdmin() {
+    	 try {
+			Admin admin = service.getAdmin(PROFILE_EMAIL_LOGGEDIN);
+			assertNotNull(admin);
+			assertEquals(PROFILE_EMAIL_LOGGEDIN, admin.getEmail());
+		} catch (Exception e) {
+			fail();
+		}
+     }
 
+     @Test
+     public void testGetAdminNullEmail() {
+    	 Admin admin = null;
+    	 String error = null;
+    	 try {
+			admin = service.getAdmin(null);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+    	 assertNull(admin);
+    	 assertEquals(ErrorMessages.invalidEmail, error);
+     }
+     
+     @Test
+     public void testGetAdminNullAdmin() {
+    	 Admin admin = null;
+    	 String error = null;
+    	 try {
+			admin = service.getAdmin(PROFILE_EMAIL_LOGGEDOUT); //returns a null admin
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+    	 assertNull(admin);
+    	 assertEquals(ErrorMessages.accountDoesNotExist, error);
+     }
+     
 }
