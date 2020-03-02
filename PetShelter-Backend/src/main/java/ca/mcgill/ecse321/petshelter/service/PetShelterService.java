@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.petshelter.service;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,6 +189,39 @@ public class PetShelterService {
 			if (client_to_delete == null) {
 				throw new IllegalArgumentException(ErrorMessages.accountDoesNotExist);
 			}
+			//Delete all the applications, comments, messages, postings
+			Set<Application> applications_to_del = client_to_delete.getApplications();
+			if(applications_to_del != null) {
+				for(Application application: applications_to_del) {
+					client_to_delete.removeApplication(application);
+					applicationRepository.delete(application);
+				}
+			}
+			
+			Set<Comment> comments_to_del = client_to_delete.getComments();
+			if(comments_to_del != null) {
+				for(Comment comment: comments_to_del) {
+					client_to_delete.removeComment(comment);
+					commentRepository.delete(comment);
+				}				
+			}
+
+			Set<Message> messages_to_del = client_to_delete.getMessages();
+			if(messages_to_del != null) {
+				for(Message message: messages_to_del) {
+					client_to_delete.removeMessage(message);
+					messageRepository.delete(message);
+				}				
+			}
+
+			Set<Posting> postings_to_del = client_to_delete.getPostings();
+			if(postings_to_del != null) {
+				for(Posting posting: postings_to_del) {
+					client_to_delete.removePosting(posting);
+					postingRepository.delete(posting);
+				}				
+			}
+			
 			clientRepository.delete(client_to_delete); // Deleting client
 			return client_to_delete;
 		} else {
@@ -627,6 +661,22 @@ public class PetShelterService {
 		}
 		if (!posting.getProfile().getIsLoggedIn()) {
 			throw new IllegalArgumentException(ErrorMessages.invalidLoggedIn);
+		}
+		//delete associated applications and comments first
+		Set<Application> applications_to_del = posting.getApplication();
+		if(applications_to_del != null) {
+			for(Application application: applications_to_del) {
+				posting.removeApplication(application);
+				applicationRepository.delete(application);
+			}
+		}
+		
+		Set<Comment> comments_to_del = posting.getComment();
+		if(comments_to_del != null) {
+			for(Comment comment: comments_to_del) {
+				posting.removeComment(comment);
+				commentRepository.delete(comment);
+			}				
 		}
 		
 		postingRepository.delete(posting);
