@@ -82,9 +82,16 @@ public class PetShelterRestController {
 
 	// Alex GET Mappings
 	@GetMapping(value= {"/client-messages", "/client-messages/"})
-	public List<MessageDTO> getMessages(@RequestParam("client_email") String client_email) throws IllegalArgumentException{
+	public List<MessageDTO> getClientMessages(@RequestParam("client_email") String client_email) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
 		List<Message> messages = service.getClientMessages(client);
+		return convertToDTOMessage(messages);
+	}
+	
+	@GetMapping(value= {"/admin-messages", "/admin-messages/"})
+	public List<MessageDTO> getAdminMessages(@RequestParam("admin_email") String admin_email) throws IllegalArgumentException{
+		Admin admin = service.getAdmin(admin_email);
+		List<Message> messages = service.getAdminMessages(admin);
 		return convertToDTOMessage(messages);
 	}
 	
@@ -94,6 +101,7 @@ public class PetShelterRestController {
 		List<Donation> donations = service.getClientDonations(client);
 		return convertToDTODonations(donations);
 	}
+	
 
 	// Nicolas GET Mappings
 
@@ -240,8 +248,9 @@ public class PetShelterRestController {
 	public MessageDTO sendMessage(@RequestParam("client_email") String client_email, 
 								  @RequestParam("date") String date_string,
 								  @RequestParam("content") String content, 
-								  @RequestParam("admin") Admin admin) throws IllegalArgumentException{
+								  @RequestParam("admin_email") String admin_email) throws IllegalArgumentException{
 		Client client = service.getClient(client_email);
+		Admin admin = service.getAdmin(admin_email);
 		Date date = null;
 		try {			
 			date = Date.valueOf(date_string);
@@ -428,7 +437,7 @@ public class PetShelterRestController {
 	 */
 	private MessageDTO convertToDTO(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
-		messageDTO.setAdmin(message.getAdmin());
+		messageDTO.setAdmin(convertToDTO(message.getAdmin()));
 		messageDTO.setClient(convertToDTO(message.getClient().getDateOfBirth(), message.getClient().getEmail(),
 				message.getClient().getPhoneNumber(), message.getClient().getAddress(),
 				message.getClient().getIsLoggedIn(), message.getClient().getFirstName(),

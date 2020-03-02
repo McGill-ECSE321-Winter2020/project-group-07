@@ -1,9 +1,6 @@
 package ca.mcgill.ecse321.petshelter.dto;
 import java.sql.Date;
 
-import ca.mcgill.ecse321.petshelter.model.Admin;
-import ca.mcgill.ecse321.petshelter.model.Client;
-
 
 /**
  * This class is the data transfer object class for messages, 
@@ -16,7 +13,7 @@ public class MessageDTO {
 	private Date date;
 	private String content;
 	private ClientDTO client;
-	private Admin admin;
+	private ProfileDTO admin;
 	private Integer id;
 	
 
@@ -44,11 +41,11 @@ public class MessageDTO {
 		this.client = client;
 	}
 
-	public Admin getAdmin() {
+	public ProfileDTO getAdmin() {
 		return admin;
 	}
 
-	public void setAdmin(Admin admin) {
+	public void setAdmin(ProfileDTO admin) {
 		this.admin = admin;
 	}
 
