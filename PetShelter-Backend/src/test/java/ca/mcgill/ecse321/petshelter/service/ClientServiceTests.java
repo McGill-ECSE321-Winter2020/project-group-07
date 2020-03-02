@@ -20,10 +20,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.petshelter.ErrorMessages;
+import ca.mcgill.ecse321.petshelter.dao.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.dao.ClientRepository;
+import ca.mcgill.ecse321.petshelter.dao.CommentRepository;
+import ca.mcgill.ecse321.petshelter.dao.MessageRepository;
+import ca.mcgill.ecse321.petshelter.dao.PostingRepository;
 import ca.mcgill.ecse321.petshelter.dao.ProfileRepository;
 import ca.mcgill.ecse321.petshelter.model.Admin;
+import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Client;
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Message;
+import ca.mcgill.ecse321.petshelter.model.Posting;
 import ca.mcgill.ecse321.petshelter.model.Profile;
 
 
@@ -35,6 +43,18 @@ public class ClientServiceTests {
 
     @Mock
     private ClientRepository clientDAO;
+    
+    @Mock
+    private ApplicationRepository applicationDAO;
+    
+    @Mock
+    private MessageRepository messageDAO;
+    
+    @Mock
+    private CommentRepository commentDAO;
+    
+    @Mock
+    private PostingRepository postingDAO;
     
     @InjectMocks
     private PetShelterService service;
@@ -175,7 +195,10 @@ public class ClientServiceTests {
         lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
         lenient().when(clientDAO.save(any(Client.class))).thenAnswer(returnParameterAsAnswer);
         lenient().doNothing().when(clientDAO).delete(any(Client.class));
-    
+        lenient().doNothing().when(applicationDAO).delete(any(Application.class));
+        lenient().doNothing().when(commentDAO).delete(any(Comment.class));
+        lenient().doNothing().when(messageDAO).delete(any(Message.class));
+        lenient().doNothing().when(postingDAO).delete(any(Posting.class));
 	}
 
 
