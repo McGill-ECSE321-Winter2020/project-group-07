@@ -46,6 +46,15 @@ public class Client extends Profile{
 		this.donations.add(donation);
 		return this.donations;
 	}
+	
+	public Set<Donation> removeDonation(Donation donation){
+		// Instantiate if the Set is not initialized
+		if (this.donations == null) {
+			return null;
+		}
+		this.donations.remove(donation);
+		return this.donations;
+	}
 
 	@ElementCollection(targetClass=Message.class)
 	private Set<Message> messages;
@@ -67,6 +76,15 @@ public class Client extends Profile{
 		this.messages.add(message);
 		return this.messages;
 	}
+	
+	public Set<Message> removeMessage(Message message){
+		// Instantiate if the Set is not initialized
+		if (this.messages == null) {
+			return null;
+		}
+		this.messages.remove(message);
+		return this.messages;
+	}
 
 	@ElementCollection(targetClass=Application.class)
 	private Set<Application> applications;
@@ -86,6 +104,15 @@ public class Client extends Profile{
 			this.applications = new HashSet<>();
 		}
 		this.applications.add(application);
+		return this.applications;
+	}
+	
+	public Set<Application> removeApplication(Application application){
+		// Instantiate if the Set is not initialized
+		if (this.applications == null) {
+			return null;
+		}
+		this.applications.remove(application);
 		return this.applications;
 	}
 

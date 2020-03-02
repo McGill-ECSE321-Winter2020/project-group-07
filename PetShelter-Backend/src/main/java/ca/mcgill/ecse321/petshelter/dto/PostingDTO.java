@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.*;
-
 import java.sql.Date;
 import java.util.List;
 
@@ -20,20 +18,8 @@ public class PostingDTO {
 	private List <CommentDTO> comments;
 	
 	//Constructor
-	public PostingDTO(Integer id, Date date, String picture, String description, 
-			String petName, String petBreed,Date petDateOfBirth, ProfileDTO profile, 
-			List<ApplicationDTO> applications, List<CommentDTO> comments) {
+	public PostingDTO() {
 		
-		Id = id;
-		this.date = date;
-		this.picture = picture;
-		this.description = description;
-		this.petName = petName;
-		this.petBreed = petBreed;
-		this.petDateOfBirth = petDateOfBirth;
-		this.profile = profile;
-		this.applications = applications;
-		this.comments = comments;
 	}
 	
 	//Setters and Getters

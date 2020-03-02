@@ -175,7 +175,6 @@ public class PostingServiceTests {
 		lenient().when(postingDAO.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().doNothing().when(postingDAO).delete(any(Posting.class));
 		lenient().when(profileDAO.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
-
 	}
 
 	// Test for if the profile is null
