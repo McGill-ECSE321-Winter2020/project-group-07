@@ -15,8 +15,8 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
 | Alexander Legouverneur  | Software Developer | 17.5 | 29 | &mdash; | &mdash; |
-| Kaustav Das Sharma | Software Architecure Engineer | 22 | 7 | &mdash; | &mdash; |
-| Mohamed Bouaouina | Project Manager | 18.5 | 35 | &mdash; | &mdash; |
+| Kaustav Das Sharma | Software Architecure Engineer | 39 | 7 | &mdash; | &mdash; |
+| Mohamed Bouaouina | Project Manager | 18.5 | 47 | &mdash; | &mdash; |
 | Nicolas Buisson | Product Manager | 20 | 29 | &mdash; | &mdash; |
 | Rahul Behal | Software Consultant | 15 | 37 | &mdash; | &mdash; |
 
@@ -48,9 +48,9 @@ Starts Feb 10, 2020
 * Test coverage
 
 ### Tasks completed by each member:
-* Alex:
-* Kaustav:
-* Mohamed:
+* Alex: Implemented unit tests, Rest controller methods, and service methods relevant to messages and client profiles.
+* Kaustav: Implemented unit tests, rest controller methods, and service methods relevant to postings, conducted integration tests for postings and comments, added methods for referential integrity adherence and build system compatibility.
+* Mohamed: Implemented unit tests, rest controller methods, and service methods relevant to applications, conducted integration tests for applications and messages and client profile, added methods for referential integrity adherence and build system compatibility.
 * Nicolas: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
 * Rahul: Implemented service methods, unit tests for service methods, and RESTful services for the create account, delete account, and login/logout account use cases and requirements. Wrote documentation for unit tests of requirements and RESTful service endpoint documentations for the aforementioned RESTful services.
 
