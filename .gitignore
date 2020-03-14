@@ -18,3 +18,4 @@ project-group-07.iml
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/test.class
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/test.java
 .vscode/launch.json
+PetShelter-Frontend/package-lock.json
