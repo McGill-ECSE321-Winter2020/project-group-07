@@ -29,18 +29,4 @@ test {
 	useJUnitPlatform()
 }
 
-/*
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output + configurations.testCompile
-        runtimeClasspath += output + compileClasspath + configurations.testRuntime
-    }
-}
-
-idea {
-    module {
-        testSourceDirs += sourceSets.integrationTest.java.srcDirs
-        testResourceDirs += sourceSets.integrationTest.resources.srcDirs
-        scopes.TEST.plus += [ configurations.integrationTestCompile ]
-    }
-}
+ 
