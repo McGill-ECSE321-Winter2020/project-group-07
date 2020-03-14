@@ -44,13 +44,3 @@ idea {
         scopes.TEST.plus += [ configurations.integrationTestCompile ]
     }
 }
-
-task integrationTest(type: Test) {
-    description = 'Runs the integration tests.'
-    group = 'verification'
-    commandLine 'sh ./integrationTests.sh'
-    mustRunAfter test
-}
-
-check.dependsOn integrationTest
-/*
