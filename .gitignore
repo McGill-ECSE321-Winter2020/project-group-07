@@ -1,11 +1,11 @@
 .gradle/
-build/
+./build/
 
 # Ignore Gradle project-specific cache directory
 .gradle
 
 # Ignore Gradle build output directory
-build
+./build
 project-group-07.iml
 .idea/workspace.xml
 .idea/vcs.xml
@@ -18,4 +18,3 @@ project-group-07.iml
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/test.class
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/test.java
 .vscode/launch.json
-PetShelter-Frontend/package-lock.json
