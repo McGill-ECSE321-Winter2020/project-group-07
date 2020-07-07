@@ -61,7 +61,7 @@ Starts Mar 2, 2020
 * Architecture model
 * Implementation of a web frontend using Vue.js 
 
-As a susbsitute to this sprint, each team member worked on an individual assignment where they built the frontend of a website using Vue.js components and Axios to handle backend calls. Unfortunately, the assignment repositories cannot be made public. 
+As a substitute to this sprint, each team member worked on an individual assignment where they built the frontend of a website using Vue.js components and Axios to handle backend calls. Unfortunately, the assignment repositories cannot be made public. 
 
 ## Sprint 4 \[Canceled due to COVID-19\]
 
