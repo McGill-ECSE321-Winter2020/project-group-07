@@ -1,4 +1,4 @@
-# ECSE 321 Pet Shelter Project - Group 07
+# ECSE 321 Pet Shelter Project - Winter 2020 - Group 07
 
 Welcome to the Group 07 Pet Shelter Project Repository!
 
@@ -30,11 +30,11 @@ Started Jan 27, 2020
 * Test cases for persistence layer
 
 ### Tasks completed by each member:
-* Alex: Worked on setting up the spring backend app along with the petshelterRepository class, designed the use case diagrams, and participated in the conception and refinement of the requirements. Worked on the testing of the persistence layer with JUnit testing.
-* Kaustav: Worked on project management tasks (adding wiki documentation, project backlog, Kanban board organisation, issue tracking), setting up Spring boot backend app with Gradle, Travis CI integration, deploying Heroku instance with database and UML domain modelling.
-* Mohamed: Worked on creating requirements, use cases, use case diagrams, setting up a Spring backend app with a Gradle build system, creating the CRUD repos, unit testing the persitence layer with JUnit, and documenting the project.
-* Nicolas: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
-* Rahul: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
+* **Alex**: Worked on setting up the spring backend app along with the petshelterRepository class, designed the use case diagrams, and participated in the conception and refinement of the requirements. Worked on the testing of the persistence layer with JUnit testing.
+* **Kaustav**: Worked on project management tasks (adding wiki documentation, project backlog, Kanban board organisation, issue tracking), setting up Spring boot backend app with Gradle, Travis CI integration, deploying Heroku instance with database and UML domain modelling.
+* **Mohamed**: Worked on creating requirements, use cases, use case diagrams, setting up a Spring backend app with a Gradle build system, creating the CRUD repos, unit testing the persitence layer with JUnit, and documenting the project.
+* **Nicolas**: Worked on creating requirements, creating the domain model, generating the code using UML Lab, creating the CRUD repository query methods.
+* **Rahul**: Worked on creating requirements, use cases, use case diagrams, setting up a Spring/Spring Boot backend app with Gradle, and deploying database on Heroku.
 
 ## Sprint 2
 
@@ -48,36 +48,24 @@ Starts Feb 10, 2020
 * Test coverage
 
 ### Tasks completed by each member:
-* Alex: Implemented unit tests, Rest controller methods, and service methods relevant to messages and client profiles.
-* Kaustav: Implemented unit tests, rest controller methods, and service methods relevant to postings, conducted integration tests for postings and comments, added methods for referential integrity adherence and build system compatibility.
-* Mohamed: Implemented unit tests, rest controller methods, and service methods relevant to applications, conducted integration tests for applications and messages and client profile, added methods for referential integrity adherence and build system compatibility.
-* Nicolas: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
-* Rahul: Implemented service methods, unit tests for service methods, and RESTful services for the create account, delete account, and login/logout account use cases and requirements. Wrote documentation for unit tests of requirements and RESTful service endpoint documentations for the aforementioned RESTful services.
+* **Alex**: Implemented unit tests, Rest controller methods, and service methods relevant to messages and client profiles.
+* **Kaustav**: Implemented unit tests, rest controller methods, and service methods relevant to postings, conducted integration tests for postings and comments, added methods for referential integrity adherence and build system compatibility.
+* **Mohamed**: Implemented unit tests, rest controller methods, and service methods relevant to applications, conducted integration tests for applications and messages and client profile, added methods for referential integrity adherence and build system compatibility.
+* **Nicolas**: Implemented unit tests, Rest controller methods, and service methods for the getOpenPostings, commentOnPost, getComments methods
+* **Rahul**: Implemented service methods, unit tests for service methods, and RESTful services for the create account, delete account, and login/logout account use cases and requirements. Wrote documentation for unit tests of requirements and RESTful service endpoint documentations for the aforementioned RESTful services.
 
-## Sprint 3
+## Sprint 3 \[Canceled due to COVID-19\]
 
 ### Objectives to complete:
 Starts Mar 2, 2020
 * Architecture model
-* Implementation of Web frontend
+* Implementation of a web frontend using Vue.js 
 
-### Tasks completed by each member:
-* Alex:
-* Kaustav:
-* Mohamed:
-* Nicolas:
-* Rahul:
+As a susbsitute to this sprint, each team member worked on an individual assignment where they built the frontend of a website using Vue.js components and Axios to handle backend calls. Unfortunately, the assignment repositories cannot be made public. 
 
-## Sprint 4
+## Sprint 4 \[Canceled due to COVID-19\]
 
 ### Objectives to complete:
 Starts Mar 23, 2020
-* Implementation of mobile frontend
+* Implementation of an Android mobile frontend
 * Preparation for group presentation 
-
-### Tasks completed by each member:
-* Alex:
-* Kaustav:
-* Mohamed:
-* Nicolas:
-* Rahul:
