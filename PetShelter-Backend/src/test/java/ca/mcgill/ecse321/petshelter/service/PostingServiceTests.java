@@ -92,7 +92,7 @@ public class PostingServiceTests {
 	private static final ApplicationStatus APPLICATION_STATUS_PENDING = ApplicationStatus.pending;
 
 	// Invalid attributes
-	private static final long timeFourMonthsFromNow = 1592659829000L;
+	private static final long timeFourMonthsFromNow = 1604793600000L;
 	private static final String invalidPetName = "c3po";
 	private static final String invalidBreed = "labrador and husky";
 	private static final String tooLongDescription = "Are you looking for a friend? Well so am I! "
